@@ -1,10 +1,42 @@
 /* eslint-disable no-console */
 import { Auth } from 'aws-amplify';
 
-export const logInUserCognitoFunction = async (email: string, password: string): Promise<void> => {
+export const logInUserCognitoFunction = async (username: string, password: string): Promise<void | boolean> => {
   try {
-    const user = await Auth.signIn(email, password);
-    console.log('user', user);
+    const user = await Auth.signIn(username, password);
+    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      return false;
+    } else {
+      console.log('user', user);
+    }
+  } catch (error) {
+    console.log('error signing in', error);
+  }
+};
+
+export const logInUserWithNewPasswordCognitoFunction = async (username: string, password: string, newPassword: string): Promise<void | boolean> => {
+  try {
+    const user = await Auth.signIn(username, password);
+    // Auth.completeNewPassword(
+    //   user,
+    //   newPassword,
+    // ).then(user => {
+    //   console.log(user);
+    //   return true;
+    // }).catch(e => {
+    //   console.log(e);
+    // });
+    if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      Auth.completeNewPassword(
+        user,
+        newPassword,
+      ).then(user => {
+        console.log(user);
+        return true;
+      }).catch(e => {
+        console.log(e);
+      });
+    }
   } catch (error) {
     console.log('error signing in', error);
   }
@@ -13,6 +45,7 @@ export const logInUserCognitoFunction = async (email: string, password: string):
 export const logOutUserCognitoFunction = async (): Promise<void> => {
   try {
     await Auth.signOut({ global: true });
+    console.log('logout');
   } catch (error) {
     console.log('error signing out: ', error);
   }

@@ -20,7 +20,7 @@ export class App extends Component {
           <Route path='/eyerate-reviews' exact component={EyerateReviewsPage} />
           <Route path='/other-reviews' exact component={OtherReviewsPage} />
           <Route path='/payment' exact component={PaymentPage} />
-          <Route path='/first-time-sign-in' exact component={FirstTimeSigninPage} />
+          <Route path='/new-user-login' exact component={FirstTimeSigninPage} />
         </Switch>
       </BrowserRouter>
     );

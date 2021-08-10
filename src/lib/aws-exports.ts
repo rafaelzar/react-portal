@@ -1,7 +1,7 @@
 export const awsconfig = {
   Auth: {
-    region: 'eu-west-1',
-    userPoolId: 'eu-west-1_ed8IaZCgm',
-    userPoolWebClientId: '40bbkj8hsckvpoluto0bq7lhs8',
+    region: process.env.REACT_APP_COGNITO_REGION,
+    userPoolId: process.env.REACT_APP_COGNITO_USER_POOL_ID,
+    userPoolWebClientId: process.env.REACT_APP_COGNITO_USER_POOL_WEB_CLIENT_ID,
   },
 };

@@ -11,6 +11,7 @@ export const logInUserCognitoFunction = async (
       return 'NEW_PASSWORD_REQUIRED';
     } else {
       console.log('user', user);
+      return user;
     }
   } catch (error) {
     console.log('error signing in', error);

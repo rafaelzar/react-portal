@@ -14,8 +14,10 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     const res = await logInUserCognitoFunction(email, password);
-    if (res === false) {
+    if (res === 'NEW_PASSWORD_REQUIRED') {
       setNewUser(true);
+    } else if (res === false) {
+      console.log('wrong pass or username');
     } else {
       history.push('/');
     }
@@ -26,7 +28,9 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
     const res = await logInUserWithNewPasswordCognitoFunction(email, password, newPassword);
     if (res) {
       history.push('/');
-      console.log('loged in with the new password');
+      console.log('logged in with the new password');
+    } else {
+      console.log('something went wrong');
     }
   };
 

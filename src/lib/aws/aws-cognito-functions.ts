@@ -42,12 +42,14 @@ export const logInUserWithNewPasswordCognitoFunction = async (
   }
 };
 
-export const logOutUserCognitoFunction = async (): Promise<void> => {
+export const logOutUserCognitoFunction = async (): Promise<boolean> => {
   try {
     await Auth.signOut({ global: true });
     console.log('logout');
+    return true;
   } catch (error) {
     console.log('error signing out: ', error);
+    return false;
   }
 };
 

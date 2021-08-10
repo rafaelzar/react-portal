@@ -7,11 +7,12 @@ const ForgotPasswordPage: React.FC = () => {
   const [username, setUsername] = React.useState('');
   const [sameUsername, setSameUsername] = React.useState('');
   const [code, setCode] = React.useState('');
+  const [isUsernameSubmited, setIsUsernameSubmited] = React.useState(false);
 
   const ForgotPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // console.log(email, password);
     forgotPasswordFunction(username);
+    setIsUsernameSubmited(true);
   };
 
   const ForgotPasswordSubmit = async (e: React.SyntheticEvent) => {
@@ -21,53 +22,63 @@ const ForgotPasswordPage: React.FC = () => {
   return (
     <>
       <DefaultLayout>
-        <div>
+        <div className='text-center'>
           <h2>
             Forgot your password?
             <br />
             Enter Your Email and we&apos;ll send you a code
           </h2>
-          <form onSubmit={ForgotPassword}>
-            <input
-              type='text'
-              name='username'
-              placeholder='username'
-              id='email'
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input type='submit' value='Submit' />
-          </form>
         </div>
-        <div>
-          <form onSubmit={ForgotPasswordSubmit}>
-            <input
-              type='text'
-              name='username'
-              placeholder='username'
-              id='username'
-              value={sameUsername}
-              onChange={(e) => setSameUsername(e.target.value)}
-            />
-            <input
-              type='text'
-              name='newPassword'
-              placeholder='newPassword'
-              id='newPassword'
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <input
-              type='text'
-              name='code'
-              placeholder='code'
-              id='code'
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-            />
-            <input type='submit' value='Submit' />
-          </form>
-        </div>
+        { !isUsernameSubmited ? (
+          <div className='text-center'>
+            <form onSubmit={ForgotPassword}>
+              <input
+                type='text'
+                name='username'
+                placeholder='username'
+                id='email'
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <input type='submit' value='Submit' />
+            </form>
+          </div>
+        ) : (
+          <>
+            <div className='text-center'>
+              <button type='button' onClick={() => setIsUsernameSubmited(false)}>
+                Go Back
+              </button>
+              <form onSubmit={ForgotPasswordSubmit}>
+                <input
+                  type='text'
+                  name='username'
+                  placeholder='username'
+                  id='username'
+                  value={sameUsername}
+                  onChange={(e) => setSameUsername(e.target.value)}
+                />
+                <input
+                  type='text'
+                  name='newPassword'
+                  placeholder='newPassword'
+                  id='newPassword'
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+                <input
+                  type='text'
+                  name='code'
+                  placeholder='code'
+                  id='code'
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+                <input type='submit' value='Submit' />
+              </form>
+            </div>
+          </>
+        )}
       </DefaultLayout>
     </>
   );

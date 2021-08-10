@@ -1,10 +1,16 @@
 import { Component, ReactElement } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LoginPage from './pages/auth-pages/LoginPage';
 import HomePage from './pages/home/HomePage';
 import PaymentPage from './pages/payment-pages/PaymentPage';
 import EyerateReviewsPage from './pages/review-pages/EyerateReviewsPage';
 import OtherReviewsPage from './pages/review-pages/OtherReviewsPage';
+import ForgotPasswordPage from './pages/auth-pages/ForgotPasswordPage';
 import './styles/globals.scss';
+import Amplify from 'aws-amplify';
+import { awsconfig } from './lib/aws-exports';
+
+Amplify.configure(awsconfig);
 
 export class App extends Component {
   render(): ReactElement {
@@ -15,6 +21,8 @@ export class App extends Component {
           <Route path='/eyerate-reviews' exact component={EyerateReviewsPage} />
           <Route path='/other-reviews' exact component={OtherReviewsPage} />
           <Route path='/payment' exact component={PaymentPage} />
+          <Route path='/login' exact component={LoginPage} />
+          <Route path='/forgot-password' exact component={ForgotPasswordPage} />
         </Switch>
       </BrowserRouter>
     );

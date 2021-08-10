@@ -50,3 +50,21 @@ export const logOutUserCognitoFunction = async (): Promise<void> => {
     console.log('error signing out: ', error);
   }
 };
+
+export const forgotPasswordFunction = async (username: string): Promise<void> => {
+  try {
+    await Auth.forgotPassword(username)
+      .then((data) => console.log(data));
+  } catch (error) {
+    console.log('username error: ', error);
+  }
+};
+
+export const forgotPasswordSubmitFunction = async (username: string, code:string, newPassword:string): Promise<void> => {
+  try {
+    await Auth.forgotPasswordSubmit(username, code, newPassword)
+      .then((data) => console.log(data));
+  } catch (error) {
+    console.log('forgot password error: ', error);
+  }
+};

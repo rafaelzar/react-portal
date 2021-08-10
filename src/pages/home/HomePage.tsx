@@ -13,10 +13,10 @@ const HomePage: React.FC = () => {
       <div className='text-center'>
         <h1>Home Page</h1>
         <input type='button' value='Logout' onClick={logout} />
+        <Link className='nav-link' to='/forgot-password'>
+          Forgot Password
+        </Link>
       </div>
-      <Link className='nav-link' to='/forgot-password'>
-        Forgot Password
-      </Link>
     </DefaultLayout>
   );
 };

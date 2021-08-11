@@ -1,37 +1,57 @@
 import React from 'react';
-import { logInUserCognitoFunction, logInUserWithNewPasswordCognitoFunction } from '../../lib/aws/aws-cognito-functions';
+import { useAppDispatch } from '../../store/store';
+import {
+  logInCognitoUserAuthAction,
+  logInCognitoUserWithNewPasswordAuthAction,
+} from '../../store/actions/authActions';
 
 interface IProps {
-  history: Array<string>
+  history: Array<string>;
 }
 
 const LoginPage: React.FC<IProps> = ({ history }) => {
+  const dispatch = useAppDispatch();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const res = await logInUserCognitoFunction(email, password);
-    if (res === 'NEW_PASSWORD_REQUIRED') {
-      setNewUser(true);
-    } else if (res === false) {
-      console.log('wrong pass or username');
-    } else {
-      history.push('/');
-    }
+    setIsLoading(true);
+    dispatch(logInCognitoUserAuthAction(email, password)).then(
+      (res: boolean | string | undefined) => {
+        if (res === 'NEW_PASSWORD_REQUIRED') {
+          setNewUser(true);
+          setIsLoading(false);
+          console.log(res);
+        } else if (res === false) {
+          console.log('wrong pass or username');
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+          history.push('/');
+          console.log(res);
+        }
+      },
+    );
   };
 
   const LoginWitNewPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const res = await logInUserWithNewPasswordCognitoFunction(email, password, newPassword);
-    if (res) {
-      history.push('/');
-      console.log('logged in with the new password');
-    } else {
-      console.log('something went wrong');
-    }
+    setIsLoading(true);
+    dispatch(
+      logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
+    ).then((res: boolean | string | undefined) => {
+      if (res) {
+        setIsLoading(false);
+        history.push('/');
+      } else {
+        setIsLoading(false);
+        console.log('something went wrong');
+      }
+    });
   };
 
   return (
@@ -53,7 +73,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <input type='submit' value='Sign In' />
+          <input type='submit' disabled={isLoading} value='Sign In' />
         </form>
       ) : (
         <>
@@ -66,7 +86,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
-            <input type='submit' value='Sign In' />
+            <input type='submit' disabled={isLoading} value='Sign In' />
           </form>
         </>
       )}
@@ -75,4 +95,3 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 };
 
 export default LoginPage;
-

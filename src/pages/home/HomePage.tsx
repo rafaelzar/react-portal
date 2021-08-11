@@ -1,16 +1,30 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import DefaultLayout from '../../layout/DefaultLayout';
-import { logOutUserCognitoFunction } from '../../lib/aws/aws-cognito-functions';
+import { logOutCognitoUserAuthAction } from '../../store/actions/authActions';
+import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
+import { useAppDispatch } from '../../store/store';
 
 const HomePage: React.FC = () => {
-  const logout = async () => {
-    const res = await logOutUserCognitoFunction();
-    if (res) {
-      console.log('logged out');
-    } else {
-      console.log('error');
+  const dispatch = useAppDispatch();
+  const userInfo = useSelector((state) => getUserJwtTokenSelector(state));
+  const history = useHistory();
+
+  React.useEffect(() => {
+    if (userInfo === '') {
+      history.push('/login');
     }
+  }, [history, userInfo]);
+
+  const logout = async () => {
+    dispatch(logOutCognitoUserAuthAction()).then((res: boolean) => {
+      if (res) {
+        history.push('/login');
+      } else {
+        console.log('Something went wrong');
+      }
+    });
   };
 
   return (

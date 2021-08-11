@@ -8,6 +8,7 @@ export const logInUserCognitoFunction = async (
   try {
     const user = await Auth.signIn(username, password);
     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      console.log(user);
       return 'NEW_PASSWORD_REQUIRED';
     } else {
       console.log('user', user);
@@ -26,10 +27,10 @@ export const logInUserWithNewPasswordCognitoFunction = async (
 ): Promise<boolean | undefined> => {
   try {
     const res = await Auth.signIn(username, password);
-    Auth.completeNewPassword(res, newPassword)
+    await Auth.completeNewPassword(res, newPassword)
       .then((user) => {
         console.log(user);
-        return res;
+        return user;
       })
       .catch((e) => {
         console.log(e);
@@ -53,24 +54,36 @@ export const logOutUserCognitoFunction = async (): Promise<boolean> => {
   }
 };
 
-export const forgotPasswordFunction = async (
+export const forgotPasswordFunctionCognitoFunction = async (
   username: string,
-): Promise<void> => {
+): Promise<boolean | undefined> => {
   try {
-    await Auth.forgotPassword(username).then((data) => console.log(data));
+    await Auth.forgotPassword(username).then((data) => {
+      console.log(data);
+      return data;
+    });
+    return true;
   } catch (error) {
     console.log('username error: ', error);
+    return false;
   }
 };
 
-export const forgotPasswordSubmitFunction = async (
+export const forgotPasswordSubmitFunctionCognitoFunction = async (
   username: string,
   code: string,
   newPassword: string,
-): Promise<void> => {
+): Promise<boolean | undefined> => {
   try {
-    await Auth.forgotPasswordSubmit(username, code, newPassword).then((data) => console.log(data));
+    await Auth.forgotPasswordSubmit(username, code, newPassword).then(
+      (data) => {
+        console.log(data);
+        return data;
+      },
+    );
+    return true;
   } catch (error) {
     console.log('forgot password error: ', error);
+    return false;
   }
 };

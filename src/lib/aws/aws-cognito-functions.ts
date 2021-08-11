@@ -54,12 +54,14 @@ export const logOutUserCognitoFunction = async (): Promise<boolean> => {
   }
 };
 
-export const forgotPasswordFunction = async (username: string): Promise<boolean|undefined> => {
+export const forgotPasswordFunctionCognitoFunction = async (
+  username: string,
+): Promise<boolean | undefined> => {
   try {
-    await Auth.forgotPassword(username)
-      .then((data) => {
-        console.log(data);
-      });
+    await Auth.forgotPassword(username).then((data) => {
+      console.log(data);
+      return data;
+    });
     return true;
   } catch (error) {
     console.log('username error: ', error);
@@ -67,14 +69,21 @@ export const forgotPasswordFunction = async (username: string): Promise<boolean|
   }
 };
 
-export const forgotPasswordSubmitFunction = async (
+export const forgotPasswordSubmitFunctionCognitoFunction = async (
   username: string,
   code: string,
   newPassword: string,
-): Promise<void> => {
+): Promise<boolean | undefined> => {
   try {
-    await Auth.forgotPasswordSubmit(username, code, newPassword).then((data) => console.log(data));
+    await Auth.forgotPasswordSubmit(username, code, newPassword).then(
+      (data) => {
+        console.log(data);
+        return data;
+      },
+    );
+    return true;
   } catch (error) {
     console.log('forgot password error: ', error);
+    return false;
   }
 };

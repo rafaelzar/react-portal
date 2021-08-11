@@ -7,6 +7,6 @@ export const getUserSelector = (
 
 export const getUserJwtTokenSelector = (state: any): string => {
   const { user: { signInUserSession = {} } = {} } = state;
-  const { accessToken: { jwtToken = '' } = {} } = signInUserSession || {};
+  const { idToken: { jwtToken = '' } = {} } = signInUserSession || {};
   return jwtToken || '';
 };

@@ -37,6 +37,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
           setIsLoading(false);
           const res = sendJWTToken(JwTToken);
           console.log(res);
+          history.push('/');
         }
       },
     );

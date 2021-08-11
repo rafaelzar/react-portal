@@ -1,6 +1,6 @@
 import React from 'react';
 import { forgotPasswordFunction, forgotPasswordSubmitFunction } from '../../lib/aws/aws-cognito-functions';
-import DefaultLayout from '../../layout/DefaultLayout';
+import styles from '../../styles/components/ForgotPasswordPage.module.scss';
 
 const ForgotPasswordPage: React.FC = () => {
   const [newPassword, setNewPassword] = React.useState('');
@@ -11,8 +11,12 @@ const ForgotPasswordPage: React.FC = () => {
 
   const ForgotPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    forgotPasswordFunction(username);
-    setIsUsernameSubmited(true);
+    const res = await forgotPasswordFunction(username);
+    if (res) {
+      setIsUsernameSubmited(true);
+    } else {
+      console.log('Error');
+    }
   };
 
   const ForgotPasswordSubmit = async (e: React.SyntheticEvent) => {
@@ -21,16 +25,16 @@ const ForgotPasswordPage: React.FC = () => {
   };
   return (
     <>
-      <DefaultLayout>
-        <div className='text-center'>
+      <div className={styles.forgotPasswordWrapper}>
+        <div>
           <h2>
             Forgot your password?
             <br />
-            Enter Your Email and we&apos;ll send you a code
           </h2>
+          <p>Enter your username and we&apos;ll send you a code</p>
         </div>
         { !isUsernameSubmited ? (
-          <div className='text-center'>
+          <div>
             <form onSubmit={ForgotPassword}>
               <input
                 type='text'
@@ -40,16 +44,16 @@ const ForgotPasswordPage: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              <input type='submit' value='Submit' />
+              <input type='submit' value='Submit' className={styles.submitButton} />
             </form>
           </div>
         ) : (
           <>
-            <div className='text-center'>
-              <button type='button' onClick={() => setIsUsernameSubmited(false)}>
+            <div>
+              <button type='button' onClick={() => setIsUsernameSubmited(false)} className={styles.submitButton}>
                 Go Back
               </button>
-              <form onSubmit={ForgotPasswordSubmit}>
+              <form onSubmit={ForgotPasswordSubmit} className={styles.forgetPasswordForm}>
                 <input
                   type='text'
                   name='username'
@@ -61,7 +65,7 @@ const ForgotPasswordPage: React.FC = () => {
                 <input
                   type='text'
                   name='newPassword'
-                  placeholder='newPassword'
+                  placeholder='new password'
                   id='newPassword'
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -74,12 +78,12 @@ const ForgotPasswordPage: React.FC = () => {
                   value={code}
                   onChange={(e) => setCode(e.target.value)}
                 />
-                <input type='submit' value='Submit' />
+                <input type='submit' value='Submit' className={styles.submitButton} />
               </form>
             </div>
           </>
         )}
-      </DefaultLayout>
+      </div>
     </>
   );
 };

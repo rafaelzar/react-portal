@@ -1,9 +1,12 @@
 import React from 'react';
 import { useAppDispatch } from '../../store/store';
+import { useSelector } from 'react-redux';
+import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
 import {
   logInCognitoUserAuthAction,
   logInCognitoUserWithNewPasswordAuthAction,
 } from '../../store/actions/authActions';
+import { sendJWTToken } from '../../store/apiCalls';
 
 interface IProps {
   history: Array<string>;
@@ -16,6 +19,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const JwTToken = useSelector((state) => getUserJwtTokenSelector(state));
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -31,7 +35,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
           setIsLoading(false);
         } else {
           setIsLoading(false);
-          history.push('/');
+          const res = sendJWTToken(JwTToken);
           console.log(res);
         }
       },

@@ -1,9 +1,12 @@
-const initState = {};
+const initState = {
+  auth: {},
+  user: {},
+};
 
 interface Action {
   type?: string;
   user?: Record<string, unknown>;
-  dbUser?: Record<string, unknown>;
+  auth?: Record<string, unknown>;
 }
 
 export const userReducer = (state = initState, action: Action): any => {
@@ -11,12 +14,12 @@ export const userReducer = (state = initState, action: Action): any => {
   case 'LOGIN_SUCCESS':
     return {
       ...state,
-      ...action.user,
+      auth: action.user,
     };
   case 'SET_USER':
     return {
       ...state,
-      dbUser: action.user,
+      user: action.user,
     };
 
   case 'AUTH_LOGOUT_SUCCESS':

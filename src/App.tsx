@@ -16,7 +16,7 @@ Amplify.configure(awsconfig);
 axios.interceptors.request.use(
   (config) => {
     const st = store.getState();
-    const token = st?.user?.signInUserSession?.idToken?.jwtToken || '';
+    const token = st?.user?.auth?.signInUserSession?.idToken?.jwtToken || '';
     if (token != null) {
       config.headers.Authorization = `Bearer ${token}`;
     }

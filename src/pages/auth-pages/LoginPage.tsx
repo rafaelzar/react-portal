@@ -20,6 +20,13 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const userInfo = useSelector((state) => getUserJwtTokenSelector(state));
+
+  React.useEffect(() => {
+    if (userInfo !== '') {
+      history.push('/');
+    }
+  }, [history, userInfo]);
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();

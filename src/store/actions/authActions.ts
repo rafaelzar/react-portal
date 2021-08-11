@@ -45,6 +45,7 @@ export const logInCognitoUserWithNewPasswordAuthAction = (
         newPassword,
       );
       if (user) {
+        console.log('"dispatch"', 'dispatch', user);
         dispatch({ type: 'LOGIN_SUCCESS', user });
         return user;
       } else {

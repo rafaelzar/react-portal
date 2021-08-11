@@ -1,6 +1,9 @@
 import React from 'react';
 import { useAppDispatch } from '../../store/store';
-import { logInCognitoUserAuthAction, logInCognitoUserWithNewPasswordAuthAction } from '../../store/actions/authActions';
+import {
+  logInCognitoUserAuthAction,
+  logInCognitoUserWithNewPasswordAuthAction,
+} from '../../store/actions/authActions';
 
 interface IProps {
   history: Array<string>;
@@ -38,19 +41,17 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const LoginWitNewPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    dispatch(logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword)).then(
-      (res: boolean | string | undefined) => {
-        if (res) {
-          setIsLoading(false);
-          history.push('/');
-          console.log('logged in with the new password');
-        } else {
-          setIsLoading(false);
-          console.log('something went wrong');
-        }
-      },
-    );
-
+    dispatch(
+      logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
+    ).then((res: boolean | string | undefined) => {
+      if (res) {
+        setIsLoading(false);
+        history.push('/');
+      } else {
+        setIsLoading(false);
+        console.log('something went wrong');
+      }
+    });
   };
 
   return (

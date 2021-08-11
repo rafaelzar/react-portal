@@ -27,10 +27,10 @@ export const logInUserWithNewPasswordCognitoFunction = async (
 ): Promise<boolean | undefined> => {
   try {
     const res = await Auth.signIn(username, password);
-    Auth.completeNewPassword(res, newPassword)
+    await Auth.completeNewPassword(res, newPassword)
       .then((user) => {
         console.log(user);
-        return res;
+        return user;
       })
       .catch((e) => {
         console.log(e);

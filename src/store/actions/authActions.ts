@@ -1,4 +1,6 @@
 import {
+  forgotPasswordFunctionCognitoFunction,
+  forgotPasswordSubmitFunctionCognitoFunction,
   logInUserCognitoFunction,
   logInUserWithNewPasswordCognitoFunction,
   logOutUserCognitoFunction,
@@ -64,6 +66,47 @@ export const logOutCognitoUserAuthAction = () => {
       if (res) {
         dispatch({ type: 'AUTH_LOGOUT_SUCCESS' });
         return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+};
+
+export const forgotPasswordAuthAction = (email: string) => {
+  return async (): Promise<boolean | undefined> => {
+    try {
+      const res = await forgotPasswordFunctionCognitoFunction(email);
+      if (res) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+};
+
+export const forgotPasswordSubmitAuthAction = (
+  email: string,
+  code: string,
+  newPassword: string,
+) => {
+  return async (): Promise<boolean | undefined> => {
+    try {
+      const res = await forgotPasswordSubmitFunctionCognitoFunction(
+        email,
+        code,
+        newPassword,
+      );
+      if (res) {
+        console.log(res);
+        return res;
       } else {
         return false;
       }

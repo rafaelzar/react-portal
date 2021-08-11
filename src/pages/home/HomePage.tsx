@@ -5,7 +5,12 @@ import { logOutUserCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 const HomePage: React.FC = () => {
   const logout = async () => {
-    logOutUserCognitoFunction();
+    const res = await logOutUserCognitoFunction();
+    if (res) {
+      console.log('logged out');
+    } else {
+      console.log('error');
+    }
   };
 
   return (

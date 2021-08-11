@@ -12,7 +12,6 @@ const HomePage: React.FC = () => {
   const history = useHistory();
 
   React.useEffect(() => {
-    console.log('jwt', userInfo);
     if (userInfo === '') {
       history.push('/login');
     }

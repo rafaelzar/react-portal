@@ -5,13 +5,6 @@ export const getUserSelector = (
   return user || {};
 };
 
-// export const getUserJwtTokenSelector = (
-//   state: any,
-// ): string => {
-//   const { user: { signInUserSession: { accessToken: { jwtToken = '' } = {} } = {} } = {} } = state;
-//   return jwtToken || '';
-// };
-
 export const getUserJwtTokenSelector = (state: any): string => {
   const { user: { signInUserSession = {} } = {} } = state;
   const { accessToken: { jwtToken = '' } = {} } = signInUserSession || {};

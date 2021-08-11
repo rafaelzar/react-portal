@@ -8,6 +8,7 @@ export const logInUserCognitoFunction = async (
   try {
     const user = await Auth.signIn(username, password);
     if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      console.log(user);
       return 'NEW_PASSWORD_REQUIRED';
     } else {
       console.log('user', user);

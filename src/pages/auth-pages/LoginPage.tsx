@@ -3,6 +3,7 @@ import { useAppDispatch } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
 import {
+  fetchUserFromDatabaseAuthAction,
   logInCognitoUserAuthAction,
   logInCognitoUserWithNewPasswordAuthAction,
 } from '../../store/actions/authActions';
@@ -19,25 +20,35 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const JwTToken = useSelector((state) => getUserJwtTokenSelector(state));
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
     dispatch(logInCognitoUserAuthAction(email, password)).then(
-      (res: boolean | string | undefined) => {
+      async (res: boolean | string | undefined) => {
         if (res === 'NEW_PASSWORD_REQUIRED') {
           setNewUser(true);
           setIsLoading(false);
           console.log(res);
         } else if (res === false) {
-          console.log('wrong pass or username');
           setIsLoading(false);
         } else {
+          fetchUserFromDatabase();
+        }
+      },
+    );
+  };
+
+  const fetchUserFromDatabase = async () => {
+    dispatch(fetchUserFromDatabaseAuthAction()).then(
+      async (res: boolean | undefined) => {
+        if (res) {
           setIsLoading(false);
-          const res = sendJWTToken(JwTToken);
-          console.log(res);
-          history.push('/');
+          const isUserFetched = await sendJWTToken();
+          if (isUserFetched) {
+            history.push('/');
+            setIsLoading(false);
+          }
         }
       },
     );

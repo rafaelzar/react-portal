@@ -9,24 +9,23 @@ import ForgotPasswordPage from './pages/auth-pages/ForgotPasswordPage';
 import './styles/globals.scss';
 import Amplify from 'aws-amplify';
 import { awsconfig } from './lib/aws-exports';
-// import axios from 'axios';
-// import { useSelector } from 'react-redux';
-// import { getUserJwtTokenSelector } from './store/selectors/selectors';
+import axios from 'axios';
+import store from './store/store';
 
 Amplify.configure(awsconfig);
-
-// axios.interceptors.request.use(
-//   config => {
-//     const token = useSelector((state) => getUserJwtTokenSelector(state));
-//     if (token != null) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   err => {
-//     return Promise.reject(err);
-//   },
-// );
+axios.interceptors.request.use(
+  (config) => {
+    const st = store.getState();
+    const token = st?.user?.signInUserSession?.idToken?.jwtToken || '';
+    if (token != null) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  },
+);
 
 export class App extends Component {
   render(): ReactElement {

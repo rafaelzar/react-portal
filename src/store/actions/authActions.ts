@@ -5,6 +5,7 @@ import {
   logInUserWithNewPasswordCognitoFunction,
   logOutUserCognitoFunction,
 } from '../../lib/aws/aws-cognito-functions';
+import { sendJWTToken } from '../apiCalls';
 import { AppDispatch } from '../store';
 
 export const logInCognitoUserAuthAction = (
@@ -107,6 +108,24 @@ export const forgotPasswordSubmitAuthAction = (
       if (res) {
         console.log(res);
         return res;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+};
+
+export const fetchUserFromDatabaseAuthAction = () => {
+  return async (dispatch: AppDispatch): Promise<boolean | undefined> => {
+    try {
+      const user = await sendJWTToken();
+      if (user) {
+        const { data = {} } = user;
+        dispatch({ type: 'SET_USER', user: data });
+        return true;
       } else {
         return false;
       }

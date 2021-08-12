@@ -68,8 +68,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
       logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
     ).then((res: boolean | string | undefined) => {
       if (res) {
-        setIsLoading(false);
-        history.push('/');
+        fetchUserFromDatabase();
       } else {
         setIsLoading(false);
         console.log('something went wrong');

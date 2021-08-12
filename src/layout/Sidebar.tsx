@@ -1,14 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
-// import { Link as NavLinkRRD } from 'react-router-dom';
+// import { NavLink as NavLinkRRD } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-// import {
-//   Collapse, NavbarBrand, Navbar, NavItem, NavLink, Nav,
-// } from 'react-bootstrap';
 import {
-  Collapse,
-  NavbarBrand,
-  Navbar,
+  Nav, NavbarBrand, Navbar, Collapse,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -65,55 +59,36 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
           />
         </div>
         <div className='navbar-inner'>
-          {/* <Collapse navbar isOpen>
-            <Nav navbar>
-              <NavItem>
-                <NavLink
-                  to='/'
-                  activeClassName='text-primary'
-                  onClick={closeSidenav}
-                  tag={NavLinkRRD}
-                >
-                  <i className='ni ni-shop text-primary' />
-                  <span className='sidenav-normal'>Home</span>
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  to='/posts'
-                  activeClassName='text-primary'
-                  onClick={closeSidenav}
-                  tag={NavLinkRRD}
-                >
-                  <i className='ni ni-album-2 text-primary' />
-                  <span className='sidenav-normal'>TEST</span>
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink
-                  to='/users'
-                  activeClassName='text-primary'
-                  onClick={closeSidenav}
-                  tag={NavLinkRRD}
-                >
-                  <i className='ni ni-single-02 text-primary' />
-                  <span className='sidenav-normal'>TEST 2</span>
-                </NavLink>
-              </NavItem>
-            </Nav>
-          </Collapse> */}
-          <Link to='/' className='nav-link' onClick={closeSidenav}>
-            Home
-          </Link>
-          <Link className='nav-link' to='/eyerate-reviews' onClick={closeSidenav}>
-            Eyerate Reviews
-          </Link>
-          <Link className='nav-link' to='/other-reviews' onClick={closeSidenav}>
-            Other Reviews
-          </Link>
-          <Link className='nav-link' to='/payment' onClick={closeSidenav}>
-            Payment
-          </Link>
+          <Nav>
+            <Nav.Item>
+              <Link to='/' className='nav-link' onClick={closeSidenav}>
+                Home
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link
+                className='nav-link'
+                to='/eyerate-reviews'
+                onClick={closeSidenav}
+              >
+                Eyerate Reviews
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link
+                className='nav-link'
+                to='/other-reviews'
+                onClick={closeSidenav}
+              >
+                Other Reviews
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link className='nav-link' to='/payment' onClick={closeSidenav}>
+                Payment
+              </Link>
+            </Nav.Item>
+          </Nav>
         </div>
       </div>
     </Navbar>

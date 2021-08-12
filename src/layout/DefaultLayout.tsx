@@ -43,7 +43,7 @@ const DefaultLayout: React.FC<IProps> = ({ children }) => {
       />
       <div className='main-content' ref={mainContentRef}>
         <Nav />
-        <div>{children}</div>
+        {children}
       </div>
     </>
   );

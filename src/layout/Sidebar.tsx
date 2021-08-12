@@ -1,10 +1,9 @@
 import React from 'react';
 // import { NavLink as NavLinkRRD } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import {
-  Nav, NavbarBrand, Navbar,
-} from 'react-bootstrap';
+import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
 import cross from '../lib/assets/img/cross.png';
+import '../styles/components/navbar/sidebar.module.scss';
 
 interface IProps {
   toggleSidenav: () => void;

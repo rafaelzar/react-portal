@@ -1,43 +1,5 @@
 @import 'colors';
-@import 'node_modules/bootstrap/scss/functions';
-@import 'node_modules/bootstrap/scss/mixins';
 
-// Argon functions
-@import 'custom/functions';
-@import 'custom/variables';
-@import 'node_modules/bootstrap/scss/variables';
-
-// Argon mixins
-@import 'custom/mixins';
-
-// Bootstrap components
-@import 'node_modules/bootstrap/scss/nav';
-@import 'node_modules/bootstrap/scss/navbar';
-// @import 'node_modules/bootstrap/scss/root';
-// @import 'node_modules/bootstrap/scss/reboot';
-// @import 'node_modules/bootstrap/scss/type';
-// @import 'node_modules/bootstrap/scss/images';
-// @import 'node_modules/bootstrap/scss/grid';
-// @import 'node_modules/bootstrap/scss/tables';
-// @import 'node_modules/bootstrap/scss/forms';
-// @import 'node_modules/bootstrap/scss/buttons';
-// @import 'node_modules/bootstrap/scss/transitions';
-// @import 'node_modules/bootstrap/scss/dropdown';
-// @import 'node_modules/bootstrap/scss/button-group';
-// @import 'node_modules/bootstrap/scss/card';
-// @import 'node_modules/bootstrap/scss/badge';
-// @import 'node_modules/bootstrap/scss/alert';
-// @import 'node_modules/bootstrap/scss/list-group';
-// @import 'node_modules/bootstrap/scss/modal';
-// @import 'node_modules/bootstrap/scss/utilities';
-// @import 'node_modules/bootstrap/scss/spinners';
-
-// Argon components
-@import 'custom/components';
-@import 'custom/utilities';
-
-// React differences
-@import 'react/react-differences';
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -52,7 +14,7 @@ code {
     monospace;
 }
 
-a  {
+a {
   text-decoration: none;
 }
 
@@ -96,13 +58,14 @@ a  {
   color: $white;
 }
 
-input, .form-button {
+input,
+.form-button {
   background-color: #fff;
   border: transparent;
   border-radius: 5px;
   font-size: 15px;
   padding: 8px 8px 8px 8px;
-  border: .4px solid #e6e6f0;
+  border: 0.4px solid #e6e6f0;
   margin: 10px;
 }
 

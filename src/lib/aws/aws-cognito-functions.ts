@@ -20,6 +20,12 @@ export const logInUserCognitoFunction = async (
   }
 };
 
+export const fetchIdTokenCognitoFunction = async (): Promise<
+  string | undefined
+> => {
+  return (await Auth.currentSession()).getIdToken().getJwtToken();
+};
+
 export const logInUserWithNewPasswordCognitoFunction = async (
   username: string,
   password: string,

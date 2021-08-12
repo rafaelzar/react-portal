@@ -214,3 +214,9 @@ header {
 		@include transform(translateX($side-menu-w));
 	}
 }
+
+@media screen and (min-width: 768px) {
+  .page-content {
+    margin-left: $side-menu-w;
+  }
+}

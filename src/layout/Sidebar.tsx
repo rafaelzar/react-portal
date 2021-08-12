@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 // import { NavLink as NavLinkRRD } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import {
-  Nav, NavbarBrand, Navbar, Collapse,
+  Nav, NavbarBrand, Navbar,
 } from 'react-bootstrap';
+import cross from '../lib/assets/img/cross.png';
 
 interface IProps {
   toggleSidenav: () => void;
@@ -15,22 +16,22 @@ interface IProps {
 }
 
 const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
-  useEffect(() => {
+  React.useEffect(() => {
     if (window.innerWidth > 1200) {
       document.body.classList.add('g-sidenav-pinned');
     }
   }, []);
 
-  const onMouseEnterSidenav = () => {
-    if (!document.body.classList.contains('g-sidenav-pinned')) {
-      document.body.classList.add('g-sidenav-show');
-    }
-  };
-  const onMouseLeaveSidenav = () => {
-    if (!document.body.classList.contains('g-sidenav-pinned')) {
-      document.body.classList.remove('g-sidenav-show');
-    }
-  };
+  // const onMouseEnterSidenav = () => {
+  //   if (!document.body.classList.contains('g-sidenav-pinned')) {
+  //     document.body.classList.add('g-sidenav-show');
+  //   }
+  // };
+  // const onMouseLeaveSidenav = () => {
+  //   if (!document.body.classList.contains('g-sidenav-pinned')) {
+  //     document.body.classList.remove('g-sidenav-show');
+  //   }
+  // };
   const closeSidenav = () => {
     if (window.innerWidth < 1200) {
       () => toggleSidenav;
@@ -39,8 +40,8 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
   return (
     <Navbar
       className='sidenav navbar-vertical navbar-expand-xs navbar-dark bg-dark fixed-left'
-      onMouseEnter={onMouseEnterSidenav}
-      onMouseLeave={onMouseLeaveSidenav}
+      // onMouseEnter={onMouseEnterSidenav}
+      // onMouseLeave={onMouseLeaveSidenav}
     >
       <div className='scrollbar-inner'>
         <div className='sidenav-header d-flex align-items-center'>
@@ -56,7 +57,9 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
           <i
             className='ni ni-fat-remove close-menu-btn'
             onClick={toggleSidenav}
-          />
+          >
+            <img width='16' src={cross} alt='close' />
+          </i>
         </div>
         <div className='navbar-inner'>
           <Nav>

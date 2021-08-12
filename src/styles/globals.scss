@@ -117,3 +117,16 @@ input, .form-button {
 .main-content {
   position: relative;
 }
+
+.close-menu-btn {
+  font-size: 35px;
+  color: #5e72e4;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 1200px) {
+  .close-menu-btn {
+    display: none;
+  }
+}

@@ -12,7 +12,7 @@ import { awsconfig } from './lib/aws-exports';
 import axios from 'axios';
 import { fetchIdTokenCognitoFunction } from './lib/aws/aws-cognito-functions';
 
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 Amplify.configure(awsconfig);
 axios.interceptors.request.use(

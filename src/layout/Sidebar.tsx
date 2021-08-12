@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect } from 'react';
-import { NavLink as NavLinkRRD } from 'react-router-dom';
+// import { Link as NavLinkRRD } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import {
 //   Collapse, NavbarBrand, Navbar, NavItem, NavLink, Nav,
 // } from 'react-bootstrap';
@@ -8,9 +9,6 @@ import {
   Collapse,
   NavbarBrand,
   Navbar,
-  NavItem,
-  NavLink,
-  Nav,
 } from 'react-bootstrap';
 
 interface IProps {
@@ -46,7 +44,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
   };
   return (
     <Navbar
-      className='sidenav navbar-vertical navbar-expand-xs navbar-light bg-white fixed-left'
+      className='sidenav navbar-vertical navbar-expand-xs navbar-dark bg-dark fixed-left'
       onMouseEnter={onMouseEnterSidenav}
       onMouseLeave={onMouseLeaveSidenav}
     >
@@ -59,7 +57,6 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
                 className='navbar-brand-img'
                 src={logo.imgSrc}
               />
-              <span className='ml-2'>Eyerate</span>
             </NavbarBrand>
           ) : null}
           <i
@@ -105,6 +102,18 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
               </NavItem>
             </Nav>
           </Collapse> */}
+          <Link to='/' className='nav-link' onClick={closeSidenav}>
+            Home
+          </Link>
+          <Link className='nav-link' to='/eyerate-reviews' onClick={closeSidenav}>
+            Eyerate Reviews
+          </Link>
+          <Link className='nav-link' to='/other-reviews' onClick={closeSidenav}>
+            Other Reviews
+          </Link>
+          <Link className='nav-link' to='/payment' onClick={closeSidenav}>
+            Payment
+          </Link>
         </div>
       </div>
     </Navbar>

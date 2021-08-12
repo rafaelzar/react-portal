@@ -8,6 +8,7 @@ import {
   logInCognitoUserWithNewPasswordAuthAction,
 } from '../../store/actions/authActions';
 import { sendJWTToken } from '../../store/apiCalls';
+import { swalError, swalSuccess } from '../../lib/utils/toasts';
 
 interface IProps {
   history: Array<string>;
@@ -36,9 +37,9 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
         if (res === 'NEW_PASSWORD_REQUIRED') {
           setNewUser(true);
           setIsLoading(false);
-          console.log(res);
         } else if (res === false) {
           setIsLoading(false);
+          swalError('Something went wrong');
         } else {
           fetchUserFromDatabase();
         }
@@ -55,6 +56,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
           if (isUserFetched) {
             history.push('/');
             setIsLoading(false);
+            swalSuccess('Welcome!');
           }
         }
       },
@@ -71,7 +73,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
         fetchUserFromDatabase();
       } else {
         setIsLoading(false);
-        console.log('something went wrong');
+        swalError('No user in database');
       }
     });
   };

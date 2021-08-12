@@ -3,6 +3,7 @@ import { logOutCognitoUserAuthAction } from '../store/actions/authActions';
 import { useAppDispatch } from '../store/store';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { swalError, swalSuccess } from '../lib/utils/toasts';
 
 const Nav:React.FC = () => {
   const dispatch = useAppDispatch();
@@ -11,8 +12,9 @@ const Nav:React.FC = () => {
     dispatch(logOutCognitoUserAuthAction()).then((res: boolean) => {
       if (res) {
         history.push('/login');
+        swalSuccess('You are logged out');
       } else {
-        console.log('Something went wrong');
+        swalError('Something went wrong');
       }
     });
   };

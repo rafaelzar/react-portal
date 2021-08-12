@@ -6,6 +6,7 @@ import {
 } from '../../store/actions/authActions';
 import { useHistory } from 'react-router-dom';
 import styles from '../../styles/components/ForgotPasswordPage.module.scss';
+import { swalError } from '../../lib/utils/toasts';
 
 const ForgotPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,7 +24,7 @@ const ForgotPasswordPage: React.FC = () => {
         if (res) {
           setIsUsernameSubmited(true);
         } else {
-          console.log('Error');
+          swalError('Something went wrong');
         }
       },
     );
@@ -31,13 +32,12 @@ const ForgotPasswordPage: React.FC = () => {
 
   const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // forgotPasswordSubmitFunction(sameUsername, code, newPassword);
     dispatch(forgotPasswordSubmitAuthAction(username, code, newPassword)).then(
       (res: boolean | undefined) => {
         if (res) {
           history.push('/');
         } else {
-          console.log('Error');
+          swalError('Something went wrong');
         }
       },
     );

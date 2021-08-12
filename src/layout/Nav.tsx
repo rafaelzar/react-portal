@@ -18,9 +18,14 @@ const Nav:React.FC = () => {
       }
     });
   };
+
+  // const toggleSidebar = () => {
+
+  // }
   return (
     <nav className='nav-custom d-flex justify-content-end mb-2'>
       <div className='d-flex align-items-center'>
+        <span className='menu-stripe stripe-top mr-3' />
         <div className='mr-4'>User</div>
         <Button variant='dark' onClick={logout}>Logout</Button>
       </div>

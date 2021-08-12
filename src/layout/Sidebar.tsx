@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
 import cross from '../lib/assets/img/cross.png';
-import '../styles/components/navbar/sidebar.module.scss';
 
 interface IProps {
   toggleSidenav: () => void;
@@ -38,7 +37,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
   };
   return (
     <Navbar
-      className='sidenav navbar-vertical navbar-expand-xs navbar-dark bg-dark fixed-left'
+      className='navbar-content'
       // onMouseEnter={onMouseEnterSidenav}
       // onMouseLeave={onMouseLeaveSidenav}
     >
@@ -61,7 +60,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
           </i>
         </div>
         <div className='navbar-inner'>
-          <Nav>
+          <Nav className='flex-column'>
             <Nav.Item>
               <Link to='/' className='nav-link' onClick={closeSidenav}>
                 Home

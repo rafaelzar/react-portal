@@ -33,15 +33,17 @@ const DefaultLayout: React.FC<IProps> = ({ children }) => {
   };
   return (
     <>
-      <Sidebar
-        toggleSidenav={toggleSidenav}
-        logo={{
-          innerLink: '/',
-          imgSrc: logoImg,
-          imgAlt: '...',
-        }}
-      />
-      <div className='main-content' ref={mainContentRef}>
+      <div id='side' className='side-menu-container'>
+        <Sidebar
+          toggleSidenav={toggleSidenav}
+          logo={{
+            innerLink: '/',
+            imgSrc: logoImg,
+            imgAlt: '...',
+          }}
+        />
+      </div>
+      <div id='main' className='page-content' ref={mainContentRef}>
         <Nav />
         {children}
       </div>

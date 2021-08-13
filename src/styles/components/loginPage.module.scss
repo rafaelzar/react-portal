@@ -1,0 +1,22 @@
+.login-background {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, #354778 0%, rgba(53, 71, 120, 0.75) 100%);
+  }
+  
+.login-form {
+    display: grid;
+}
+
+.login-button {
+    width: 100px;
+    margin: auto;
+}
+
+.login-logo {
+    width: 250px;
+    display: block;
+    margin:0 auto;
+}

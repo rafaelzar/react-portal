@@ -1,5 +1,7 @@
 @import 'colors';
 @import '../styles/components/layout/layout.module.scss';
+@import '../styles/components/loginPage.module.scss';
+@import '../styles/components/forgotPasswordPage.module.scss';
 
 body {
   margin: 0;
@@ -55,13 +57,8 @@ a {
 
 // App
 
-.nav-link {
-  color: $white !important;
-}
-
 input,
 .form-button {
-  background-color: #fff;
   border: transparent;
   border-radius: 5px;
   font-size: 15px;
@@ -70,35 +67,33 @@ input,
   margin: 10px;
 }
 
-.nav-custom {
-  -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
-  padding: 1rem;
+input {
+  padding-left: 15px;
+  &:focus-visible{
+    outline-color: #39bcb4;
+  }
+}
+
+input::placeholder {
+  color: #8898aa;
+}
+
+
+.btn {
+  color: #fff !important;
+  background-color: #39bcb4!important;
+  border: 1px solid transparent !important;
   position: relative;
-	z-index: 4;
-  background-color: white;
-  width: 100%;
-}
-
-// .navbar-content {
-//   height: 100%;
-// }
-
-// NAVBAR
-
-// .main-content {
-//   position: relative;
-// }
-
-.close-menu-btn {
-  font-size: 35px;
-  color: #5e72e4;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-@media screen and (min-width: 768px) {
-  .close-menu-btn {
-    display: none;
+  text-transform: none;
+  transition: all 0.15s ease;
+  letter-spacing: 0.025em;
+  font-size: 0.875rem;
+  will-change: transform;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0,0.08);
+  &:hover {
+      background-color: #fff !important;
+      border: 1px solid #39bcb4 !important;
+      color: #39bcb4 !important;
+      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0,0.08);;
   }
 }

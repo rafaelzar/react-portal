@@ -14,6 +14,7 @@ const ForgotPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const [newPassword, setNewPassword] = React.useState('');
+  const [newPasswordConfirmed, setNewPasswordConfirmed] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [sameUsername, setSameUsername] = React.useState('');
   const [code, setCode] = React.useState('');
@@ -34,15 +35,19 @@ const ForgotPasswordPage: React.FC = () => {
 
   const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    dispatch(forgotPasswordSubmitAuthAction(username, code, newPassword)).then(
-      (res: boolean | undefined) => {
-        if (res) {
-          history.push('/');
-        } else {
-          swalError('Something went wrong');
-        }
-      },
-    );
+    if (newPassword === newPasswordConfirmed) {
+      dispatch(forgotPasswordSubmitAuthAction(username, code, newPassword)).then(
+        (res: boolean | undefined) => {
+          if (res) {
+            history.push('/');
+          } else {
+            swalError('Something went wrong');
+          }
+        },
+      );
+    } else {
+      swalError('Passwords do not match');
+    }
   };
   return (
     <>
@@ -57,12 +62,12 @@ const ForgotPasswordPage: React.FC = () => {
                 <Card.Body className='px-lg-5 py-lg-4'>
                   {!isUsernameSubmited ? (
                     <div>
-                      <div className='text-center text-muted mb-4'>Please enter your username.</div>
+                      <div className='text-center text-muted mb-4'>Please enter your email.</div>
                       <form onSubmit={forgotPassword} className='forgot-form'>
                         <input
                           type='text'
                           name='username'
-                          placeholder='username'
+                          placeholder='email'
                           id='email'
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
@@ -89,28 +94,29 @@ const ForgotPasswordPage: React.FC = () => {
                           </button>
                           <input
                             type='text'
-                            name='username'
-                            placeholder='username'
-                            id='username'
-                            value={sameUsername}
-                            onChange={(e) => setSameUsername(e.target.value)}
-                          />
-                          <input
-                            type='text'
-                            name='newPassword'
-                            placeholder='new password'
-                            id='newPassword'
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            className='my-3'
-                          />
-                          <input
-                            type='text'
                             name='code'
                             placeholder='code'
                             id='code'
                             value={code}
                             onChange={(e) => setCode(e.target.value)}
+                            className='mb-3'
+                          />
+                          <input
+                            type='password'
+                            name='newPassword'
+                            placeholder='new password'
+                            id='newPassword'
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            className='mb-3'
+                          />
+                          <input
+                            type='password'
+                            name='newPasswordConfirmed'
+                            placeholder='confirm new password'
+                            id='newPasswordConfirmed'
+                            value={newPasswordConfirmed}
+                            onChange={(e) => setNewPasswordConfirmed(e.target.value)}
                           />
                           <input
                             type='submit'

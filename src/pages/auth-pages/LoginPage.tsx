@@ -8,7 +8,12 @@ import {
   logInCognitoUserWithNewPasswordAuthAction,
 } from '../../store/actions/authActions';
 import { sendJWTToken } from '../../store/apiCalls';
+import { Link } from 'react-router-dom';
 import { swalError, swalSuccess } from '../../lib/utils/toasts';
+import {
+  Card, Col, Container, Row,
+} from 'react-bootstrap';
+import logo from '../../lib/assets/img/logo-eyerate.png';
 
 interface IProps {
   history: Array<string>;
@@ -79,41 +84,68 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   };
 
   return (
-    <div className='text-center p-1'>
-      <h1>Login</h1>
-      {!newUser ? (
-        <form onSubmit={Login}>
-          <input
-            type='text'
-            name='email'
-            id='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type='password'
-            name='password'
-            id='password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input type='submit' disabled={isLoading} value='Sign In' />
-        </form>
-      ) : (
-        <>
-          <p>Please change your password</p>
-          <form onSubmit={LoginWitNewPassword}>
-            <input
-              type='password'
-              name='newPassword'
-              id='newPassword'
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-            <input type='submit' disabled={isLoading} value='Sign In' />
-          </form>
-        </>
-      )}
+    <div className='login-background'>
+      <Container className='pt-5 pb-5'>
+        <Row className='justify-content-center'>
+          <Col lg='5' md='7'>
+            <Card className='card-background'>
+              <Card.Header className='bg-transparent'>
+                <div className='text-muted text-center my-2'>Welcome to the Employee Portal.</div>
+              </Card.Header>
+              <Card.Body className='px-lg-5 py-lg-5'>
+                <img
+                  alt='Eyerate logo'
+                  className='login-logo'
+                  src={logo}
+                />
+                <div className='text-center text-muted mb-4'>Please login in order to proceed.</div>
+                {!newUser ? (
+                  <form onSubmit={Login} className='login-form'>
+                    <input
+                      type='text'
+                      name='email'
+                      id='email'
+                      placeholder='email'
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className='mb-3'
+                    />
+                    <input
+                      type='password'
+                      name='password'
+                      id='password'
+                      placeholder='password'
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className='mb-5'
+                    />
+                    <button type='submit' disabled={isLoading} className='btn login-button'>Sign In</button>
+                    <Link to='/forgot-password' className='text-bottom mt-3'>
+                      Forgot password?
+                    </Link>
+                  </form>
+                ) : (
+                  <>
+                    <p>Please change your password</p>
+                    <form onSubmit={LoginWitNewPassword} className='login-form'>
+                      <input
+                        type='password'
+                        name='newPassword'
+                        id='newPassword'
+                        placeholder='New Password'
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className='mb-5'
+                      />
+                      <button type='submit' disabled={isLoading} className='btn login-button'>Sign In</button>
+                    </form>
+                  </>
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };

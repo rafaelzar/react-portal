@@ -18,9 +18,7 @@ const HomePage: React.FC = () => {
     <DefaultLayout>
       <div className='text-center'>
         <h1>Home Page</h1>
-        <Link to='/forgot-password'>
-          Forgot Password
-        </Link>
+        <Link to='/forgot-password'>Forgot Password</Link>
       </div>
     </DefaultLayout>
   );

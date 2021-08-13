@@ -8,14 +8,15 @@ interface IProps {
 }
 
 const DefaultLayout: React.FC<IProps> = ({ children }) => {
+  const [toggleSideNav, setToggleSideNav] = React.useState(false);
   const toggleSidebar = () => {
-    document.querySelector('#menu-trigger')?.classList.toggle('menu-clicked');
-    document.querySelector('#side')?.classList.toggle('side-menu-close');
-    document.querySelector('#main')?.classList.toggle('page-content-move');
+    // TODO - fix adding class to hamburger menu
+    // document.querySelector('#menu-trigger')?.classList.toggle('menu-clicked');
+    setToggleSideNav(!toggleSideNav);
   };
   return (
     <>
-      <div id='side' className='side-menu-container'>
+      <div id='side' className={`side-menu-container ${toggleSideNav ? 'side-menu-close' : ''}`}>
         <Sidebar
           toggleSidebar={toggleSidebar}
           logo={{
@@ -25,7 +26,7 @@ const DefaultLayout: React.FC<IProps> = ({ children }) => {
           }}
         />
       </div>
-      <div id='main' className='page-content'>
+      <div id='main' className={`page-content ${toggleSideNav ? 'page-content-move' : ''}`}>
         <Nav toggleSidebar={toggleSidebar} />
         {children}
       </div>

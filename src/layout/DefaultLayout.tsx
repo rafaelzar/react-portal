@@ -8,22 +8,15 @@ interface IProps {
 }
 
 const DefaultLayout: React.FC<IProps> = ({ children }) => {
-  // const [sidenavOpen, setSidenavOpen] = React.useState(true);
-  // const toggleSidenav = () => {
-  //   if (document.body.classList.contains('g-sidenav-pinned')) {
-  //     document.body.classList.remove('g-sidenav-pinned');
-  //     document.body.classList.add('g-sidenav-hidden');
-  //   } else {
-  //     document.body.classList.add('g-sidenav-pinned');
-  //     document.body.classList.remove('g-sidenav-hidden');
-  //   }
-  //   setSidenavOpen(!sidenavOpen);
-  // };
+  const toggleSidebar = () => {
+    document.querySelector('#menu-trigger')?.classList.toggle('menu-clicked');
+    document.querySelector('#side')?.classList.toggle('side-menu-close');
+    document.querySelector('#main')?.classList.toggle('page-content-move');
+  };
   return (
     <>
       <div id='side' className='side-menu-container'>
         <Sidebar
-          // toggleSidenav={toggleSidenav}
           logo={{
             innerLink: '/',
             imgSrc: logoImg,
@@ -32,7 +25,7 @@ const DefaultLayout: React.FC<IProps> = ({ children }) => {
         />
       </div>
       <div id='main' className='page-content'>
-        <Nav />
+        <Nav toggleSidebar={toggleSidebar} />
         {children}
       </div>
     </>

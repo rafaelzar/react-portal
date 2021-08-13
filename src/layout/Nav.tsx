@@ -5,7 +5,11 @@ import { useHistory } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { swalError, swalSuccess } from '../lib/utils/toasts';
 
-const Nav:React.FC = () => {
+interface IProps {
+  toggleSidebar: () => void;
+}
+
+const Nav:React.FC<IProps> = ({ toggleSidebar }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const logout = async () => {
@@ -19,11 +23,6 @@ const Nav:React.FC = () => {
     });
   };
 
-  const toggleSidebar = () => {
-    document.querySelector('#menu-trigger')?.classList.toggle('menu-clicked');
-    document.querySelector('#side')?.classList.toggle('slide-in');
-    document.querySelector('#main')?.classList.toggle('slide-content');
-  };
   return (
     <nav className='nav-custom d-flex justify-content-end mb-2'>
       <div className='d-flex align-items-center'>

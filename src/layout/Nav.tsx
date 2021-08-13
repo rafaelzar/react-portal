@@ -19,13 +19,15 @@ const Nav:React.FC = () => {
     });
   };
 
-  // const toggleSidebar = () => {
-
-  // }
+  const toggleSidebar = () => {
+    document.querySelector('#menu-trigger')?.classList.toggle('menu-clicked');
+    document.querySelector('#side')?.classList.toggle('slide-in');
+    document.querySelector('#main')?.classList.toggle('slide-content');
+  };
   return (
     <nav className='nav-custom d-flex justify-content-end mb-2'>
       <div className='d-flex align-items-center'>
-        <span className='menu-stripe stripe-top mr-3' />
+        <span className='menu-stripe stripe-top mr-3' onClick={toggleSidebar} />
         <div className='mr-4'>User</div>
         <Button variant='dark' onClick={logout}>Logout</Button>
       </div>

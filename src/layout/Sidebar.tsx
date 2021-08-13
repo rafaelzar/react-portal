@@ -5,7 +5,7 @@ import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
 import cross from '../lib/assets/img/cross.png';
 
 interface IProps {
-  toggleSidenav: () => void;
+  // toggleSidenav: () => void;
   logo: {
     innerLink: string;
     imgSrc: string;
@@ -13,28 +13,19 @@ interface IProps {
   };
 }
 
-const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
-  React.useEffect(() => {
-    if (window.innerWidth > 1200) {
-      document.body.classList.add('g-sidenav-pinned');
-    }
-  }, []);
+const Sidebar: React.FC<IProps> = ({ logo }) => {
+  // React.useEffect(() => {
+  //   if (window.innerWidth > 1200) {
+  //     document.body.classList.add('g-sidenav-pinned');
+  //   }
+  // }, []);
 
-  // const onMouseEnterSidenav = () => {
-  //   if (!document.body.classList.contains('g-sidenav-pinned')) {
-  //     document.body.classList.add('g-sidenav-show');
+  // const closeSidenav = () => {
+  //   if (window.innerWidth < 1200) {
+  //     () => toggleSidenav;
   //   }
   // };
-  // const onMouseLeaveSidenav = () => {
-  //   if (!document.body.classList.contains('g-sidenav-pinned')) {
-  //     document.body.classList.remove('g-sidenav-show');
-  //   }
-  // };
-  const closeSidenav = () => {
-    if (window.innerWidth < 1200) {
-      () => toggleSidenav;
-    }
-  };
+
   return (
     <Navbar
       className='navbar-content'
@@ -44,7 +35,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
       <div className='scrollbar-inner'>
         <div className='sidenav-header d-flex align-items-center'>
           {logo ? (
-            <NavbarBrand href='/' className='mr-auto '>
+            <NavbarBrand className='mr-auto '>
               <img
                 alt={logo.imgAlt}
                 className='navbar-brand-img'
@@ -52,17 +43,17 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
               />
             </NavbarBrand>
           ) : null}
-          <i
+          {/* <i
             className='ni ni-fat-remove close-menu-btn'
-            onClick={toggleSidenav}
+            // onClick={toggleSidenav}
           >
             <img width='16' src={cross} alt='close' />
-          </i>
+          </i> */}
         </div>
         <div className='navbar-inner'>
           <Nav className='flex-column'>
             <Nav.Item>
-              <Link to='/' className='nav-link' onClick={closeSidenav}>
+              <Link to='/' className='nav-link'>
                 Home
               </Link>
             </Nav.Item>
@@ -70,7 +61,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
               <Link
                 className='nav-link'
                 to='/eyerate-reviews'
-                onClick={closeSidenav}
+                // onClick={closeSidenav}
               >
                 Eyerate Reviews
               </Link>
@@ -79,13 +70,16 @@ const Sidebar: React.FC<IProps> = ({ toggleSidenav, logo }) => {
               <Link
                 className='nav-link'
                 to='/other-reviews'
-                onClick={closeSidenav}
+                // onClick={closeSidenav}
               >
                 Other Reviews
               </Link>
             </Nav.Item>
             <Nav.Item>
-              <Link className='nav-link' to='/payment' onClick={closeSidenav}>
+              <Link
+                className='nav-link'
+                to='/payment'
+              >
                 Payment
               </Link>
             </Nav.Item>

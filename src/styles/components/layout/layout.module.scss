@@ -4,11 +4,7 @@ $burger-w: 26px;
 // burger button stripes
 $menu-stripe-w: 26px;
 $menu-stripe-h: 3px;
-$menu-stripe-color: #3498db;
-$menu-stripe-color-h: white;
-// header
-$header-h: 50px;
-$header-background: #2c3e50;
+$menu-stripe-color: #34495e;
 // side menu
 $side-menu-w: 250px;
 
@@ -19,14 +15,6 @@ $side-menu-w: 250px;
 	-ms-transition: $args;
 	-o-transition: $args;
 	transition: $args;
-}
-
-@mixin transform($args...) {
-	-webkit-transform: $args;
-	-moz-transform: $args;
-	-ms-transform: $args;
-	-o-transform: $args;
-	transform: $args;
 }
 
 .menu-stripe {
@@ -62,62 +50,22 @@ $side-menu-w: 250px;
 	width: $burger-w;
 	height: $burger-h;
 	line-height: 15px;
-	position: absolute;
-	top: 50%;
-	left: 20px;
-	@include transform(translateY(-50%));
-	
-	// when you click the hamburger button
+	margin-right: 20px;
+
 	&.menu-clicked {
-		.menu-stripe {		
-			background-color: transparent;
-			
-			&:before {
-				background-color: white;
-				top: 50%;
-				@include transform(translateY(-50%) rotate(45deg));
-			}
-			
-			&:after {
-				background-color: white;
-				top: 50%;
-				@include transform(translateY(-50%) rotate(-45deg));
-			}
-		}
-		
-		// hovering the hamburger button when its clicked
-		&:hover {
-			.menu-stripe {
-				background-color: transparent;
-				
-				&:before {
-					top: 50%;
-					@include transform(translateY(-50%) rotate(45deg));
-				}
-				
-				&:after {
-					top: 50%;
-					@include transform(translateY(-50%) rotate(-45deg)); 
-				}
-			}			
-		}
-	}
-	
-	// hover the hamburger button
-	&:hover {
 		.menu-stripe {
-			background-color: $menu-stripe-color-h;
+			// background-color: $gold;
 			
-			&:before, &:after {
-				background-color: $menu-stripe-color-h;
-			}
+			// &:before, &:after {
+			// 	// background-color: $gold;
+			// }
 			
 			&:before {
-				top: -10px;
+				top: -5px;
 			}
 			
 			&:after {
-				top: 10px;
+				top: 5px;
 			}
 		}	
 	}
@@ -168,19 +116,6 @@ $side-menu-w: 250px;
   background-color: white;
   width: 100%;
 }
-
-// .close-menu-btn {
-//   font-size: 35px;
-//   color: #5e72e4;
-//   margin-right: 10px;
-//   cursor: pointer;
-// }
-
-// @media screen and (min-width: 768px) {
-//   .close-menu-btn {
-//     display: none;
-//   }
-// }
 
 .navbar-content {
 	padding: 0 !important;

@@ -9,6 +9,7 @@ interface IProps {
 
 const DefaultLayout: React.FC<IProps> = ({ children }) => {
   const toggleSidebar = () => {
+    document.querySelector('#menu-trigger')?.classList.toggle('menu-clicked');
     document.querySelector('#side')?.classList.toggle('side-menu-close');
     document.querySelector('#main')?.classList.toggle('page-content-move');
   };

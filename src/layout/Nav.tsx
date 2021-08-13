@@ -9,7 +9,7 @@ interface IProps {
   toggleSidebar: () => void;
 }
 
-const Nav:React.FC<IProps> = ({ toggleSidebar }) => {
+const Nav: React.FC<IProps> = ({ toggleSidebar }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const logout = async () => {
@@ -26,9 +26,13 @@ const Nav:React.FC<IProps> = ({ toggleSidebar }) => {
   return (
     <nav className='nav-custom d-flex justify-content-end mb-2'>
       <div className='d-flex align-items-center'>
-        <span className='menu-stripe stripe-top mr-3' onClick={toggleSidebar} />
+        <div id='menu-trigger' onClick={toggleSidebar}>
+          <span className='menu-stripe stripe-top mr-3' />
+        </div>
         <div className='mr-4'>User</div>
-        <Button variant='dark' onClick={logout}>Logout</Button>
+        <Button variant='dark' onClick={logout}>
+          Logout
+        </Button>
       </div>
     </nav>
   );

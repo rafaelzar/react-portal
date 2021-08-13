@@ -9,8 +9,24 @@ import ForgotPasswordPage from './pages/auth-pages/ForgotPasswordPage';
 import './styles/globals.scss';
 import Amplify from 'aws-amplify';
 import { awsconfig } from './lib/aws-exports';
+import axios from 'axios';
+import { fetchIdTokenCognitoFunction } from './lib/aws/aws-cognito-functions';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 Amplify.configure(awsconfig);
+axios.interceptors.request.use(
+  async (config) => {
+    const idToken = await fetchIdTokenCognitoFunction();
+    if (idToken != null) {
+      config.headers.Authorization = `Bearer ${idToken}`;
+    }
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  },
+);
 
 export class App extends Component {
   render(): ReactElement {

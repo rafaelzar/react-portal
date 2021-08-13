@@ -1,4 +1,6 @@
 @import 'colors';
+@import '../styles/components/layout/layout.module.scss';
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,7 +15,7 @@ code {
     monospace;
 }
 
-a  {
+a {
   text-decoration: none;
 }
 
@@ -54,15 +56,49 @@ a  {
 // App
 
 .nav-link {
-  margin: 0 10px;
+  color: $white !important;
 }
 
-input, .form-button {
+input,
+.form-button {
   background-color: #fff;
   border: transparent;
   border-radius: 5px;
   font-size: 15px;
   padding: 8px 8px 8px 8px;
-  border: .4px solid #e6e6f0;
+  border: 0.4px solid #e6e6f0;
   margin: 10px;
+}
+
+.nav-custom {
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+  position: relative;
+	z-index: 4;
+  background-color: white;
+  width: 100%;
+}
+
+// .navbar-content {
+//   height: 100%;
+// }
+
+// NAVBAR
+
+// .main-content {
+//   position: relative;
+// }
+
+.close-menu-btn {
+  font-size: 35px;
+  color: #5e72e4;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+@media screen and (min-width: 768px) {
+  .close-menu-btn {
+    display: none;
+  }
 }

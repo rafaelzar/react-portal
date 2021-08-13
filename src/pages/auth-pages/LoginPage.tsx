@@ -1,9 +1,14 @@
 import React from 'react';
 import { useAppDispatch } from '../../store/store';
+import { useSelector } from 'react-redux';
+import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
 import {
+  fetchUserFromDatabaseAuthAction,
   logInCognitoUserAuthAction,
   logInCognitoUserWithNewPasswordAuthAction,
 } from '../../store/actions/authActions';
+import { sendJWTToken } from '../../store/apiCalls';
+import { swalError, swalSuccess } from '../../lib/utils/toasts';
 
 interface IProps {
   history: Array<string>;
@@ -16,23 +21,43 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const userInfo = useSelector((state) => getUserJwtTokenSelector(state));
+
+  React.useEffect(() => {
+    if (userInfo !== '') {
+      history.push('/');
+    }
+  }, [history, userInfo]);
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setIsLoading(true);
     dispatch(logInCognitoUserAuthAction(email, password)).then(
-      (res: boolean | string | undefined) => {
+      async (res: boolean | string | undefined) => {
         if (res === 'NEW_PASSWORD_REQUIRED') {
           setNewUser(true);
           setIsLoading(false);
-          console.log(res);
         } else if (res === false) {
-          console.log('wrong pass or username');
           setIsLoading(false);
+          swalError('Something went wrong');
         } else {
+          fetchUserFromDatabase();
+        }
+      },
+    );
+  };
+
+  const fetchUserFromDatabase = async () => {
+    dispatch(fetchUserFromDatabaseAuthAction()).then(
+      async (res: boolean | undefined) => {
+        if (res) {
           setIsLoading(false);
-          history.push('/');
-          console.log(res);
+          const isUserFetched = await sendJWTToken();
+          if (isUserFetched) {
+            history.push('/');
+            setIsLoading(false);
+            swalSuccess('Welcome!');
+          }
         }
       },
     );
@@ -45,11 +70,10 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
       logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
     ).then((res: boolean | string | undefined) => {
       if (res) {
-        setIsLoading(false);
-        history.push('/');
+        fetchUserFromDatabase();
       } else {
         setIsLoading(false);
-        console.log('something went wrong');
+        swalError('No user in database');
       }
     });
   };

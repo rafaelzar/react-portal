@@ -2,8 +2,10 @@ import React from 'react';
 // import { NavLink as NavLinkRRD } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
+import cross from '../lib/assets/img/cross.png';
 
 interface IProps {
+  toggleSidebar: () => void;
   logo: {
     innerLink: string;
     imgSrc: string;
@@ -11,7 +13,7 @@ interface IProps {
   };
 }
 
-const Sidebar: React.FC<IProps> = ({ logo }) => {
+const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
   return (
     <Navbar className='navbar-content'>
       <div className='scrollbar-inner'>
@@ -25,12 +27,12 @@ const Sidebar: React.FC<IProps> = ({ logo }) => {
               />
             </NavbarBrand>
           ) : null}
-          {/* <i
+          <i
             className='close-menu-btn'
-            // onClick={toggleSidenav}
+            onClick={toggleSidebar}
           >
             <img width='16' src={cross} alt='close' />
-          </i> */}
+          </i>
         </div>
         <div className='navbar-inner'>
           <Nav className='flex-column'>

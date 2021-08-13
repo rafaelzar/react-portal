@@ -17,6 +17,7 @@ const DefaultLayout: React.FC<IProps> = ({ children }) => {
     <>
       <div id='side' className='side-menu-container'>
         <Sidebar
+          toggleSidebar={toggleSidebar}
           logo={{
             innerLink: '/',
             imgSrc: logoImg,

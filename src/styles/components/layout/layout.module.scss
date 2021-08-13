@@ -1,14 +1,5 @@
-// burger button
-$burger-h: 22px;
-$burger-w: 26px;
-// burger button stripes
-$menu-stripe-w: 26px;
-$menu-stripe-h: 3px;
-$menu-stripe-color: #34495e;
-// side menu
 $side-menu-w: 250px;
 
-// ~~~ mixins ~~~
 @mixin transition($args...) {
 	-webkit-transition: $args;
 	-moz-transition: $args;
@@ -19,8 +10,8 @@ $side-menu-w: 250px;
 
 .menu-stripe {
 	display: inline-block;
-	width: $menu-stripe-w;
-	height: $menu-stripe-h;
+	width: 26px;
+	height: 3px;
 	background: $menu-stripe-color;
 	position: relative;
 	@include transition(all .1s linear);
@@ -28,8 +19,8 @@ $side-menu-w: 250px;
 	&:before, &:after {
 		content: "";
 		display: inline-block;
-		width: $menu-stripe-w;
-		height: $menu-stripe-h;
+		width: 26px;
+		height: 3px;
 		background: $menu-stripe-color;
 		position: absolute;
 		left: 0;
@@ -46,9 +37,10 @@ $side-menu-w: 250px;
 }
 
 #menu-trigger {
+	cursor: pointer;
 	display: inline-block;
-	width: $burger-w;
-	height: $burger-h;
+	width: 26px;
+	height: 22px;
 	line-height: 15px;
 	margin-right: 20px;
 
@@ -148,4 +140,17 @@ $side-menu-w: 250px;
 
 .active-nav-link {
 	color: $gold !important;
+}
+
+.close-menu-btn {
+	display: none;
+	cursor: pointer;
+	position: absolute;
+	right: 15px;
+}	
+
+@media screen and (max-width: 768px) {
+	.close-menu-btn {
+		display: block;
+	}	
 }

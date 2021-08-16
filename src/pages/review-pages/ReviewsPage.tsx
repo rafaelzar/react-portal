@@ -8,8 +8,15 @@ import {
   Col,
   Card,
 } from 'react-bootstrap';
+import ReviewCard from '../../components/reviews-page/ReviewCard';
+import { mockupData } from '../../lib/utils/mockupData';
+import { IReviews } from '../../lib/interfaces';
 
 const ReviewsPage: React.FC = () => {
+  const [reviews, setReviews] = React.useState<IReviews[]>([]);
+  React.useEffect(() => {
+    setReviews(mockupData);
+  }, []);
   return (
     <DefaultLayout>
       <Container fluid>
@@ -24,7 +31,7 @@ const ReviewsPage: React.FC = () => {
             </DropdownButton>
             <input type='date' name='review-date' className='mx-2' />
             <span className='mr-2'>on</span>
-            <DropdownButton id='dropdown-reviews-time' title='All sites'>
+            <DropdownButton id='dropdown-reviews-site' title='All sites'>
               <Dropdown.Item>All sites</Dropdown.Item>
               <Dropdown.Item>Eyerate</Dropdown.Item>
             </DropdownButton>
@@ -40,11 +47,11 @@ const ReviewsPage: React.FC = () => {
                 <Row>
                   <Col md={6}>
                     <p>New reviews</p>
-                    <p>7</p>
+                    <p className='big-number'>7</p>
                   </Col>
                   <Col md={6}>
                     <p>Average Rating</p>
-                    <p>4.5</p>
+                    <p className='big-number'>4.5</p>
                   </Col>
                 </Row>
                 <Row>
@@ -57,9 +64,21 @@ const ReviewsPage: React.FC = () => {
           </Col>
           <Col md={8}>
             <Card className='p-2'>
-              <Card.Title>
+              <Card.Title className='d-flex justify-content-between'>
                 <h3>Review List</h3>
+                <DropdownButton id='dropdown-reviews-sort' title='Most Recent'>
+                  <Dropdown.Item>Newset</Dropdown.Item>
+                  <Dropdown.Item>Oldest</Dropdown.Item>
+                </DropdownButton>
               </Card.Title>
+              {reviews.map((r) => (
+                <ReviewCard
+                  name={r.name}
+                  body={r.textReceived}
+                  date={r.date}
+                  rating={r.rating}
+                />
+              ))}
             </Card>
           </Col>
         </Row>

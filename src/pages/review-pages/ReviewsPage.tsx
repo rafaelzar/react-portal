@@ -11,6 +11,7 @@ import {
 import ReviewCard from '../../components/reviews-page/ReviewCard';
 import { mockupData } from '../../lib/utils/mockupData';
 import { IReviews } from '../../lib/interfaces';
+import ReviewStats from '../../components/reviews-page/ReviewStats';
 
 const ReviewsPage: React.FC = () => {
   const [reviews, setReviews] = React.useState<IReviews[]>([]);
@@ -39,32 +40,11 @@ const ReviewsPage: React.FC = () => {
         </div>
         <Row>
           <Col md={4}>
-            <Card className='p-2'>
-              <Card.Title>
-                <h3>Review Stats</h3>
-              </Card.Title>
-              <Card.Text>
-                <Row>
-                  <Col md={6}>
-                    <p>New reviews</p>
-                    <p className='big-number'>7</p>
-                  </Col>
-                  <Col md={6}>
-                    <p>Average Rating</p>
-                    <p className='big-number'>4.5</p>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col md={12}>
-                    <p>Star Distribution</p>
-                  </Col>
-                </Row>
-              </Card.Text>
-            </Card>
+            <ReviewStats />
           </Col>
           <Col md={8}>
-            <Card className='p-2'>
-              <Card.Title className='d-flex justify-content-between'>
+            <Card className='p-3'>
+              <Card.Title className='d-flex justify-content-between px-2'>
                 <h3>Review List</h3>
                 <DropdownButton id='dropdown-reviews-sort' title='Most Recent'>
                   <Dropdown.Item>Newset</Dropdown.Item>
@@ -77,6 +57,7 @@ const ReviewsPage: React.FC = () => {
                   body={r.textReceived}
                   date={r.date}
                   rating={r.rating}
+                  type={r.type}
                 />
               ))}
             </Card>

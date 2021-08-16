@@ -3,5 +3,6 @@ export interface IReviews {
   name: string;
   rating: number;
   date: string;
-  textReceived?: string;
+  type?: string;
+  textReceived: string;
 }

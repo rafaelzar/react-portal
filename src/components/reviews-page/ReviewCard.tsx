@@ -3,17 +3,18 @@ import React from 'react';
 interface IProps {
   name: string,
   date: string,
-  body?: string
-  rating: number
+  body: string,
+  rating: number,
+  type?: string,
 }
 
 const ReviewCard: React.FC<IProps> = ({
-  name, date, body, rating,
+  name, date, body, rating, type,
 }) => {
   return (
     <div className='review-card'>
       <div className='review-card-header'>
-        <div className='header-border' />
+        <div className={`header-border ${type === 'Negative' ? 'negative-review-color' : ''}`} />
         <div className='d-flex justify-content-between mb-3 review-card-body'>
           <div>{date}</div>
           <div>

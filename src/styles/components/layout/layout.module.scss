@@ -110,6 +110,14 @@ $side-menu-w: 250px;
 	height: 70px;
 }
 
+@media screen and (min-width: 768px) {
+	.nav-custom {
+		display: none;
+		height: 0;
+		opacity: 0;
+	}
+}
+
 .navbar-content {
 	padding: 0 !important;
 }

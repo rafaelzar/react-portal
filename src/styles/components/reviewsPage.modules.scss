@@ -1,0 +1,24 @@
+.big-number {
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+.review-card {
+  border: 1px solid #e5e8ed;
+  border-radius: 5px;
+  margin: 10px;
+}
+
+.header-border {
+  height: 5px;
+  background-color: #66cdbb;
+}
+
+.review-card-body,
+.review-card-footer {
+  padding: 1rem;
+}
+
+.negative-review-color {
+  background-color: #f57d6b;
+}

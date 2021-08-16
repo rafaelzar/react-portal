@@ -13,6 +13,7 @@ import axios from 'axios';
 import { fetchIdTokenCognitoFunction } from './lib/aws/aws-cognito-functions';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SettingsPage from './pages/settings-pages/SettingsPage';
 
 Amplify.configure(awsconfig);
 axios.interceptors.request.use(
@@ -37,6 +38,7 @@ export class App extends Component {
           <Route path='/eyerate-reviews' exact component={EyerateReviewsPage} />
           <Route path='/other-reviews' exact component={OtherReviewsPage} />
           <Route path='/payment' exact component={PaymentPage} />
+          <Route path='/settings' exact component={SettingsPage} />
           <Route path='/login' exact component={LoginPage} />
           <Route path='/forgot-password' exact component={ForgotPasswordPage} />
         </Switch>

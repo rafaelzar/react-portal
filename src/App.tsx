@@ -3,8 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import LoginPage from './pages/auth-pages/LoginPage';
 import HomePage from './pages/home/HomePage';
 import PaymentPage from './pages/payment-pages/PaymentPage';
-import EyerateReviewsPage from './pages/review-pages/EyerateReviewsPage';
-import OtherReviewsPage from './pages/review-pages/OtherReviewsPage';
+import ReviewsPage from './pages/review-pages/ReviewsPage';
 import ForgotPasswordPage from './pages/auth-pages/ForgotPasswordPage';
 import './styles/globals.scss';
 import Amplify from 'aws-amplify';
@@ -35,8 +34,7 @@ export class App extends Component {
       <BrowserRouter>
         <Switch>
           <Route path='/' exact component={HomePage} />
-          <Route path='/eyerate-reviews' exact component={EyerateReviewsPage} />
-          <Route path='/other-reviews' exact component={OtherReviewsPage} />
+          <Route path='/reviews' exact component={ReviewsPage} />
           <Route path='/payment' exact component={PaymentPage} />
           <Route path='/settings' exact component={SettingsPage} />
           <Route path='/login' exact component={LoginPage} />

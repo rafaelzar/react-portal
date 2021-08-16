@@ -61,20 +61,10 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
               <NavLink
                 className='nav-link'
                 activeClassName='active-nav-link'
-                to='/eyerate-reviews'
+                to='/reviews'
                 // onClick={closeSidenav}
               >
-                Eyerate Reviews
-              </NavLink>
-            </Nav.Item>
-            <Nav.Item>
-              <NavLink
-                className='nav-link'
-                activeClassName='active-nav-link'
-                to='/other-reviews'
-                // onClick={closeSidenav}
-              >
-                Other Reviews
+                Reviews
               </NavLink>
             </Nav.Item>
             <Nav.Item>
@@ -100,11 +90,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
               </NavLink>
             </Nav.Item>
             <Nav.Item onClick={logout}>
-              <div
-                className='nav-link pointer'
-              >
-                Logout
-              </div>
+              <div className='nav-link pointer'>Logout</div>
             </Nav.Item>
           </Nav>
         </div>

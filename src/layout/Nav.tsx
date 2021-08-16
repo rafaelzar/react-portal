@@ -11,7 +11,6 @@ const Nav: React.FC<IProps> = ({ toggleSidebar }) => {
         <div id='menu-trigger' onClick={toggleSidebar}>
           <span className='menu-stripe stripe-top mr-3' />
         </div>
-        <div>User</div>
       </div>
     </nav>
   );

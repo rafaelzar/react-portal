@@ -2,6 +2,7 @@
 @import '../styles/components/layout/layout.module.scss';
 @import '../styles/components/loginPage.module.scss';
 @import '../styles/components/forgotPasswordPage.module.scss';
+@import '../styles/components/settingsPage.module.scss';
 
 body {
   margin: 0;
@@ -40,31 +41,48 @@ input,
 
 input {
   padding-left: 15px;
-  &:focus-visible{
+  &:focus-visible {
     outline-color: #39bcb4;
   }
+}
+
+.form-group .form-control {
+  color: #929292;
+  border: 2px solid #e3e8eb;
+}
+
+.form-group .form-control:focus {
+  background-color: #fff;
+  border-color: #39bcb4;
+  border: 2px solid #39bcb4;
+  outline: none;
+  box-shadow: none;
 }
 
 input::placeholder {
   color: #8898aa;
 }
 
-
 .btn {
   color: #fff !important;
-  background-color: #39bcb4!important;
+  background-color: #39bcb4 !important;
   border: 1px solid transparent !important;
   position: relative;
-  text-transform: none;
   transition: all 0.15s ease;
   letter-spacing: 0.025em;
   font-size: 0.875rem;
   will-change: transform;
-  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0,0.08);
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+  &:hover,
+  &:focus-visible {
+    background-color: #fff !important;
+    border: 1px solid #39bcb4 !important;
+    color: #39bcb4 !important;
+  }
   &:hover {
-      background-color: #fff !important;
-      border: 1px solid #39bcb4 !important;
-      color: #39bcb4 !important;
-      box-shadow: 0 7px 14px rgba(50, 50, 93, 0.10), 0 3px 6px rgba(0, 0, 0,0.08);;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
+  }
+  &:focus {
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.3), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
   }
 }

@@ -5,10 +5,11 @@ import {
   forgotPasswordSubmitAuthAction,
 } from '../../store/actions/authActions';
 import { Link, useHistory } from 'react-router-dom';
-import { swalError } from '../../lib/utils/toasts';
+import { swalError, swalSuccess } from '../../lib/utils/toasts';
 import {
   Card, Col, Container, Row,
 } from 'react-bootstrap';
+import { isValidPassword, validateEmail } from '../../lib/utils/validator';
 
 const ForgotPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,31 +23,44 @@ const ForgotPasswordPage: React.FC = () => {
 
   const forgotPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    dispatch(forgotPasswordAuthAction(username)).then(
-      (res: boolean | undefined) => {
-        if (res) {
-          setIsUsernameSubmited(true);
-        } else {
-          swalError('Something went wrong');
-        }
-      },
-    );
-  };
-
-  const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    if (newPassword === newPasswordConfirmed) {
-      dispatch(forgotPasswordSubmitAuthAction(username, code, newPassword)).then(
+    if (validateEmail(username)) {
+      dispatch(forgotPasswordAuthAction(username)).then(
         (res: boolean | undefined) => {
           if (res) {
-            history.push('/');
+            setIsUsernameSubmited(true);
           } else {
             swalError('Something went wrong');
           }
         },
       );
+    }
+  };
+
+  const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    if (isValidPassword(newPassword)) {
+      if (code !== '') {
+        if (newPassword === newPasswordConfirmed) {
+          dispatch(
+            forgotPasswordSubmitAuthAction(username, code, newPassword),
+          ).then((res: boolean | undefined) => {
+            if (res) {
+              history.push('/');
+            } else {
+              swalError('Something went wrong');
+            }
+          });
+        } else {
+          swalError('Passwords do not match');
+        }
+      } else {
+        swalError('Please enter a valid  code');
+      }
+      swalSuccess('Please login with new password');
     } else {
-      swalError('Passwords do not match');
+      swalError(
+        'Password must be long at least 8 characters and contain at least one uppercase letter, one lower case letter, one digit and one special charater',
+      );
     }
   };
   return (
@@ -57,12 +71,16 @@ const ForgotPasswordPage: React.FC = () => {
             <Col lg='5' md='7'>
               <Card className='card-background'>
                 <Card.Header className='bg-transparent'>
-                  <div className='text-muted text-center my-2'>Forgot Password?</div>
+                  <div className='text-muted text-center my-2'>
+                    Forgot Password?
+                  </div>
                 </Card.Header>
                 <Card.Body className='px-lg-5 py-lg-4'>
                   {!isUsernameSubmited ? (
                     <div>
-                      <div className='text-center text-muted mb-4'>Please enter your email.</div>
+                      <div className='text-center text-muted mb-4'>
+                        Please enter your email.
+                      </div>
                       <form onSubmit={forgotPassword} className='forgot-form'>
                         <input
                           type='text'
@@ -72,7 +90,13 @@ const ForgotPasswordPage: React.FC = () => {
                           value={username}
                           onChange={(e) => setUsername(e.target.value)}
                         />
-                        <button type='submit' value='Submit' className='btn forgot-button mt-5'>Submit</button>
+                        <button
+                          type='submit'
+                          value='Submit'
+                          className='btn forgot-button mt-5'
+                        >
+                          Submit
+                        </button>
                         <Link to='/login' className='text-bottom mt-3'>
                           Return to login
                         </Link>

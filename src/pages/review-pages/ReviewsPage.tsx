@@ -8,16 +8,27 @@ import {
   Col,
   Card,
 } from 'react-bootstrap';
+import { DateRangePicker } from 'react-date-range';
+import { addDays } from 'date-fns';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
 import { mockupData } from '../../lib/utils/mockupData';
 import { IReviews } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
+import { createFalse } from 'typescript';
 
 const ReviewsPage: React.FC = () => {
   const [reviews, setReviews] = React.useState<IReviews[]>([]);
+  const [dateState, setDateState] = React.useState<any>([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: 'selection',
+    },
+  ]);
   React.useEffect(() => {
     setReviews(mockupData);
   }, []);
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -25,12 +36,20 @@ const ReviewsPage: React.FC = () => {
         <div className='filters-section d-flex align-items-center mt-3 mb-5'>
           <span>Show reviews from</span>
           <div className='d-flex align-items-center ml-2'>
-            <DropdownButton id='dropdown-reviews-time' title='Last Week'>
+            <DateRangePicker
+              onChange={(item) => setDateState([item.selection])}
+              showSelectionPreview
+              // showMonthAndYearPickers={false}
+              moveRangeOnFirstSelection={false}
+              ranges={dateState}
+              direction='horizontal'
+            />
+            {/* <DropdownButton id='dropdown-reviews-time' title='Last Week'>
               <Dropdown.Item>Last Week</Dropdown.Item>
               <Dropdown.Item>Last 4 weeks</Dropdown.Item>
               <Dropdown.Item>Last 3 Months</Dropdown.Item>
             </DropdownButton>
-            <input type='date' name='review-date' className='mx-2' />
+            <input type='date' name='review-date' className='mx-2' /> */}
             <span className='mr-2'>on</span>
             <DropdownButton id='dropdown-reviews-site' title='All sites'>
               <Dropdown.Item>All sites</Dropdown.Item>

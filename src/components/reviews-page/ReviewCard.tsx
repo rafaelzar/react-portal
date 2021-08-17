@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 
 interface IProps {
   name: string,
@@ -16,7 +17,7 @@ const ReviewCard: React.FC<IProps> = ({
       <div className='review-card-header'>
         <div className={`header-border ${type === 'Negative' ? 'negative-review-color' : ''}`} />
         <div className='d-flex justify-content-between mb-3 review-card-body'>
-          <div>{date}</div>
+          <div>{moment(date).format('LL')}</div>
           <div>
             <span>{rating}</span>
             {' '}

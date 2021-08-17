@@ -1,3 +1,17 @@
+@media screen and (max-width: 600px) {
+  .filters-section {
+    flex-direction: column;
+
+    div {
+      flex-direction: column;
+
+      button {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+
 .big-number {
   font-weight: bold;
   font-size: 3rem;

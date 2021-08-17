@@ -43,7 +43,7 @@ const ReviewsPage: React.FC = () => {
             <ReviewStats />
           </Col>
           <Col md={8}>
-            <Card className='p-3'>
+            <Card className='p-3 mb-3'>
               <Card.Title className='d-flex justify-content-between px-2'>
                 <h3>Review List</h3>
                 <DropdownButton id='dropdown-reviews-sort' title='Most Recent'>
@@ -53,11 +53,11 @@ const ReviewsPage: React.FC = () => {
               </Card.Title>
               {reviews.map((r) => (
                 <ReviewCard
-                  name={r.name}
-                  body={r.textReceived}
+                  author={r.author}
+                  content={r.content}
                   date={r.date}
                   rating={r.rating}
-                  type={r.type}
+                  platform={r.platform}
                 />
               ))}
             </Card>

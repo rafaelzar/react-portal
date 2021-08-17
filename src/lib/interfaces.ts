@@ -1,10 +1,10 @@
 export interface IReviews {
-  id: string;
-  name: string;
-  rating: number;
-  date: string;
-  type?: string;
-  textReceived: string;
+  _id: string,
+  author: string,
+  content: string,
+  date: string,
+  rating: number,
+  platform: string,
 }
 
 export interface ICognitoErrorHandler {

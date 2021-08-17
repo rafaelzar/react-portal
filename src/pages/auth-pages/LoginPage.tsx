@@ -14,7 +14,7 @@ import {
   Card, Col, Container, Row,
 } from 'react-bootstrap';
 import logo from '../../lib/assets/img/logo-eyerate.png';
-import { isValidPassword, validateEmail } from '../../lib/utils/validator';
+import { validateLogin } from '../../lib/utils/validator';
 
 interface IProps {
   history: Array<string>;
@@ -37,11 +37,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (!validateEmail(email)) {
-      swalError('Please enter a valid email');
-    } else if (!isValidPassword(password)) {
-      swalError('Please enter a vaild password');
-    } else {
+    if (validateLogin(email, password)) {
       setIsLoading(true);
       dispatch(logInCognitoUserAuthAction(email, password)).then(
         async (res: boolean | string | undefined) => {
@@ -76,13 +72,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 
   const LoginWitNewPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (!validateEmail(email)) {
-      swalError('Please enter a valid email');
-    } else if (!isValidPassword(newPassword)) {
-      swalError(
-        'Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and one special character',
-      );
-    } else {
+    if (validateLogin(email, newPassword)) {
       setIsLoading(true);
       dispatch(
         logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),

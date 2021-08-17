@@ -9,7 +9,10 @@ import { swalError, swalSuccess } from '../../lib/utils/toasts';
 import {
   Card, Col, Container, Row,
 } from 'react-bootstrap';
-import { isValidPassword, validateEmail } from '../../lib/utils/validator';
+import {
+  validateEmail,
+  validateForgotPasswordSubmit,
+} from '../../lib/utils/validator';
 
 const ForgotPasswordPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -39,13 +42,7 @@ const ForgotPasswordPage: React.FC = () => {
 
   const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (code === '') {
-      swalError('Please enter a valid code');
-    } else if (!isValidPassword(newPassword)) {
-      swalError('Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and one special character');
-    } else if (newPassword !== newPasswordConfirmed) {
-      swalError('Passwords do not match');
-    } else {
+    if (validateForgotPasswordSubmit(code, newPassword, newPasswordConfirmed)) {
       dispatch(
         forgotPasswordSubmitAuthAction(username, code, newPassword),
       ).then((res: boolean | undefined) => {
@@ -57,30 +54,6 @@ const ForgotPasswordPage: React.FC = () => {
         }
       });
     }
-    // if (isValidPassword(newPassword)) {
-    //   if (code !== '') {
-    //     if (newPassword === newPasswordConfirmed) {
-    //       dispatch(
-    //         forgotPasswordSubmitAuthAction(username, code, newPassword),
-    //       ).then((res: boolean | undefined) => {
-    //         if (res) {
-    //           history.push('/');
-    //         } else {
-    //           swalError('Something went wrong');
-    //         }
-    //       });
-    //     } else {
-    //       swalError('Passwords do not match');
-    //     }
-    //   } else {
-    //     swalError('Please enter a valid  code');
-    //   }
-    //   swalSuccess('Please login with new password');
-    // } else {
-    //   swalError(
-    //     'Password must be long at least 8 characters and contain at least one uppercase letter, one lower case letter, one digit and one special charater',
-    //   );
-    // }
   };
   return (
     <>

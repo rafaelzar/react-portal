@@ -17,13 +17,14 @@ const ForgotPasswordPage: React.FC = () => {
   const [newPassword, setNewPassword] = React.useState('');
   const [newPasswordConfirmed, setNewPasswordConfirmed] = React.useState('');
   const [username, setUsername] = React.useState('');
-  const [sameUsername, setSameUsername] = React.useState('');
   const [code, setCode] = React.useState('');
   const [isUsernameSubmited, setIsUsernameSubmited] = React.useState(false);
 
   const forgotPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (validateEmail(username)) {
+    if (!validateEmail(username)) {
+      swalError('Please enter a valid email');
+    } else {
       dispatch(forgotPasswordAuthAction(username)).then(
         (res: boolean | undefined) => {
           if (res) {
@@ -38,30 +39,48 @@ const ForgotPasswordPage: React.FC = () => {
 
   const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (isValidPassword(newPassword)) {
-      if (code !== '') {
-        if (newPassword === newPasswordConfirmed) {
-          dispatch(
-            forgotPasswordSubmitAuthAction(username, code, newPassword),
-          ).then((res: boolean | undefined) => {
-            if (res) {
-              history.push('/');
-            } else {
-              swalError('Something went wrong');
-            }
-          });
-        } else {
-          swalError('Passwords do not match');
-        }
-      } else {
-        swalError('Please enter a valid  code');
-      }
-      swalSuccess('Please login with new password');
+    if (code === '') {
+      swalError('Please enter a valid code');
+    } else if (!isValidPassword(newPassword)) {
+      swalError('Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and one special character');
+    } else if (newPassword !== newPasswordConfirmed) {
+      swalError('Passwords do not match');
     } else {
-      swalError(
-        'Password must be long at least 8 characters and contain at least one uppercase letter, one lower case letter, one digit and one special charater',
-      );
+      dispatch(
+        forgotPasswordSubmitAuthAction(username, code, newPassword),
+      ).then((res: boolean | undefined) => {
+        if (res) {
+          history.push('/login');
+          swalSuccess('Please login with new password');
+        } else {
+          swalError('Something went wrong');
+        }
+      });
     }
+    // if (isValidPassword(newPassword)) {
+    //   if (code !== '') {
+    //     if (newPassword === newPasswordConfirmed) {
+    //       dispatch(
+    //         forgotPasswordSubmitAuthAction(username, code, newPassword),
+    //       ).then((res: boolean | undefined) => {
+    //         if (res) {
+    //           history.push('/');
+    //         } else {
+    //           swalError('Something went wrong');
+    //         }
+    //       });
+    //     } else {
+    //       swalError('Passwords do not match');
+    //     }
+    //   } else {
+    //     swalError('Please enter a valid  code');
+    //   }
+    //   swalSuccess('Please login with new password');
+    // } else {
+    //   swalError(
+    //     'Password must be long at least 8 characters and contain at least one uppercase letter, one lower case letter, one digit and one special charater',
+    //   );
+    // }
   };
   return (
     <>

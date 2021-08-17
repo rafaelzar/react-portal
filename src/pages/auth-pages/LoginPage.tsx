@@ -38,7 +38,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
-      swalError('Please enter a valid mail');
+      swalError('Please enter a valid email');
     } else if (!isValidPassword(password)) {
       swalError('Please enter a vaild password');
     } else {
@@ -78,7 +78,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const LoginWitNewPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!validateEmail(email)) {
-      swalError('Please enter a valid mail');
+      swalError('Please enter a valid email');
     } else if (!isValidPassword(newPassword)) {
       swalError(
         'Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and one special character',

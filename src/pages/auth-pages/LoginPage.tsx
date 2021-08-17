@@ -37,27 +37,25 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (validateEmail(email)) {
-      if (isValidPassword(password)) {
-        setIsLoading(true);
-        dispatch(logInCognitoUserAuthAction(email, password)).then(
-          async (res: boolean | string | undefined) => {
-            if (res === 'NEW_PASSWORD_REQUIRED') {
-              setNewUser(true);
-              setIsLoading(false);
-            } else if (res === false) {
-              setIsLoading(false);
-              swalError('Something went wrong');
-            } else {
-              fetchUserFromDatabase();
-            }
-          },
-        );
-      } else {
-        swalError(
-          'Password must be long at least 8 characters and contain at least one uppercase letter, one lower case letter, one digit and one special charater',
-        );
-      }
+    if (!validateEmail(email)) {
+      swalError('Please enter a valid mail');
+    } else if (!isValidPassword(password)) {
+      swalError('Please enter a vaild password');
+    } else {
+      setIsLoading(true);
+      dispatch(logInCognitoUserAuthAction(email, password)).then(
+        async (res: boolean | string | undefined) => {
+          if (res === 'NEW_PASSWORD_REQUIRED') {
+            setNewUser(true);
+            setIsLoading(false);
+          } else if (res === false) {
+            setIsLoading(false);
+            swalError('Something went wrong');
+          } else {
+            fetchUserFromDatabase();
+          }
+        },
+      );
     }
   };
 
@@ -79,28 +77,24 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 
   const LoginWitNewPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (validateEmail(email)) {
-      if (isValidPassword(newPassword)) {
-        setIsLoading(true);
-        dispatch(
-          logInCognitoUserWithNewPasswordAuthAction(
-            email,
-            password,
-            newPassword,
-          ),
-        ).then((res: boolean | string | undefined) => {
-          if (res) {
-            fetchUserFromDatabase();
-          } else {
-            setIsLoading(false);
-            swalError('No user in database');
-          }
-        });
-      } else {
-        swalError(
-          'Password must be long at least 8 characters and contain at least one uppercase letter, one lower case letter, one digit and one special charater',
-        );
-      }
+    if (!validateEmail(email)) {
+      swalError('Please enter a valid mail');
+    } else if (!isValidPassword(newPassword)) {
+      swalError(
+        'Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and one special character',
+      );
+    } else {
+      setIsLoading(true);
+      dispatch(
+        logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
+      ).then((res: boolean | string | undefined) => {
+        if (res) {
+          fetchUserFromDatabase();
+        } else {
+          setIsLoading(false);
+          swalError('No user in database');
+        }
+      });
     }
   };
 

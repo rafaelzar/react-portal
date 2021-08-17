@@ -1,5 +1,7 @@
 import React from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
+import { Doughnut } from 'react-chartjs-2';
+import { chartData } from '../../lib/utils/chartData';
 
 const ReviewStats: React.FC = () => {
   return (
@@ -21,6 +23,7 @@ const ReviewStats: React.FC = () => {
         <Row>
           <Col md={12}>
             <p>Star Distribution</p>
+            <Doughnut data={chartData} />
           </Col>
         </Row>
       </Card.Text>

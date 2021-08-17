@@ -16,9 +16,7 @@ export const validateLogin = (
   if (!validator.isEmail(email)) {
     swalError('Please enter a valid email');
   } else if (!isValidPassword(password)) {
-    swalError(
-      'Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 digit and one special character',
-    );
+    swalError('Invalid password format');
   } else {
     return true;
   }

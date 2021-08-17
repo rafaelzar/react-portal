@@ -22,3 +22,14 @@
 .negative-review-color {
   background-color: #f57d6b;
 }
+
+.stars-bar-wrapp {
+  display: flex;
+  align-items: center;
+
+  .star-bar {
+    width: 80%;
+    height: 10px;
+    margin-left: 10px;
+  }
+}

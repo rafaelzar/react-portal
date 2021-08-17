@@ -5,6 +5,7 @@ import {
   logInUserWithNewPasswordCognitoFunction,
   logOutUserCognitoFunction,
 } from '../../lib/aws/aws-cognito-functions';
+import { swalError, swalInfo } from '../../lib/utils/toasts';
 import { sendJWTToken } from '../apiCalls';
 import { AppDispatch } from '../store';
 
@@ -18,7 +19,6 @@ export const logInCognitoUserAuthAction = (
     try {
       const user = await logInUserCognitoFunction(username, password);
       if (user === 'NEW_PASSWORD_REQUIRED') {
-        console.log('new pass required');
         return 'NEW_PASSWORD_REQUIRED';
       } else if (user) {
         dispatch({ type: 'LOGIN_SUCCESS', user });
@@ -27,7 +27,7 @@ export const logInCognitoUserAuthAction = (
         return false;
       }
     } catch (error) {
-      console.log(error);
+      swalError('Something went wrong');
       return false;
     }
   };
@@ -54,7 +54,7 @@ export const logInCognitoUserWithNewPasswordAuthAction = (
         return false;
       }
     } catch (error) {
-      console.log(error);
+      swalError('Something went wrong');
       return false;
     }
   };
@@ -71,7 +71,7 @@ export const logOutCognitoUserAuthAction = () => {
         return false;
       }
     } catch (error) {
-      console.log(error);
+      swalError('Something went wrong');
       return false;
     }
   };
@@ -88,6 +88,7 @@ export const forgotPasswordAuthAction = (email: string) => {
       }
     } catch (error) {
       console.log(error);
+      swalError('Something went wrong');
       return false;
     }
   };
@@ -113,6 +114,7 @@ export const forgotPasswordSubmitAuthAction = (
       }
     } catch (error) {
       console.log(error);
+      swalError('Something went wrong');
       return false;
     }
   };
@@ -131,6 +133,7 @@ export const fetchUserFromDatabaseAuthAction = () => {
       }
     } catch (error) {
       console.log(error);
+      swalInfo('This is a test user which is not in the database');
       return false;
     }
   };

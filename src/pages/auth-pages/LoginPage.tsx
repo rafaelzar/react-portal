@@ -14,6 +14,7 @@ import {
   Card, Col, Container, Row,
 } from 'react-bootstrap';
 import logo from '../../lib/assets/img/logo-eyerate.png';
+import { validateLogin } from '../../lib/utils/validator';
 
 interface IProps {
   history: Array<string>;
@@ -36,20 +37,21 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    dispatch(logInCognitoUserAuthAction(email, password)).then(
-      async (res: boolean | string | undefined) => {
-        if (res === 'NEW_PASSWORD_REQUIRED') {
-          setNewUser(true);
-          setIsLoading(false);
-        } else if (res === false) {
-          setIsLoading(false);
-          swalError('Something went wrong');
-        } else {
-          fetchUserFromDatabase();
-        }
-      },
-    );
+    if (validateLogin(email, password)) {
+      setIsLoading(true);
+      dispatch(logInCognitoUserAuthAction(email, password)).then(
+        async (res: boolean | string | undefined) => {
+          if (res === 'NEW_PASSWORD_REQUIRED') {
+            setNewUser(true);
+            setIsLoading(false);
+          } else if (res === false) {
+            setIsLoading(false);
+          } else {
+            fetchUserFromDatabase();
+          }
+        },
+      );
+    }
   };
 
   const fetchUserFromDatabase = async () => {
@@ -70,17 +72,19 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
 
   const LoginWitNewPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    dispatch(
-      logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
-    ).then((res: boolean | string | undefined) => {
-      if (res) {
-        fetchUserFromDatabase();
-      } else {
-        setIsLoading(false);
-        swalError('No user in database');
-      }
-    });
+    if (validateLogin(email, newPassword)) {
+      setIsLoading(true);
+      dispatch(
+        logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
+      ).then((res: boolean | string | undefined) => {
+        if (res) {
+          fetchUserFromDatabase();
+        } else {
+          setIsLoading(false);
+          swalError('No user in database');
+        }
+      });
+    }
   };
 
   return (
@@ -90,15 +94,15 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
           <Col lg='5' md='7'>
             <Card className='card-background'>
               <Card.Header className='bg-transparent'>
-                <div className='text-muted text-center my-2'>Welcome to the Employee Portal.</div>
+                <div className='text-muted text-center my-2'>
+                  Welcome to the Employee Portal.
+                </div>
               </Card.Header>
               <Card.Body className='px-lg-5 py-lg-5'>
-                <img
-                  alt='Eyerate logo'
-                  className='login-logo'
-                  src={logo}
-                />
-                <div className='text-center text-muted mb-4'>Please login in order to proceed.</div>
+                <img alt='Eyerate logo' className='login-logo' src={logo} />
+                <div className='text-center text-muted mb-4'>
+                  Please login in order to proceed.
+                </div>
                 {!newUser ? (
                   <form onSubmit={Login} className='login-form'>
                     <input
@@ -119,7 +123,13 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                       onChange={(e) => setPassword(e.target.value)}
                       className='mb-5'
                     />
-                    <button type='submit' disabled={isLoading} className='btn login-button'>Sign In</button>
+                    <button
+                      type='submit'
+                      disabled={isLoading}
+                      className='btn login-button'
+                    >
+                      Sign In
+                    </button>
                     <Link to='/forgot-password' className='text-bottom mt-3'>
                       Forgot password?
                     </Link>
@@ -137,7 +147,13 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                         onChange={(e) => setNewPassword(e.target.value)}
                         className='mb-5'
                       />
-                      <button type='submit' disabled={isLoading} className='btn login-button'>Sign In</button>
+                      <button
+                        type='submit'
+                        disabled={isLoading}
+                        className='btn login-button'
+                      >
+                        Sign In
+                      </button>
                     </form>
                   </>
                 )}

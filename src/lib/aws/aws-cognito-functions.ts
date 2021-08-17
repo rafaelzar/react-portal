@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { Auth } from 'aws-amplify';
+import errorHandler from '../utils/errorHandler';
 
 export const logInUserCognitoFunction = async (
   username: string,
@@ -16,6 +17,7 @@ export const logInUserCognitoFunction = async (
     }
   } catch (error) {
     console.log('error signing in', error);
+    errorHandler(error);
     return false;
   }
 };
@@ -45,6 +47,7 @@ export const logInUserWithNewPasswordCognitoFunction = async (
     return res;
   } catch (error) {
     console.log('error signing in', error);
+    errorHandler(error);
     return false;
   }
 };
@@ -56,6 +59,7 @@ export const logOutUserCognitoFunction = async (): Promise<boolean> => {
     return true;
   } catch (error) {
     console.log('error signing out: ', error);
+    errorHandler(error);
     return false;
   }
 };
@@ -71,6 +75,7 @@ export const forgotPasswordFunctionCognitoFunction = async (
     return true;
   } catch (error) {
     console.log('username error: ', error);
+    errorHandler(error);
     return false;
   }
 };
@@ -90,6 +95,7 @@ export const forgotPasswordSubmitFunctionCognitoFunction = async (
     return true;
   } catch (error) {
     console.log('forgot password error: ', error);
+    errorHandler(error);
     return false;
   }
 };

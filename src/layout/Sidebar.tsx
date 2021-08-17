@@ -23,8 +23,6 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
       if (res) {
         history.push('/login');
         swalSuccess('You are logged out');
-      } else {
-        swalError('Something went wrong');
       }
     });
   };

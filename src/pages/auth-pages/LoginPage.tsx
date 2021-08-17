@@ -50,7 +50,6 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
             setIsLoading(false);
           } else if (res === false) {
             setIsLoading(false);
-            swalError('Something went wrong');
           } else {
             fetchUserFromDatabase();
           }

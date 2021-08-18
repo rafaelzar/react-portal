@@ -7,9 +7,11 @@ import {
   Row,
   Col,
   Card,
+  Button,
 } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
 import { addDays } from 'date-fns';
+import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
 import { mockupData } from '../../lib/utils/mockupData';
 import { IReviews, IDatePicker } from '../../lib/interfaces';
@@ -18,6 +20,10 @@ import ReviewStats from '../../components/reviews-page/ReviewStats';
 const ReviewsPage: React.FC = () => {
   const [reviews, setReviews] = React.useState<IReviews[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [dateRange, setDateRange] = React.useState({
+    start: 'From',
+    end: 'To',
+  });
   const [dateState, setDateState] = React.useState<IDatePicker[]>([
     {
       startDate: new Date(),
@@ -28,6 +34,17 @@ const ReviewsPage: React.FC = () => {
   React.useEffect(() => {
     setReviews(mockupData);
   }, []);
+
+  const setDateRangeFilter = () => {
+    setDateRange((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'MMM DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
+    }));
+    setToggleDatePicker(!toggleDatePicker);
+  };
 
   return (
     <DefaultLayout>
@@ -40,14 +57,17 @@ const ReviewsPage: React.FC = () => {
             onClick={() => setToggleDatePicker(!toggleDatePicker)}
           >
             <div className='date-range-btn'>Last 4 weeks</div>
-            <div className='date-range-btn'>Jun 30-Jul 30</div>
+            <div className='date-range-btn'>
+              <span>{dateRange.start}</span>
+              {' '}
+              -
+              {' '}
+              <span>{dateRange.end}</span>
+            </div>
           </div>
           <div className='d-flex align-items-center ml-2'>
             <span className='mr-2'>on</span>
-            <div
-              className='date-range-btn with-border d-flex align-items-center'
-              onClick={() => console.log(dateState)}
-            >
+            <div className='date-range-btn with-border d-flex align-items-center'>
               All Sites
               <div className='arrow-wrapp'>
                 <i className='arrow down ml-5' />
@@ -58,14 +78,20 @@ const ReviewsPage: React.FC = () => {
         <div
           className={`date-piker-wrapp ${toggleDatePicker ? 'd-block' : ''}`}
         >
-          <DateRangePicker
-            onChange={(item) => setDateState([item.selection])}
-            showSelectionPreview
-            // showMonthAndYearPickers={false}
-            moveRangeOnFirstSelection={false}
-            ranges={dateState}
-            direction='horizontal'
-          />
+          <Row>
+            <DateRangePicker
+              onChange={(item) => setDateState([item.selection])}
+              inputRanges={[]}
+              showDateDisplay={false}
+              showMonthAndYearPickers={false}
+              moveRangeOnFirstSelection={false}
+              ranges={dateState}
+              direction='vertical'
+            />
+            <Col md={12} className='mb-4'>
+              <Button onClick={setDateRangeFilter}>Filter</Button>
+            </Col>
+          </Row>
         </div>
         <Row>
           <Col md={4}>

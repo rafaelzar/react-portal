@@ -47,3 +47,43 @@
     margin-left: 10px;
   }
 }
+
+.date-piker-wrapp {
+  display: none;
+}
+
+.date-range-btn-wrapp {
+  display: flex;
+  border: 1px solid #e5e8ed;
+  border-radius: 10px;
+
+  .date-range-btn:first-child {
+    border-right: 1px solid #e5e8ed;
+  }
+}
+
+.date-range-btn {
+  padding: 5px 15px;
+  cursor: pointer;
+
+  &.with-border {
+    border: 1px solid #e5e8ed;
+    border-radius: 10px;
+  }
+}
+
+.arrow-wrapp {
+  margin-top: -5px;
+}
+
+.arrow {
+  border: solid $blackHighlight;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}

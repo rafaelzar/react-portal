@@ -99,3 +99,24 @@ export const forgotPasswordSubmitFunctionCognitoFunction = async (
     return false;
   }
 };
+
+export const changePasswordFunctionCognitoFunction = async (
+  oldPassword: string,
+  newPassword: string,
+): Promise<boolean | void | string> => {
+  try {
+    const currentUser = await Auth.currentAuthenticatedUser();
+    if (currentUser) {
+      const changePasswordRes = await Auth.changePassword(
+        currentUser,
+        oldPassword,
+        newPassword,
+      );
+      return changePasswordRes;
+    }
+    return false;
+  } catch (error) {
+    errorHandler(error);
+    return false;
+  }
+};

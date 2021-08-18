@@ -1,37 +1,44 @@
 import React from 'react';
+import moment from 'moment';
 
 interface IProps {
-  name: string,
-  date: string,
-  body: string,
-  rating: number,
-  type?: string,
+  author: string;
+  date: string;
+  content: string;
+  rating: number;
+  platform: string;
 }
 
 const ReviewCard: React.FC<IProps> = ({
-  name, date, body, rating, type,
+  author,
+  date,
+  content,
+  rating,
+  platform,
 }) => {
   return (
     <div className='review-card'>
       <div className='review-card-header'>
-        <div className={`header-border ${type === 'Negative' ? 'negative-review-color' : ''}`} />
+        <div
+          className={`header-border ${
+            rating < 3 ? 'negative-review-color' : ''
+          }`}
+        />
         <div className='d-flex justify-content-between mb-3 review-card-body'>
-          <div>{date}</div>
+          <div>{moment(date).format('LL')}</div>
           <div>
             <span>{rating}</span>
             {' '}
-            Google
+            {platform}
           </div>
         </div>
       </div>
       <div className='review-card-body'>
-        <p>
-          {body}
-        </p>
+        <p>{content}</p>
       </div>
       <div className='review-card-footer'>
-        <span>{name}</span>
-        <span>(612) 258-2151</span>
+        <span>{author}</span>
+        <span> (612) 258-2151</span>
       </div>
     </div>
   );

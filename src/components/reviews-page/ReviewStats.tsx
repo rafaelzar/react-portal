@@ -1,5 +1,9 @@
 import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import {
+  Row, Col, Card, ProgressBar,
+} from 'react-bootstrap';
+import { Doughnut } from 'react-chartjs-2';
+import { chartData, starsData } from '../../lib/utils/chartData';
 
 const ReviewStats: React.FC = () => {
   return (
@@ -10,17 +14,35 @@ const ReviewStats: React.FC = () => {
       <Card.Text>
         <Row>
           <Col md={6}>
-            <p>New reviews</p>
+            <p className='font-weight-bold'>New reviews</p>
             <p className='big-number'>7</p>
           </Col>
           <Col md={6}>
-            <p>Average Rating</p>
+            <p className='font-weight-bold'>Average Rating</p>
             <p className='big-number'>4.5</p>
           </Col>
         </Row>
         <Row>
           <Col md={12}>
-            <p>Star Distribution</p>
+            <p className='font-weight-bold'>Star Distribution</p>
+            <div className='mb-4'>
+              {starsData.map((stars) => (
+                <div key={stars.stars} className='stars-bar-wrapp mb-2'>
+                  <span>
+                    {stars.stars}
+                    {' '}
+                    Star
+                  </span>
+                  <ProgressBar className='star-bar' now={stars.percent} />
+                </div>
+              ))}
+            </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col md={12}>
+            <p className='font-weight-bold'>Site Distribution</p>
+            <Doughnut data={chartData} />
           </Col>
         </Row>
       </Card.Text>

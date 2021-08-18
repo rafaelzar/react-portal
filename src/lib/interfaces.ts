@@ -1,14 +1,20 @@
 export interface IReviews {
-  id: string;
-  name: string;
-  rating: number;
+  _id: string;
+  author: string;
+  content: string;
   date: string;
-  type?: string;
-  textReceived: string;
+  rating: number;
+  platform: string;
 }
 
 export interface ICognitoErrorHandler {
-  code: string,
-  message: string,
-  name: string,
+  code: string;
+  message: string;
+  name: string;
+}
+
+export interface IDatePicker {
+  startDate?: Date | undefined;
+  endDate?: Date | undefined;
+  key?: string;
 }

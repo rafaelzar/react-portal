@@ -48,9 +48,28 @@
   }
 }
 
-.date-piker-wrapp {
-  margin-top: -20px;
+.date-picker-wrapp {
+  margin-top: -40px;
   display: none;
+  position: absolute;
+  left: 15px;
+  z-index: 999;
+  padding: 0 20px;
+  background: #fff;
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 400px ){
+  .date-picker-wrapp {
+    left: 5px;
+  }
+
+  .rdrDateRangeWrapper {
+    .rdrMonth {
+      width: 100%;
+    }
+  }
 }
 
 .date-range-btn-wrapp {
@@ -108,4 +127,8 @@
 .down {
   transform: rotate(45deg);
   -webkit-transform: rotate(45deg);
+}
+
+.rdrDefinedRangesWrapper {
+  display: none;
 }

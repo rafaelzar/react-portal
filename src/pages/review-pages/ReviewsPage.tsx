@@ -10,7 +10,7 @@ import {
   Button,
 } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
-import { addDays } from 'date-fns';
+import { subDays } from 'date-fns';
 import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
 import { mockupData } from '../../lib/utils/mockupData';
@@ -25,13 +25,13 @@ const ReviewsPage: React.FC = () => {
     'All Sites',
   );
   const [dateRange, setDateRange] = React.useState({
-    start: 'From',
-    end: 'To',
+    start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
+    end: `${moment(new Date()).format('MMM DD')}`,
   });
   const [dateState, setDateState] = React.useState<IDatePicker[]>([
     {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
       key: 'selection',
     },
   ]);
@@ -64,7 +64,7 @@ const ReviewsPage: React.FC = () => {
             className='date-range-btn-wrapp ml-2'
             onClick={() => setToggleDatePicker(!toggleDatePicker)}
           >
-            <div className='date-range-btn'>Last 4 weeks</div>
+            <div className='date-range-btn d-none'>Last 4 weeks</div>
             <div className='date-range-btn'>
               <span>{dateRange.start}</span>
               {' '}
@@ -107,22 +107,21 @@ const ReviewsPage: React.FC = () => {
           </div>
         </div>
         <div
-          className={`date-piker-wrapp ${toggleDatePicker ? 'd-block' : ''}`}
+          className={`date-picker-wrapp ${toggleDatePicker ? 'd-block' : ''}`}
         >
-          <Row>
-            <DateRangePicker
-              onChange={(item) => setDateState([item.selection])}
-              inputRanges={[]}
-              showDateDisplay={false}
-              showMonthAndYearPickers={false}
-              moveRangeOnFirstSelection={false}
-              ranges={dateState}
-              direction='vertical'
-            />
-            <Col md={12} className='mb-4'>
-              <Button onClick={setDateRangeFilter}>Filter</Button>
-            </Col>
-          </Row>
+          <DateRangePicker
+            onChange={(item) => setDateState([item.selection])}
+            inputRanges={[]}
+            staticRanges={[]}
+            showDateDisplay={false}
+            showMonthAndYearPickers={false}
+            moveRangeOnFirstSelection={false}
+            ranges={dateState}
+            direction='vertical'
+          />
+          <Col md={12} className='mb-4'>
+            <Button className='w-100' onClick={setDateRangeFilter}>Filter</Button>
+          </Col>
         </div>
         <Row>
           <Col md={4}>

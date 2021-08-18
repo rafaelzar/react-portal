@@ -27,7 +27,7 @@ const ReviewStats: React.FC = () => {
             <p className='font-weight-bold'>Star Distribution</p>
             <div className='mb-4'>
               {starsData.map((stars) => (
-                <div className='stars-bar-wrapp mb-2'>
+                <div key={stars.stars} className='stars-bar-wrapp mb-2'>
                   <span>
                     {stars.stars}
                     {' '}

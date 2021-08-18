@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container,
@@ -20,6 +20,10 @@ import ReviewStats from '../../components/reviews-page/ReviewStats';
 const ReviewsPage: React.FC = () => {
   const [reviews, setReviews] = React.useState<IReviews[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [toggleSitesDropdonw, setToggleSitesDropdown] = React.useState(false);
+  const [sitesDropdownValue, setSitesDropdownValue] = React.useState(
+    'All Sites',
+  );
   const [dateRange, setDateRange] = React.useState({
     start: 'From',
     end: 'To',
@@ -46,6 +50,10 @@ const ReviewsPage: React.FC = () => {
     setToggleDatePicker(!toggleDatePicker);
   };
 
+  const handleDropdownChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLElement;
+    setSitesDropdownValue(target.innerText);
+  };
   return (
     <DefaultLayout>
       <Container fluid>
@@ -67,10 +75,33 @@ const ReviewsPage: React.FC = () => {
           </div>
           <div className='d-flex align-items-center ml-2'>
             <span className='mr-2'>on</span>
-            <div className='date-range-btn with-border d-flex align-items-center'>
-              All Sites
+            <div
+              className='date-range-btn custom-dropdown d-flex align-items-center'
+              onClick={() => {
+                setToggleSitesDropdown(!toggleSitesDropdonw);
+              }}
+            >
+              {sitesDropdownValue}
               <div className='arrow-wrapp'>
                 <i className='arrow down ml-5' />
+              </div>
+              <div
+                className={`custom-dropdown-menu ${
+                  toggleSitesDropdonw ? 'd-block' : ''
+                }`}
+              >
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  All Sites
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Eyerate
+                </div>
               </div>
             </div>
           </div>
@@ -108,6 +139,7 @@ const ReviewsPage: React.FC = () => {
               </Card.Title>
               {reviews.map((r) => (
                 <ReviewCard
+                  key={r._id}
                   author={r.author}
                   content={r.content}
                   date={r.date}

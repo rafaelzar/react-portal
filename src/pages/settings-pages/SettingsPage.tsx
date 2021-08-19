@@ -2,30 +2,36 @@ import React from 'react';
 import { useAppDispatch } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
+import {
+  getUserJwtTokenSelector,
+  getUserSelector,
+} from '../../store/selectors/selectors';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container, Row, Col, Card, Form, Button,
 } from 'react-bootstrap';
-import { swalError, swalInfo } from '../../lib/utils/toasts';
+import { swalInfo } from '../../lib/utils/toasts';
 import {
   changePasswordAuthAction,
   logOutCognitoUserAuthAction,
 } from '../../store/actions/authActions';
+import { validateChangePasswordSubmit } from '../../lib/utils/validator';
+import { updateUser } from '../../store/apiCalls';
 
 const SettingsPage: React.FC = () => {
-  const reduxStore = useSelector((state: { user: any }) => state);
-  const { user } = reduxStore.user;
-  const firstNameValue = user.first_name;
-  const lastNameValue = user.last_name;
-  const nickNameValue = user.nick_name;
-  const userEmailValue = user.email;
-  const phoneNumberValue = user.phone;
-  const [email, setEmail] = React.useState(userEmailValue);
-  const [firstName, setFirstName] = React.useState(firstNameValue);
-  const [lastName, setLastName] = React.useState(lastNameValue);
-  const [phoneNumber, setPhoneNumber] = React.useState(phoneNumberValue);
-  const [nickName, setNickName] = React.useState(nickNameValue);
+  const userInfo = useSelector((state) => getUserSelector(state));
+  const {
+    first_name: userFirstName = '',
+    last_name: userLastName = '',
+    nick_names: userNickName = '',
+    email: userEmail = '',
+    phone: userPhone = '',
+  } = userInfo;
+  const [email, setEmail] = React.useState(userEmail);
+  const [firstName, setFirstName] = React.useState(userFirstName);
+  const [lastName, setLastName] = React.useState(userLastName);
+  const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
+  const [nickName, setNickName] = React.useState(userNickName);
   const [password, setPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
@@ -33,27 +39,43 @@ const SettingsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const changePassword = async () => {
-    if (newPassword !== '' && confirmPassword !== '') {
-      if (newPassword !== confirmPassword) {
-        swalError('Passwords do not match.');
-      } else {
-        dispatch(changePasswordAuthAction(password, newPassword)).then(
-          (res: boolean | string | undefined) => {
-            if (res) {
-              dispatch(logOutCognitoUserAuthAction()).then(
-                (logoutRes: boolean | string | undefined) => {
-                  if (logoutRes) {
-                    swalInfo('Login with new password');
-                    history.push('/login');
-                  }
-                },
-              );
-            }
-          },
-        );
+  const updateSubmit = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    if (userFirstName !== firstName) {
+      // ovde ide poziv za menjanje first Name
+    } else if (lastName !== userLastName) {
+      console.log('Last Name changed');
+    } else if (userEmail !== email) {
+      console.log('Email Changed');
+    } else if (nickName !== userNickName) {
+      console.log('Nickname Changed');
+    } else if (userPhone !== phoneNumber) {
+      console.log('Phone Number Changed');
+    } else if (password !== '') {
+      if (
+        validateChangePasswordSubmit(password, newPassword, confirmPassword)
+      ) {
+        changePassword();
       }
+    } else {
+      swalInfo('No changes were made');
     }
+  };
+  const changePassword = async () => {
+    dispatch(changePasswordAuthAction(password, newPassword)).then(
+      (res: boolean | string | undefined) => {
+        if (res) {
+          dispatch(logOutCognitoUserAuthAction()).then(
+            (logoutRes: boolean | string | undefined) => {
+              if (logoutRes) {
+                swalInfo('Login with new password');
+                history.push('/login');
+              }
+            },
+          );
+        }
+      },
+    );
   };
 
   React.useEffect(() => {
@@ -75,25 +97,29 @@ const SettingsPage: React.FC = () => {
                 <Card className='user-information-card'>
                   <Container className='my-3'>
                     <p>
-                      {firstNameValue}
+                      {userFirstName}
                       {' '}
-                      {lastNameValue}
+                      {userLastName}
                     </p>
                     <div className='horizontal-line my-3' />
-                    {nickNameValue && (
+                    <h2>Nickname</h2>
+                    {nickName ? (
                       <>
-                        <h2>Nickname</h2>
-                        <p>{nickNameValue}</p>
+                        <p>{userNickName}</p>
                       </>
+                    ) : (
+                      <p>Unset</p>
                     )}
-                    {phoneNumberValue && (
+                    <h2>Phone</h2>
+                    {userPhone ? (
                       <>
-                        <h2>Phone</h2>
-                        <p>{phoneNumberValue}</p>
+                        <p>{userPhone}</p>
                       </>
+                    ) : (
+                      <p>Unset</p>
                     )}
                     <h2>Email</h2>
-                    <p>{userEmailValue}</p>
+                    <p>{userEmail}</p>
                   </Container>
                 </Card>
               </Container>
@@ -135,7 +161,7 @@ const SettingsPage: React.FC = () => {
                             <Form.Control
                               type='text'
                               value={nickName}
-                              onChange={(e) => setNickName(e.target.value)}
+                              // onChange={(e) => setNickName(e.target.value)}
                             />
                           </Form.Group>
                         </Col>
@@ -205,7 +231,7 @@ const SettingsPage: React.FC = () => {
                         <Col lg='12'>
                           <Button
                             className='btn ml-auto'
-                            onClick={changePassword}
+                            onClick={updateSubmit}
                           >
                             Save changes
                           </Button>

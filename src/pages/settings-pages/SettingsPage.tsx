@@ -35,7 +35,7 @@ const SettingsPage: React.FC = () => {
   const [nickName, setNickName] = React.useState(userNickName);
   const [password, setPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
-  const [confirmPassword, setConfirmPassword] = React.useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
   const userToken = useSelector((state) => getUserJwtTokenSelector(state));
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -47,13 +47,13 @@ const SettingsPage: React.FC = () => {
       || userEmail !== email
       || nickName !== userNickName
       || userPhone !== phoneNumber;
-    const isPasswordChanged = password !== '' && newPassword !== '' && confirmPassword !== '';
+    const isPasswordChanged = password !== '' && newPassword !== '' && confirmNewPassword !== '';
     if (isUserInfoChanged) {
       await updateUserInfo();
     }
     if (isPasswordChanged) {
       if (
-        validateChangePasswordSubmit(password, newPassword, confirmPassword)
+        validateChangePasswordSubmit(password, newPassword, confirmNewPassword)
       ) {
         await changePassword();
       }
@@ -237,7 +237,7 @@ const SettingsPage: React.FC = () => {
                             <Form.Control
                               type='password'
                               placeholder='**********'
-                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              onChange={(e) => setConfirmNewPassword(e.target.value)}
                             />
                           </Form.Group>
                         </Col>

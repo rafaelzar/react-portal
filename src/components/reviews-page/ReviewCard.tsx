@@ -19,7 +19,6 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
         <div className='d-flex justify-content-between mb-3 review-card-body'>
           <div>{moment(data.date).format('LL')}</div>
           <div className='d-flex align-items-center'>
-            <span>{data.rating}</span>
             <span className='mx-2'>{data.platform}</span>
             <div>
               <StarResolver rating={data.rating} />

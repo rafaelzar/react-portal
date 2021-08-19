@@ -1,4 +1,5 @@
 import React, { SyntheticEvent } from 'react';
+import { useAppDispatch } from '../../store/store';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container,
@@ -8,17 +9,22 @@ import {
   Col,
   Card,
   Button,
+  Spinner,
 } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
 import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
-import { mockupData } from '../../lib/utils/mockupData';
-import { IReviews, IDatePicker } from '../../lib/interfaces';
+import { IDatePicker, IEmployeeReviews } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
+import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 
 const ReviewsPage: React.FC = () => {
-  const [reviews, setReviews] = React.useState<IReviews[]>([]);
+  const dispatch = useAppDispatch();
+  const [employeeReviews, setEmployeeReviews] = React.useState<
+    IEmployeeReviews[]
+  >([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [toggleSitesDropdonw, setToggleSitesDropdown] = React.useState(false);
   const [sitesDropdownValue, setSitesDropdownValue] = React.useState(
@@ -35,9 +41,21 @@ const ReviewsPage: React.FC = () => {
       key: 'selection',
     },
   ]);
+  const userID = '607a1d65e4be5100126b827e';
   React.useEffect(() => {
-    setReviews(mockupData);
-  }, []);
+    const query = `${userID}`;
+    setIsLoading(true);
+    dispatch(getEmployeesReviewsReviewsAction(query)).then(
+      (res: Array<IEmployeeReviews> | undefined) => {
+        if (res) {
+          setEmployeeReviews(res);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
+  }, [dateRange, dispatch]);
 
   const setDateRangeFilter = () => {
     setDateRange((prevState) => ({
@@ -120,7 +138,9 @@ const ReviewsPage: React.FC = () => {
             direction='vertical'
           />
           <Col md={12} className='mb-4'>
-            <Button className='w-100' onClick={setDateRangeFilter}>Filter</Button>
+            <Button className='w-100' onClick={setDateRangeFilter}>
+              Filter
+            </Button>
           </Col>
         </div>
         <Row>
@@ -136,16 +156,11 @@ const ReviewsPage: React.FC = () => {
                   <Dropdown.Item>Oldest</Dropdown.Item>
                 </DropdownButton>
               </Card.Title>
-              {reviews.map((r) => (
-                <ReviewCard
-                  key={r._id}
-                  author={r.author}
-                  content={r.content}
-                  date={r.date}
-                  rating={r.rating}
-                  platform={r.platform}
-                />
-              ))}
+              {!isLoading ? (
+                employeeReviews.map((r) => <ReviewCard key={r._id} data={r} />)
+              ) : (
+                <Spinner className='m-auto' animation='border' />
+              )}
             </Card>
           </Col>
         </Row>

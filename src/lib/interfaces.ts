@@ -18,3 +18,12 @@ export interface IDatePicker {
   endDate?: Date | undefined;
   key?: string;
 }
+
+export interface IEmployeeReviews {
+  _id: string;
+  author: string;
+  content?: string;
+  date: string;
+  rating: number;
+  platform: string;
+}

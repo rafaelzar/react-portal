@@ -147,6 +147,7 @@ const ReviewsPage: React.FC = () => {
             showDateDisplay={false}
             showMonthAndYearPickers={false}
             moveRangeOnFirstSelection={false}
+            maxDate={new Date()}
             ranges={dateState}
             direction='vertical'
           />

@@ -1,4 +1,5 @@
 import React, { SyntheticEvent } from 'react';
+import { useAppDispatch } from '../../store/store';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container,
@@ -8,17 +9,22 @@ import {
   Col,
   Card,
   Button,
+  Spinner,
 } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
 import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
-import { mockupData } from '../../lib/utils/mockupData';
-import { IReviews, IDatePicker } from '../../lib/interfaces';
+import { IDatePicker, IEmployeeReviews } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
+import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 
 const ReviewsPage: React.FC = () => {
-  const [reviews, setReviews] = React.useState<IReviews[]>([]);
+  const dispatch = useAppDispatch();
+  const [employeeReviews, setEmployeeReviews] = React.useState<
+    IEmployeeReviews[]
+  >([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [toggleSitesDropdonw, setToggleSitesDropdown] = React.useState(false);
   const [sitesDropdownValue, setSitesDropdownValue] = React.useState(
@@ -28,6 +34,10 @@ const ReviewsPage: React.FC = () => {
     start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
     end: `${moment(new Date()).format('MMM DD')}`,
   });
+  const [dateRangeQuery, setDateRangeQuery] = React.useState({
+    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    end: `${moment(new Date()).format('YYYY-MM-DD')}`,
+  });
   const [dateState, setDateState] = React.useState<IDatePicker[]>([
     {
       startDate: subDays(new Date(), 7),
@@ -35,9 +45,21 @@ const ReviewsPage: React.FC = () => {
       key: 'selection',
     },
   ]);
+  const userID = '607a1d65e4be5100126b827e';
   React.useEffect(() => {
-    setReviews(mockupData);
-  }, []);
+    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+    setIsLoading(true);
+    dispatch(getEmployeesReviewsReviewsAction(query)).then(
+      (res: Array<IEmployeeReviews> | undefined) => {
+        if (res) {
+          setEmployeeReviews(res);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
+  }, [dateRangeQuery, dispatch]);
 
   const setDateRangeFilter = () => {
     setDateRange((prevState) => ({
@@ -46,6 +68,15 @@ const ReviewsPage: React.FC = () => {
         'MMM DD',
       ),
       end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
+    }));
+    setDateRangeQuery((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
     }));
     setToggleDatePicker(!toggleDatePicker);
   };
@@ -116,11 +147,14 @@ const ReviewsPage: React.FC = () => {
             showDateDisplay={false}
             showMonthAndYearPickers={false}
             moveRangeOnFirstSelection={false}
+            maxDate={new Date()}
             ranges={dateState}
             direction='vertical'
           />
           <Col md={12} className='mb-4'>
-            <Button className='w-100' onClick={setDateRangeFilter}>Filter</Button>
+            <Button className='w-100' onClick={setDateRangeFilter}>
+              Filter
+            </Button>
           </Col>
         </div>
         <Row>
@@ -128,25 +162,29 @@ const ReviewsPage: React.FC = () => {
             <ReviewStats />
           </Col>
           <Col md={8}>
-            <Card className='p-3 mb-3'>
-              <Card.Title className='d-flex justify-content-between px-2'>
-                <h3>Review List</h3>
-                <DropdownButton id='dropdown-reviews-sort' title='Most Recent'>
-                  <Dropdown.Item>Newset</Dropdown.Item>
-                  <Dropdown.Item>Oldest</Dropdown.Item>
-                </DropdownButton>
-              </Card.Title>
-              {reviews.map((r) => (
-                <ReviewCard
-                  key={r._id}
-                  author={r.author}
-                  content={r.content}
-                  date={r.date}
-                  rating={r.rating}
-                  platform={r.platform}
-                />
-              ))}
-            </Card>
+            {!isLoading ? (
+              <Card className='p-3 mb-3'>
+                <Card.Title className='d-flex justify-content-between px-2'>
+                  <h3>Review List</h3>
+                  <DropdownButton
+                    id='dropdown-reviews-sort'
+                    title='Most Recent'
+                  >
+                    <Dropdown.Item>Newset</Dropdown.Item>
+                    <Dropdown.Item>Oldest</Dropdown.Item>
+                  </DropdownButton>
+                </Card.Title>
+                {employeeReviews.length > 0 ? (
+                  employeeReviews.map((r) => (
+                    <ReviewCard key={r._id} data={r} />
+                  ))
+                ) : (
+                  <div className='m-auto'>No reviews for this period</div>
+                )}
+              </Card>
+            ) : (
+              <Spinner className='d-block m-auto' animation='border' />
+            )}
           </Col>
         </Row>
       </Container>

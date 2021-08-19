@@ -1,12 +1,14 @@
 import {
+  changePasswordFunctionCognitoFunction,
   forgotPasswordFunctionCognitoFunction,
   forgotPasswordSubmitFunctionCognitoFunction,
   logInUserCognitoFunction,
   logInUserWithNewPasswordCognitoFunction,
   logOutUserCognitoFunction,
 } from '../../lib/aws/aws-cognito-functions';
+import errorHandler from '../../lib/utils/errorHandler';
 import { swalError, swalInfo } from '../../lib/utils/toasts';
-import { sendJWTToken } from '../apiCalls';
+import { sendJWTToken, updateUser } from '../apiCalls';
 import { AppDispatch } from '../store';
 
 export const logInCognitoUserAuthAction = (
@@ -77,6 +79,24 @@ export const logOutCognitoUserAuthAction = () => {
   };
 };
 
+export const updateUserAuthAction = (id: string, user: any) => {
+  return async (dispatch: AppDispatch): Promise<boolean | undefined> => {
+    try {
+      const res = await updateUser(id, user);
+      const updatedUser = res?.data || {};
+      if (updatedUser?._id) {
+        dispatch({ type: 'UPDATE_USER', user: updatedUser });
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      swalError('Something went wrong');
+      return false;
+    }
+  };
+};
+
 export const forgotPasswordAuthAction = (email: string) => {
   return async (): Promise<boolean | undefined> => {
     try {
@@ -87,7 +107,6 @@ export const forgotPasswordAuthAction = (email: string) => {
         return false;
       }
     } catch (error) {
-      console.log(error);
       swalError('Something went wrong');
       return false;
     }
@@ -107,13 +126,11 @@ export const forgotPasswordSubmitAuthAction = (
         newPassword,
       );
       if (res) {
-        console.log(res);
         return res;
       } else {
         return false;
       }
     } catch (error) {
-      console.log(error);
       swalError('Something went wrong');
       return false;
     }
@@ -134,6 +151,26 @@ export const fetchUserFromDatabaseAuthAction = () => {
     } catch (error) {
       console.log(error);
       swalInfo('This is a test user which is not in the database');
+      return false;
+    }
+  };
+};
+
+export const changePasswordAuthAction = (
+  oldPassword: string,
+  newPassword: string,
+) => {
+  return async (): Promise<boolean | string | undefined> => {
+    try {
+      const res = await changePasswordFunctionCognitoFunction(
+        oldPassword,
+        newPassword,
+      );
+      if (res) {
+        return res;
+      }
+    } catch (error) {
+      errorHandler(error);
       return false;
     }
   };

@@ -34,6 +34,10 @@ const ReviewsPage: React.FC = () => {
     start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
     end: `${moment(new Date()).format('MMM DD')}`,
   });
+  const [dateRangeQuery, setDateRangeQuery] = React.useState({
+    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    end: `${moment(new Date()).format('YYYY-MM-DD')}`,
+  });
   const [dateState, setDateState] = React.useState<IDatePicker[]>([
     {
       startDate: subDays(new Date(), 7),
@@ -43,7 +47,7 @@ const ReviewsPage: React.FC = () => {
   ]);
   const userID = '607a1d65e4be5100126b827e';
   React.useEffect(() => {
-    const query = `${userID}`;
+    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
     setIsLoading(true);
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: Array<IEmployeeReviews> | undefined) => {
@@ -55,7 +59,7 @@ const ReviewsPage: React.FC = () => {
         }
       },
     );
-  }, [dateRange, dispatch]);
+  }, [dateRangeQuery, dispatch]);
 
   const setDateRangeFilter = () => {
     setDateRange((prevState) => ({
@@ -64,6 +68,15 @@ const ReviewsPage: React.FC = () => {
         'MMM DD',
       ),
       end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
+    }));
+    setDateRangeQuery((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
     }));
     setToggleDatePicker(!toggleDatePicker);
   };
@@ -148,20 +161,29 @@ const ReviewsPage: React.FC = () => {
             <ReviewStats />
           </Col>
           <Col md={8}>
-            <Card className='p-3 mb-3'>
-              <Card.Title className='d-flex justify-content-between px-2'>
-                <h3>Review List</h3>
-                <DropdownButton id='dropdown-reviews-sort' title='Most Recent'>
-                  <Dropdown.Item>Newset</Dropdown.Item>
-                  <Dropdown.Item>Oldest</Dropdown.Item>
-                </DropdownButton>
-              </Card.Title>
-              {!isLoading ? (
-                employeeReviews.map((r) => <ReviewCard key={r._id} data={r} />)
-              ) : (
-                <Spinner className='m-auto' animation='border' />
-              )}
-            </Card>
+            {!isLoading ? (
+              <Card className='p-3 mb-3'>
+                <Card.Title className='d-flex justify-content-between px-2'>
+                  <h3>Review List</h3>
+                  <DropdownButton
+                    id='dropdown-reviews-sort'
+                    title='Most Recent'
+                  >
+                    <Dropdown.Item>Newset</Dropdown.Item>
+                    <Dropdown.Item>Oldest</Dropdown.Item>
+                  </DropdownButton>
+                </Card.Title>
+                {employeeReviews.length > 0 ? (
+                  employeeReviews.map((r) => (
+                    <ReviewCard key={r._id} data={r} />
+                  ))
+                ) : (
+                  <div className='m-auto'>No reviews for this period</div>
+                )}
+              </Card>
+            ) : (
+              <Spinner className='d-block m-auto' animation='border' />
+            )}
           </Col>
         </Row>
       </Container>

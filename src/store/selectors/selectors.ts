@@ -1,7 +1,9 @@
+import { IUserInformation } from '../../lib/interfaces';
+
 export const getUserSelector = (
   state: any,
-): Record<string, unknown> | Record<string, never> => {
-  const { user = {} } = state;
+): IUserInformation => {
+  const { user: { user = {} } } = state;
   return user || {};
 };
 

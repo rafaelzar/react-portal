@@ -8,7 +8,7 @@ import {
 } from '../../lib/aws/aws-cognito-functions';
 import errorHandler from '../../lib/utils/errorHandler';
 import { swalError, swalInfo } from '../../lib/utils/toasts';
-import { sendJWTToken } from '../apiCalls';
+import { sendJWTToken, updateUser } from '../apiCalls';
 import { AppDispatch } from '../store';
 
 export const logInCognitoUserAuthAction = (
@@ -68,6 +68,24 @@ export const logOutCognitoUserAuthAction = () => {
       const res = await logOutUserCognitoFunction();
       if (res) {
         dispatch({ type: 'AUTH_LOGOUT_SUCCESS' });
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      swalError('Something went wrong');
+      return false;
+    }
+  };
+};
+
+export const updateUserAuthAction = (id: string, user: any) => {
+  return async (dispatch: AppDispatch): Promise<boolean | undefined> => {
+    try {
+      const res = await updateUser(id, user);
+      const updatedUser = res?.data || {};
+      if (updatedUser?._id) {
+        dispatch({ type: 'UPDATE_USER', user: updatedUser });
         return true;
       } else {
         return false;

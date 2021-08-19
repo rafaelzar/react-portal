@@ -10,13 +10,13 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container, Row, Col, Card, Form, Button,
 } from 'react-bootstrap';
-import { swalInfo } from '../../lib/utils/toasts';
+import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
   changePasswordAuthAction,
   logOutCognitoUserAuthAction,
+  updateUserAuthAction,
 } from '../../store/actions/authActions';
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
-import { updateUser } from '../../store/apiCalls';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -26,6 +26,7 @@ const SettingsPage: React.FC = () => {
     nick_names: userNickName = '',
     email: userEmail = '',
     phone: userPhone = '',
+    _id: userId = '',
   } = userInfo;
   const [email, setEmail] = React.useState(userEmail);
   const [firstName, setFirstName] = React.useState(userFirstName);
@@ -41,26 +42,24 @@ const SettingsPage: React.FC = () => {
 
   const updateSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (userFirstName !== firstName) {
-      // ovde ide poziv za menjanje first Name
-    } else if (lastName !== userLastName) {
-      console.log('Last Name changed');
-    } else if (userEmail !== email) {
-      console.log('Email Changed');
-    } else if (nickName !== userNickName) {
-      console.log('Nickname Changed');
-    } else if (userPhone !== phoneNumber) {
-      console.log('Phone Number Changed');
-    } else if (password !== '') {
+    const isUserInfoChanged = userFirstName !== firstName
+      || lastName !== userLastName
+      || userEmail !== email
+      || nickName !== userNickName
+      || userPhone !== phoneNumber;
+    const isPasswordChanged = password !== '' && newPassword !== '' && confirmPassword !== '';
+    if (isUserInfoChanged) {
+      await updateUserInfo();
+    }
+    if (isPasswordChanged) {
       if (
         validateChangePasswordSubmit(password, newPassword, confirmPassword)
       ) {
-        changePassword();
+        await changePassword();
       }
-    } else {
-      swalInfo('No changes were made');
     }
   };
+
   const changePassword = async () => {
     dispatch(changePasswordAuthAction(password, newPassword)).then(
       (res: boolean | string | undefined) => {
@@ -76,6 +75,23 @@ const SettingsPage: React.FC = () => {
         }
       },
     );
+  };
+
+  const updateUserInfo = async () => {
+    dispatch(
+      updateUserAuthAction(userId, {
+        first_name: firstName,
+        last_name: lastName,
+        phone: phoneNumber,
+        nick_names: ['Piki'],
+      }),
+    ).then((res: boolean | string | undefined) => {
+      if (res) {
+        swalSuccess('You updated info successfuly');
+      } else {
+        swalError('Something went wrong');
+      }
+    });
   };
 
   React.useEffect(() => {

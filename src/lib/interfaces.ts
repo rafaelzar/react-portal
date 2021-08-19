@@ -23,7 +23,8 @@ export interface IDatePicker {
 export interface IUserInformation {
   first_name: string;
   last_name: string;
-  nick_names?: Array<string>,
-  email: string,
-  phone?: string,
+  nick_names?: Array<string>;
+  email: string;
+  phone?: string;
+  _id?: string;
 }

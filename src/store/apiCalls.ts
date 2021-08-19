@@ -7,7 +7,10 @@ export const sendJWTToken = async (): Promise<AxiosResponse | undefined> => {
   return res;
 };
 
-export const updateUser = async (id: string, data: Record<string, unknown>): Promise<AxiosResponse | undefined> => {
+export const updateUser = async (
+  id: string,
+  data: Record<string, unknown>,
+): Promise<AxiosResponse | undefined> => {
   const res = await axios.patch(`${baseUrl}/employees/${id}`, data);
   return res;
 };

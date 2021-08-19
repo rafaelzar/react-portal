@@ -42,7 +42,10 @@ const ReviewStats: React.FC = () => {
         <Row>
           <Col md={12}>
             <p className='font-weight-bold'>Site Distribution</p>
-            <Doughnut data={chartData} />
+            <Doughnut
+              data={chartData}
+              options={{ animation: { duration: 0 } }}
+            />
           </Col>
         </Row>
       </Card.Text>

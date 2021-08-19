@@ -20,6 +20,14 @@ export interface IDatePicker {
   key?: string;
 }
 
+export interface IEmployeeReviews {
+  _id: string;
+  author: string;
+  content?: string;
+  date: string;
+  rating: number;
+  platform: string;
+}
 export interface IUserInformation {
   first_name: string;
   last_name: string;

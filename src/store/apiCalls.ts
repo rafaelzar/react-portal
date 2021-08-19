@@ -7,6 +7,13 @@ export const sendJWTToken = async (): Promise<AxiosResponse | undefined> => {
   return res;
 };
 
+export const getEmployeesReviews = async (
+  queries: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/reviews/${queries}`);
+  return res;
+};
+
 export const updateUser = async (
   id: string,
   data: Record<string, unknown>,

@@ -8,7 +8,13 @@ import {
 } from '../../store/selectors/selectors';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
-  Container, Row, Col, Card, Form, Button,
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  InputGroup,
 } from 'react-bootstrap';
 import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
@@ -23,46 +29,58 @@ const SettingsPage: React.FC = () => {
   const {
     first_name: userFirstName = '',
     last_name: userLastName = '',
-    nick_names: userNickName = '',
+    nick_names: userNickName = [''],
     email: userEmail = '',
     phone: userPhone = '',
     _id: userId = '',
   } = userInfo;
-  const [email, setEmail] = React.useState(userEmail);
-  const [firstName, setFirstName] = React.useState(userFirstName);
+  const [firstName, setFirstName] = React.useState(userFirstName.trim());
   const [lastName, setLastName] = React.useState(userLastName);
   const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
-  const [nickName, setNickName] = React.useState(userNickName);
+  const [nickNames, setNickNames] = React.useState(userNickName);
+  const [tempNickname, setTempNickname] = React.useState(userNickName[0]);
   const [password, setPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
+  const [disable, setDisable] = React.useState(false);
   const userToken = useSelector((state) => getUserJwtTokenSelector(state));
   const dispatch = useAppDispatch();
   const history = useHistory();
 
   const updateSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    const isUserInfoChanged = userFirstName !== firstName
-      || lastName !== userLastName
-      || userEmail !== email
-      || nickName !== userNickName
-      || userPhone !== phoneNumber;
-    const isPasswordChanged = password !== '' && newPassword !== '' && confirmNewPassword !== '';
-    if (isUserInfoChanged) {
+    const isUserInfoChanged = userFirstName.trim() !== firstName.trim()
+      || lastName.trim() !== userLastName.trim()
+      || userNickName.length < nickNames.length
+      || userPhone.trim() !== phoneNumber.trim();
+
+    const isPasswordChanged = password !== '' || newPassword !== '' || confirmNewPassword !== '';
+    if (isUserInfoChanged === true) {
       await updateUserInfo();
+      setDisable(true);
     }
     if (isPasswordChanged) {
       if (
-        validateChangePasswordSubmit(password, newPassword, confirmNewPassword)
+        validateChangePasswordSubmit(
+          isUserInfoChanged,
+          password.trim(),
+          newPassword.trim(),
+          confirmNewPassword.trim(),
+        )
       ) {
         await changePassword();
+        setDisable(true);
       }
+    }
+    if (isPasswordChanged === false && isUserInfoChanged === false) {
+      swalInfo('No changes were made');
     }
   };
 
   const changePassword = async () => {
     dispatch(changePasswordAuthAction(password, newPassword)).then(
       (res: boolean | string | undefined) => {
+        setDisable(true);
         if (res) {
           dispatch(logOutCognitoUserAuthAction()).then(
             (logoutRes: boolean | string | undefined) => {
@@ -72,26 +90,41 @@ const SettingsPage: React.FC = () => {
               }
             },
           );
+          setDisable(false);
         }
       },
     );
   };
 
   const updateUserInfo = async () => {
+    setDisable(false);
     dispatch(
       updateUserAuthAction(userId, {
-        first_name: firstName,
-        last_name: lastName,
-        phone: phoneNumber,
-        nick_names: ['Piki'],
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        phone: phoneNumber.trim(),
+        nick_names: nickNames,
       }),
     ).then((res: boolean | string | undefined) => {
+      setDisable(true);
       if (res) {
         swalSuccess('You updated info successfuly');
       } else {
         swalError('Something went wrong');
       }
+      setDisable(false);
     });
+  };
+
+  const updateNickname = () => {
+    const doesNicknameExits = nickNames.some(
+      (item: string) => tempNickname === item,
+    );
+    if (doesNicknameExits === false) {
+      setNickNames([...nickNames, tempNickname.trim()]);
+    } else {
+      swalInfo('That nickname already exist');
+    }
   };
 
   React.useEffect(() => {
@@ -117,11 +150,10 @@ const SettingsPage: React.FC = () => {
                       {' '}
                       {userLastName}
                     </p>
-                    <div className='horizontal-line my-3' />
-                    <h2>Nickname</h2>
-                    {nickName ? (
+                    <h2>Nick name</h2>
+                    {userNickName ? (
                       <>
-                        <p>{userNickName}</p>
+                        <p>{userNickName[0]}</p>
                       </>
                     ) : (
                       <p>Unset</p>
@@ -173,26 +205,42 @@ const SettingsPage: React.FC = () => {
                       <Row>
                         <Col lg='6'>
                           <Form.Group className='mb-3'>
-                            <Form.Label>Nickname</Form.Label>
-                            <Form.Control
-                              type='text'
-                              value={nickName}
-                              // onChange={(e) => setNickName(e.target.value)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col lg='6' />
-                        <Col lg='6'>
-                          <Form.Group
-                            className='mb-3'
-                            controlId='formBasicEmail'
-                          >
-                            <Form.Label>Email address</Form.Label>
-                            <Form.Control
-                              type='email'
-                              value={email}
-                              onChange={(e) => setEmail(e.target.value)}
-                            />
+                            <Form.Label>Add Nickname</Form.Label>
+                            <InputGroup className='mb-3'>
+                              <Form.Control
+                                placeholder='Nick names'
+                                aria-label='Nick names'
+                                aria-describedby='basic-addon2'
+                                value={tempNickname}
+                                onChange={(e) => setTempNickname(e.target.value)}
+                              />
+                              <InputGroup.Append>
+                                <Button
+                                  variant='outline-secondary'
+                                  onClick={() => {
+                                    updateNickname();
+                                  }}
+                                >
+                                  Add
+                                </Button>
+                              </InputGroup.Append>
+                            </InputGroup>
+                            <Col lg='12'>
+                              <Row>
+                                {nickNames && nickNames.length !== 0 ? (
+                                  nickNames.map((n: string) => {
+                                    return (
+                                      <div className='mr-1'>
+                                        {n}
+                                        ,
+                                      </div>
+                                    );
+                                  })
+                                ) : (
+                                  <div>You don&apos;t have nicknames.</div>
+                                )}
+                              </Row>
+                            </Col>
                           </Form.Group>
                         </Col>
                         <Col lg='6'>
@@ -248,6 +296,7 @@ const SettingsPage: React.FC = () => {
                           <Button
                             className='btn ml-auto'
                             onClick={updateSubmit}
+                            disabled={disable}
                           >
                             Save changes
                           </Button>

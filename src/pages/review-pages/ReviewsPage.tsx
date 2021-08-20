@@ -2,14 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import { useAppDispatch } from '../../store/store';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
-  Container,
-  Dropdown,
-  DropdownButton,
-  Row,
-  Col,
-  Card,
-  Button,
-  Spinner,
+  Container, Row, Col, Card, Button, Spinner,
 } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
@@ -29,10 +22,16 @@ const ReviewsPage: React.FC = () => {
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
   const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
+  const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
+    false,
+  );
   const [sitesDropdownValue, setSitesDropdownValue] = React.useState(
     'All Sites',
   );
   const [starsDropdownValue, setStarsDropdownValue] = React.useState(0);
+  const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
+    'Newest',
+  );
   const [dateRange, setDateRange] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
     end: `${moment(new Date()).format('MMM DD')}`,
@@ -48,11 +47,17 @@ const ReviewsPage: React.FC = () => {
       key: 'selection',
     },
   ]);
-  // const ratingQuery = `${starsDropdownValue !== 0 && `rating=${starsDropdownValue}`}`;
-  // const platformQuery = `${sitesDropdownValue !== 'All Sites' && `platform=${sitesDropdownValue}`}`;
+
   const userID = '607a1d65e4be5100126b827e';
+
   React.useEffect(() => {
-    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}&${starsDropdownValue !== 0 && `rating=${starsDropdownValue}`}&${sitesDropdownValue !== 'All Sites' && `platform=${sitesDropdownValue}`}`;
+    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
+      dateRangeQuery.end
+    }&${starsDropdownValue !== 0
+      && `rating=${starsDropdownValue}`}&${sitesDropdownValue !== 'All Sites'
+      && `platform=${sitesDropdownValue}`}&sort=${
+      dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
+    }&sortBy=date`;
     setIsLoading(true);
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: Array<IEmployeeReviews> | undefined) => {
@@ -64,7 +69,13 @@ const ReviewsPage: React.FC = () => {
         }
       },
     );
-  }, [dateRangeQuery, sitesDropdownValue, starsDropdownValue, dispatch]);
+  }, [
+    dateRangeQuery,
+    sitesDropdownValue,
+    starsDropdownValue,
+    dispatch,
+    dateSortDropdownValue,
+  ]);
 
   const setDateRangeFilter = () => {
     setDateRange((prevState) => ({
@@ -168,7 +179,9 @@ const ReviewsPage: React.FC = () => {
           >
             {starsDropdownValue !== 0 ? (
               <StarResolver rating={starsDropdownValue} />
-            ) : ('All Ratings')}
+            ) : (
+              'All Ratings'
+            )}
             <div className='arrow-wrapp'>
               <i className='arrow down ml-3' />
             </div>
@@ -245,13 +258,35 @@ const ReviewsPage: React.FC = () => {
               <Card className='p-3 mb-3'>
                 <Card.Title className='d-flex justify-content-between px-2'>
                   <h3>Review List</h3>
-                  <DropdownButton
-                    id='dropdown-reviews-sort'
-                    title='Most Recent'
+                  <div
+                    className='date-range-btn custom-dropdown d-flex align-items-center'
+                    onClick={() => {
+                      setToggleDateSortDropdown(!toggleDateSortDropdown);
+                    }}
                   >
-                    <Dropdown.Item>Newset</Dropdown.Item>
-                    <Dropdown.Item>Oldest</Dropdown.Item>
-                  </DropdownButton>
+                    {dateSortDropdownValue}
+                    <div className='arrow-wrapp'>
+                      <i className='arrow down ml-3' />
+                    </div>
+                    <div
+                      className={`custom-dropdown-menu ${
+                        toggleDateSortDropdown ? 'd-block' : ''
+                      }`}
+                    >
+                      <div
+                        className='custom-dropdown-item'
+                        onClick={() => setDateSortDropdownValue('Newest')}
+                      >
+                        Newest
+                      </div>
+                      <div
+                        className='custom-dropdown-item'
+                        onClick={() => setDateSortDropdownValue('Oldest')}
+                      >
+                        Oldest
+                      </div>
+                    </div>
+                  </div>
                 </Card.Title>
                 {employeeReviews.length > 0 ? (
                   employeeReviews.map((r) => (

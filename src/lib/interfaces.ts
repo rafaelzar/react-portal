@@ -30,7 +30,7 @@ export interface IEmployeeReviews {
 }
 
 export interface IReviewsResponse {
-  data: IEmployeeReviews
+  data: IEmployeeReviews[];
   pageCount: number;
 }
 

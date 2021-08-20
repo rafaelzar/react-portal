@@ -8,7 +8,11 @@ import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
 import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
-import { IDatePicker, IEmployeeReviews, IReviewsResponse } from '../../lib/interfaces';
+import {
+  IDatePicker,
+  IEmployeeReviews,
+  IReviewsResponse,
+} from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 import StarResolver from '../../components/reviews-page/StarResolver';
@@ -19,9 +23,10 @@ const ReviewsPage: React.FC = () => {
   const [employeeReviews, setEmployeeReviews] = React.useState<
     IEmployeeReviews[]
   >([]);
-  const [reviewsResponse, setReviewsResponse] = React.useState<IReviewsResponse>({} as IReviewsResponse);
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [numberOfPages, setNumberOfPages] = React.useState('');
+  const [activePageNumber, setActivePageNumber] = React.useState(1);
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
   const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
@@ -53,22 +58,27 @@ const ReviewsPage: React.FC = () => {
   const userID = '607a1d65e4be5100126b827e';
 
   React.useEffect(() => {
-    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
-      dateRangeQuery.end
-    }&${starsDropdownValue !== 0
-      && `rating=${starsDropdownValue}`}&${sitesDropdownValue !== 'All Sites'
-      && `platform=${sitesDropdownValue}`}&sort=${
-      dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
-    }&sortBy=date`;
+    const buildQueryFromState = () => {
+      let query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
+        dateRangeQuery.end
+      }&page=${pageNumber}&sort=${
+        dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
+      }&sortBy=date`;
+      if (starsDropdownValue !== 0)
+        query = `${query}&rating=${starsDropdownValue}`;
+      if (sitesDropdownValue !== 'All Sites')
+        query = `${query}&platform=${sitesDropdownValue}`;
+      return query;
+    };
+
+    const query = buildQueryFromState();
     setIsLoading(true);
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: IReviewsResponse | undefined) => {
         if (res) {
-          setReviewsResponse(res);
-          console.log(res.data);
-          setEmployeeReviews(res.data);
+          const { data: reviews = [], pageCount = '' } = res;
+          setEmployeeReviews(reviews);
           setIsLoading(false);
-          console.log(res);
         } else {
           setIsLoading(false);
         }

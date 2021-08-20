@@ -1,12 +1,14 @@
 import React from 'react';
 import { Pagination } from 'react-bootstrap';
 
-const PaginationComponent: React.FC = () => {
+const PaginationComponent: React.FC = (props) => {
+  const {
+    goPrev, goNext, currentPage, pageCount,
+  } = props;
   return (
     <Pagination>
-      <Pagination.Prev />
-      <Pagination.Item>{1}</Pagination.Item>
-      <Pagination.Next />
+      <Pagination.Prev onClick={goPrev} disabled={currentPage === 1} />
+      <Pagination.Next onClick={goNext} disabled={pageCount === currentPage} />
     </Pagination>
   );
 };

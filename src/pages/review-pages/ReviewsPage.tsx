@@ -8,16 +8,18 @@ import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
 import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
-import { IDatePicker, IEmployeeReviews } from '../../lib/interfaces';
+import { IDatePicker, IEmployeeReviews, IReviewsResponse } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 import StarResolver from '../../components/reviews-page/StarResolver';
+import PaginationComponent from '../../components/reviews-page/Pagination';
 
 const ReviewsPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const [employeeReviews, setEmployeeReviews] = React.useState<
     IEmployeeReviews[]
   >([]);
+  const [reviewsResponse, setReviewsResponse] = React.useState<IReviewsResponse>({} as IReviewsResponse);
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
@@ -60,10 +62,13 @@ const ReviewsPage: React.FC = () => {
     }&sortBy=date`;
     setIsLoading(true);
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
-      (res: Array<IEmployeeReviews> | undefined) => {
+      (res: IReviewsResponse | undefined) => {
         if (res) {
-          setEmployeeReviews(res);
+          setReviewsResponse(res);
+          console.log(res.data);
+          setEmployeeReviews(res.data);
           setIsLoading(false);
+          console.log(res);
         } else {
           setIsLoading(false);
         }
@@ -290,11 +295,14 @@ const ReviewsPage: React.FC = () => {
                 </Card.Title>
                 {employeeReviews.length > 0 ? (
                   employeeReviews.map((r) => (
-                    <ReviewCard key={r._id} data={r} />
+                    <>
+                      <ReviewCard key={r._id} data={r} />
+                    </>
                   ))
                 ) : (
                   <div className='m-auto'>No reviews with this criteria</div>
                 )}
+                {employeeReviews.length > 0 && <PaginationComponent />}
               </Card>
             ) : (
               <Spinner className='d-block m-auto' animation='border' />

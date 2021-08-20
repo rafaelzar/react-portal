@@ -1,11 +1,14 @@
 import React from 'react';
+import { Pagination } from 'react-bootstrap';
 
-const Pagination: React.FC = () => {
+const PaginationComponent: React.FC = () => {
   return (
-    <div>
-      Pagination
-    </div>
+    <Pagination>
+      <Pagination.Prev />
+      <Pagination.Item>{1}</Pagination.Item>
+      <Pagination.Next />
+    </Pagination>
   );
 };
 
-export default Pagination;
+export default PaginationComponent;

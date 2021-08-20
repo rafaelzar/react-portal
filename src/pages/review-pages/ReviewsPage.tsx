@@ -2,14 +2,7 @@ import React, { SyntheticEvent } from 'react';
 import { useAppDispatch } from '../../store/store';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
-  Container,
-  Dropdown,
-  DropdownButton,
-  Row,
-  Col,
-  Card,
-  Button,
-  Spinner,
+  Container, Row, Col, Card, Button, Spinner,
 } from 'react-bootstrap';
 import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
@@ -18,6 +11,7 @@ import ReviewCard from '../../components/reviews-page/ReviewCard';
 import { IDatePicker, IEmployeeReviews } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
+import StarResolver from '../../components/reviews-page/StarResolver';
 
 const ReviewsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -26,9 +20,17 @@ const ReviewsPage: React.FC = () => {
   >([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
-  const [toggleSitesDropdonw, setToggleSitesDropdown] = React.useState(false);
+  const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
+  const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
+  const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
+    false,
+  );
   const [sitesDropdownValue, setSitesDropdownValue] = React.useState(
     'All Sites',
+  );
+  const [starsDropdownValue, setStarsDropdownValue] = React.useState(0);
+  const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
+    'Newest',
   );
   const [dateRange, setDateRange] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
@@ -45,9 +47,17 @@ const ReviewsPage: React.FC = () => {
       key: 'selection',
     },
   ]);
+
   const userID = '607a1d65e4be5100126b827e';
+
   React.useEffect(() => {
-    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
+      dateRangeQuery.end
+    }&${starsDropdownValue !== 0
+      && `rating=${starsDropdownValue}`}&${sitesDropdownValue !== 'All Sites'
+      && `platform=${sitesDropdownValue}`}&sort=${
+      dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
+    }&sortBy=date`;
     setIsLoading(true);
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: Array<IEmployeeReviews> | undefined) => {
@@ -59,7 +69,13 @@ const ReviewsPage: React.FC = () => {
         }
       },
     );
-  }, [dateRangeQuery, dispatch]);
+  }, [
+    dateRangeQuery,
+    sitesDropdownValue,
+    starsDropdownValue,
+    dispatch,
+    dateSortDropdownValue,
+  ]);
 
   const setDateRangeFilter = () => {
     setDateRange((prevState) => ({
@@ -85,6 +101,7 @@ const ReviewsPage: React.FC = () => {
     const target = e.target as HTMLElement;
     setSitesDropdownValue(target.innerText);
   };
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -109,7 +126,7 @@ const ReviewsPage: React.FC = () => {
             <div
               className='date-range-btn custom-dropdown d-flex align-items-center'
               onClick={() => {
-                setToggleSitesDropdown(!toggleSitesDropdonw);
+                setToggleSitesDropdown(!toggleSitesDropdown);
               }}
             >
               {sitesDropdownValue}
@@ -118,7 +135,7 @@ const ReviewsPage: React.FC = () => {
               </div>
               <div
                 className={`custom-dropdown-menu ${
-                  toggleSitesDropdonw ? 'd-block' : ''
+                  toggleSitesDropdown ? 'd-block' : ''
                 }`}
               >
                 <div
@@ -131,8 +148,83 @@ const ReviewsPage: React.FC = () => {
                   className='custom-dropdown-item'
                   onClick={(e) => handleDropdownChange(e)}
                 >
-                  Eyerate
+                  Google
                 </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Weedmaps
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  GMB
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Yelp
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className='date-range-btn custom-dropdown d-flex align-items-center m-2'
+            onClick={() => {
+              setToggleStarsDropdown(!toggleStarsDropdown);
+            }}
+          >
+            {starsDropdownValue !== 0 ? (
+              <StarResolver rating={starsDropdownValue} />
+            ) : (
+              'All Ratings'
+            )}
+            <div className='arrow-wrapp'>
+              <i className='arrow down ml-3' />
+            </div>
+            <div
+              className={`custom-dropdown-menu ${
+                toggleStarsDropdown ? 'd-block' : ''
+              }`}
+            >
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(0)}
+              >
+                All Ratings
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(1)}
+              >
+                <StarResolver rating={1} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(2)}
+              >
+                <StarResolver rating={2} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(3)}
+              >
+                <StarResolver rating={3} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(4)}
+              >
+                <StarResolver rating={4} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(5)}
+              >
+                <StarResolver rating={5} />
               </div>
             </div>
           </div>
@@ -158,28 +250,50 @@ const ReviewsPage: React.FC = () => {
           </Col>
         </div>
         <Row>
-          <Col md={4}>
+          <Col lg={4} md={12}>
             <ReviewStats />
           </Col>
-          <Col md={8}>
+          <Col lg={8} md={12}>
             {!isLoading ? (
               <Card className='p-3 mb-3'>
                 <Card.Title className='d-flex justify-content-between px-2'>
                   <h3>Review List</h3>
-                  <DropdownButton
-                    id='dropdown-reviews-sort'
-                    title='Most Recent'
+                  <div
+                    className='date-range-btn custom-dropdown d-flex align-items-center'
+                    onClick={() => {
+                      setToggleDateSortDropdown(!toggleDateSortDropdown);
+                    }}
                   >
-                    <Dropdown.Item>Newset</Dropdown.Item>
-                    <Dropdown.Item>Oldest</Dropdown.Item>
-                  </DropdownButton>
+                    {dateSortDropdownValue}
+                    <div className='arrow-wrapp'>
+                      <i className='arrow down ml-3' />
+                    </div>
+                    <div
+                      className={`custom-dropdown-menu ${
+                        toggleDateSortDropdown ? 'd-block' : ''
+                      }`}
+                    >
+                      <div
+                        className='custom-dropdown-item'
+                        onClick={() => setDateSortDropdownValue('Newest')}
+                      >
+                        Newest
+                      </div>
+                      <div
+                        className='custom-dropdown-item'
+                        onClick={() => setDateSortDropdownValue('Oldest')}
+                      >
+                        Oldest
+                      </div>
+                    </div>
+                  </div>
                 </Card.Title>
                 {employeeReviews.length > 0 ? (
                   employeeReviews.map((r) => (
                     <ReviewCard key={r._id} data={r} />
                   ))
                 ) : (
-                  <div className='m-auto'>No reviews for this period</div>
+                  <div className='m-auto'>No reviews with this criteria</div>
                 )}
               </Card>
             ) : (

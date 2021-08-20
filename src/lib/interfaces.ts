@@ -28,6 +28,7 @@ export interface IEmployeeReviews {
   rating: number;
   platform: string;
 }
+
 export interface IUserInformation {
   first_name: string;
   last_name: string;

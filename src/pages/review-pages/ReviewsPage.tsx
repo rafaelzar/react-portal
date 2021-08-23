@@ -25,7 +25,7 @@ const ReviewsPage: React.FC = () => {
   >([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
-  const [numberOfPages, setNumberOfPages] = React.useState('');
+  const [numberOfPages, setNumberOfPages] = React.useState(1);
   const [activePageNumber, setActivePageNumber] = React.useState(1);
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
   const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
@@ -61,7 +61,7 @@ const ReviewsPage: React.FC = () => {
     const buildQueryFromState = () => {
       let query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
         dateRangeQuery.end
-      }&page=${pageNumber}&sort=${
+      }&page=${activePageNumber}&sort=${
         dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
       }&sortBy=date`;
       if (starsDropdownValue !== 0)
@@ -76,8 +76,9 @@ const ReviewsPage: React.FC = () => {
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: IReviewsResponse | undefined) => {
         if (res) {
-          const { data: reviews = [], pageCount = '' } = res;
+          const { data: reviews = [], pageCount } = res;
           setEmployeeReviews(reviews);
+          setNumberOfPages(pageCount);
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -90,6 +91,7 @@ const ReviewsPage: React.FC = () => {
     starsDropdownValue,
     dispatch,
     dateSortDropdownValue,
+    activePageNumber,
   ]);
 
   const setDateRangeFilter = () => {
@@ -115,6 +117,11 @@ const ReviewsPage: React.FC = () => {
   const handleDropdownChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLElement;
     setSitesDropdownValue(target.innerText);
+  };
+
+  const handlePaginationClick = (e: React.SyntheticEvent, index: number) => {
+    e.preventDefault();
+    setActivePageNumber(index);
   };
 
   return (
@@ -312,7 +319,13 @@ const ReviewsPage: React.FC = () => {
                 ) : (
                   <div className='m-auto'>No reviews with this criteria</div>
                 )}
-                {employeeReviews.length > 0 && <PaginationComponent />}
+                {employeeReviews.length > 0 && (
+                  <PaginationComponent
+                    pageCount={numberOfPages}
+                    currentPage={activePageNumber}
+                    handlePaginationClick={handlePaginationClick}
+                  />
+                )}
               </Card>
             ) : (
               <Spinner className='d-block m-auto' animation='border' />

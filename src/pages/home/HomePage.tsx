@@ -1,22 +1,22 @@
 import React from 'react';
-import {
-  Row, Col, Container,
-} from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+import { Row, Col, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import UserInfoCard from '../../components/home-page/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
-import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
+import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 const HomePage: React.FC = () => {
-  const userToken = useSelector((state) => getUserJwtTokenSelector(state));
   const history = useHistory();
 
   React.useEffect(() => {
-    if (userToken === '') {
-      history.push('/login');
+    async function fetchIdToken() {
+      const idToken = await fetchIdTokenCognitoFunction();
+      if (idToken === false) {
+        history.push('/login');
+      }
     }
-  }, [history, userToken]);
+    fetchIdToken();
+  }, [history]);
 
   return (
     <DefaultLayout>

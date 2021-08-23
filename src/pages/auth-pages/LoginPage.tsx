@@ -1,7 +1,5 @@
 import React from 'react';
 import { useAppDispatch } from '../../store/store';
-import { useSelector } from 'react-redux';
-import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
 import {
   fetchUserFromDatabaseAuthAction,
   logInCognitoUserAuthAction,
@@ -9,12 +7,13 @@ import {
 } from '../../store/actions/authActions';
 import { sendJWTToken } from '../../store/apiCalls';
 import { Link } from 'react-router-dom';
-import { swalError, swalSuccess } from '../../lib/utils/toasts';
+import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
   Card, Col, Container, Row,
 } from 'react-bootstrap';
 import logo from '../../lib/assets/img/logo-eyerate.png';
 import { validateLogin } from '../../lib/utils/validator';
+import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 interface IProps {
   history: Array<string>;
@@ -27,13 +26,20 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const userInfo = useSelector((state) => getUserJwtTokenSelector(state));
 
   React.useEffect(() => {
-    if (userInfo !== '') {
-      history.push('/');
+    if (window.location.href.indexOf('?authStatus=SessionExpired') > -1) {
+      swalInfo('Your session has expired. Please log in again.');
+      window.history.replaceState(null, window.location.pathname);
     }
-  }, [history, userInfo]);
+    async function fetchIdToken() {
+      const idToken = await fetchIdTokenCognitoFunction();
+      if (idToken !== false) {
+        history.push('/');
+      }
+    }
+    fetchIdToken();
+  }, [history]);
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();

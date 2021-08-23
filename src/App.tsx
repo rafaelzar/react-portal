@@ -20,7 +20,9 @@ Amplify.configure(awsconfig);
 axios.interceptors.request.use(
   async (config) => {
     const idToken = await fetchIdTokenCognitoFunction();
-    if (idToken != null) {
+    if (idToken === false) {
+      window.location.href = '/login?authStatus=SessionExpired';
+    } else if (idToken !== null) {
       config.headers.Authorization = `Bearer ${idToken}`;
     }
     return config;

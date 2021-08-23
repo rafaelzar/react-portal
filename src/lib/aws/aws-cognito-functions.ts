@@ -23,9 +23,14 @@ export const logInUserCognitoFunction = async (
 };
 
 export const fetchIdTokenCognitoFunction = async (): Promise<
-  string | undefined
+  string | boolean | undefined
 > => {
-  return (await Auth.currentSession()).getIdToken().getJwtToken();
+  try {
+    return (await Auth.currentSession()).getIdToken().getJwtToken();
+  } catch (error) {
+    errorHandler(error);
+    return false;
+  }
 };
 
 export const logInUserWithNewPasswordCognitoFunction = async (

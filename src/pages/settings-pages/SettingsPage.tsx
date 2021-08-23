@@ -2,10 +2,7 @@ import React from 'react';
 import { useAppDispatch } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import {
-  getUserJwtTokenSelector,
-  getUserSelector,
-} from '../../store/selectors/selectors';
+import { getUserSelector } from '../../store/selectors/selectors';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container,
@@ -24,6 +21,7 @@ import {
 } from '../../store/actions/authActions';
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
 import UserInfoCard from '../../components/home-page/UserInfoCard';
+import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -31,7 +29,6 @@ const SettingsPage: React.FC = () => {
     first_name: userFirstName = '',
     last_name: userLastName = '',
     nick_names: userNickName = [''],
-    email: userEmail = '',
     phone: userPhone = '',
     _id: userId = '',
   } = userInfo;
@@ -44,9 +41,18 @@ const SettingsPage: React.FC = () => {
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
   const [disable, setDisable] = React.useState(false);
-  const userToken = useSelector((state) => getUserJwtTokenSelector(state));
   const dispatch = useAppDispatch();
   const history = useHistory();
+
+  React.useEffect(() => {
+    async function fetchIdToken() {
+      const idToken = await fetchIdTokenCognitoFunction();
+      if (idToken === false) {
+        history.push('/login');
+      }
+    }
+    fetchIdToken();
+  }, [history]);
 
   const updateSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -128,12 +134,6 @@ const SettingsPage: React.FC = () => {
       swalInfo('That nickname already exist');
     }
   };
-
-  React.useEffect(() => {
-    if (userToken === '') {
-      history.push('/login');
-    }
-  }, [history, userToken]);
 
   return (
     <DefaultLayout>

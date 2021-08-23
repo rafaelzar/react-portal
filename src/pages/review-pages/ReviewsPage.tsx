@@ -111,6 +111,7 @@ const ReviewsPage: React.FC = () => {
         'YYYY-MM-DD',
       ),
     }));
+    setActivePageNumber(1);
     setToggleDatePicker(!toggleDatePicker);
   };
 

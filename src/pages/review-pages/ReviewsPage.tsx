@@ -273,10 +273,10 @@ const ReviewsPage: React.FC = () => {
           </Col>
         </div>
         <Row>
-          <Col lg={4} md={12}>
+          <Col xl={4} lg={5} md={12}>
             <ReviewStats />
           </Col>
-          <Col lg={8} md={12}>
+          <Col xl={8} lg={7} md={12}>
             {!isLoading ? (
               <Card className='p-3 mb-3'>
                 <Card.Title className='d-flex justify-content-between px-2'>

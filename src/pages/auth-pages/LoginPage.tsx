@@ -7,7 +7,7 @@ import {
 } from '../../store/actions/authActions';
 import { sendJWTToken } from '../../store/apiCalls';
 import { Link } from 'react-router-dom';
-import { swalError, swalSuccess } from '../../lib/utils/toasts';
+import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
   Card, Col, Container, Row,
 } from 'react-bootstrap';
@@ -28,6 +28,10 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
+    if (window.location.href.indexOf('?authStatus=SessionExpired') > -1) {
+      swalInfo('Your session has expired. Please log in again.');
+      window.history.replaceState(null, window.location.pathname);
+    }
     async function fetchIdToken() {
       const idToken = await fetchIdTokenCognitoFunction();
       if (idToken !== false) {

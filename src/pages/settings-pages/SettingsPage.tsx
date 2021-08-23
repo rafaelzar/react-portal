@@ -23,6 +23,7 @@ import {
   updateUserAuthAction,
 } from '../../store/actions/authActions';
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
+import UserInfoCard from '../../components/home-page/UserInfoCard';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -143,35 +144,7 @@ const SettingsPage: React.FC = () => {
           </div>
           <Row>
             <Col lg='4' className='mt-3'>
-              <Container>
-                <Card className='user-information-card'>
-                  <Container className='my-3'>
-                    <p>
-                      {userFirstName}
-                      {' '}
-                      {userLastName}
-                    </p>
-                    <h2>Nick name</h2>
-                    {userNickName ? (
-                      <>
-                        <p>{userNickName.join(', ')}</p>
-                      </>
-                    ) : (
-                      <p>Unset</p>
-                    )}
-                    <h2>Phone</h2>
-                    {userPhone ? (
-                      <>
-                        <p>{userPhone}</p>
-                      </>
-                    ) : (
-                      <p>Unset</p>
-                    )}
-                    <h2>Email</h2>
-                    <p>{userEmail}</p>
-                  </Container>
-                </Card>
-              </Container>
+              <UserInfoCard />
             </Col>
             <Col lg='8' className='mt-3'>
               <Container>
@@ -227,13 +200,15 @@ const SettingsPage: React.FC = () => {
                             </InputGroup>
                             <Col lg='12'>
                               <Row>
-                                {nickNames.length !== 0 && <span className='font-weight-bold mr-1'>Nicknames:</span>}
+                                {nickNames.length !== 0 && (
+                                  <span className='font-weight-bold mr-1'>
+                                    Nicknames:
+                                  </span>
+                                )}
                                 {nickNames && nickNames.length !== 0 ? (
                                   nickNames.map((n: string, i) => {
                                     return (
-                                      <div key={n}>
-                                        {(i ? ', ' : '') + n}
-                                      </div>
+                                      <div key={n}>{(i ? ', ' : '') + n}</div>
                                     );
                                   })
                                 ) : (

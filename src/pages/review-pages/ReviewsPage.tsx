@@ -313,9 +313,7 @@ const ReviewsPage: React.FC = () => {
                 </Card.Title>
                 {employeeReviews.length > 0 ? (
                   employeeReviews.map((r) => (
-                    <>
-                      <ReviewCard key={r._id} data={r} />
-                    </>
+                    <ReviewCard key={r._id} data={r} />
                   ))
                 ) : (
                   <div className='m-auto'>No reviews with this criteria</div>

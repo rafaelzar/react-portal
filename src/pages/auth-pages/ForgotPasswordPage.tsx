@@ -22,18 +22,22 @@ const ForgotPasswordPage: React.FC = () => {
   const [username, setUsername] = React.useState('');
   const [code, setCode] = React.useState('');
   const [isUsernameSubmited, setIsUsernameSubmited] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const forgotPassword = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (!validateEmail(username)) {
       swalError('Please enter a valid email');
     } else {
+      setIsLoading(true);
       dispatch(forgotPasswordAuthAction(username)).then(
         (res: boolean | undefined) => {
           if (res) {
             setIsUsernameSubmited(true);
+            setIsLoading(false);
           } else {
             swalError('Something went wrong');
+            setIsLoading(false);
           }
         },
       );
@@ -43,6 +47,7 @@ const ForgotPasswordPage: React.FC = () => {
   const forgotPasswordSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (validateForgotPasswordSubmit(code, newPassword, newPasswordConfirmed)) {
+      setIsLoading(true);
       dispatch(
         forgotPasswordSubmitAuthAction(username, code, newPassword),
       ).then((res: boolean | undefined) => {
@@ -51,6 +56,7 @@ const ForgotPasswordPage: React.FC = () => {
           swalSuccess('Please login with new password');
         } else {
           swalError('Something went wrong');
+          setIsLoading(false);
         }
       });
     }
@@ -86,6 +92,7 @@ const ForgotPasswordPage: React.FC = () => {
                           type='submit'
                           value='Submit'
                           className='btn forgot-button mt-5'
+                          disabled={isLoading}
                         >
                           Submit
                         </button>
@@ -138,6 +145,7 @@ const ForgotPasswordPage: React.FC = () => {
                             type='submit'
                             value='Submit'
                             className='btn forgot-button mt-5'
+                            disabled={isLoading}
                           />
                           <Link to='/login' className='text-bottom mt-3'>
                             Return to login

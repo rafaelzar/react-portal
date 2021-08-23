@@ -86,7 +86,7 @@ const ForgotPasswordPage: React.FC = () => {
                           placeholder='email'
                           id='email'
                           value={username}
-                          onChange={(e) => setUsername(e.target.value)}
+                          onChange={(e) => setUsername(e.target.value.trim())}
                         />
                         <button
                           type='submit'
@@ -121,7 +121,7 @@ const ForgotPasswordPage: React.FC = () => {
                             placeholder='code'
                             id='code'
                             value={code}
-                            onChange={(e) => setCode(e.target.value)}
+                            onChange={(e) => setCode(e.target.value.trim())}
                             className='mb-3'
                           />
                           <input
@@ -130,7 +130,7 @@ const ForgotPasswordPage: React.FC = () => {
                             placeholder='new password'
                             id='newPassword'
                             value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
+                            onChange={(e) => setNewPassword(e.target.value.trim())}
                             className='mb-3'
                           />
                           <input
@@ -139,7 +139,7 @@ const ForgotPasswordPage: React.FC = () => {
                             placeholder='confirm new password'
                             id='newPasswordConfirmed'
                             value={newPasswordConfirmed}
-                            onChange={(e) => setNewPasswordConfirmed(e.target.value)}
+                            onChange={(e) => setNewPasswordConfirmed(e.target.value.trim())}
                           />
                           <input
                             type='submit'

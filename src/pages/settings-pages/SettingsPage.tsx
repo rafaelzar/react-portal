@@ -23,6 +23,7 @@ import {
   updateUserAuthAction,
 } from '../../store/actions/authActions';
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
+import UserInfoCard from '../../components/home-page/UserInfoCard';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -38,7 +39,7 @@ const SettingsPage: React.FC = () => {
   const [lastName, setLastName] = React.useState(userLastName);
   const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
   const [nickNames, setNickNames] = React.useState(userNickName);
-  const [tempNickname, setTempNickname] = React.useState(userNickName[0]);
+  const [tempNickname, setTempNickname] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
@@ -122,6 +123,7 @@ const SettingsPage: React.FC = () => {
     );
     if (doesNicknameExits === false) {
       setNickNames([...nickNames, tempNickname.trim()]);
+      setTempNickname('');
     } else {
       swalInfo('That nickname already exist');
     }
@@ -142,35 +144,7 @@ const SettingsPage: React.FC = () => {
           </div>
           <Row>
             <Col lg='4' className='mt-3'>
-              <Container>
-                <Card className='user-information-card'>
-                  <Container className='my-3'>
-                    <p>
-                      {userFirstName}
-                      {' '}
-                      {userLastName}
-                    </p>
-                    <h2>Nick name</h2>
-                    {userNickName ? (
-                      <>
-                        <p>{userNickName[0]}</p>
-                      </>
-                    ) : (
-                      <p>Unset</p>
-                    )}
-                    <h2>Phone</h2>
-                    {userPhone ? (
-                      <>
-                        <p>{userPhone}</p>
-                      </>
-                    ) : (
-                      <p>Unset</p>
-                    )}
-                    <h2>Email</h2>
-                    <p>{userEmail}</p>
-                  </Container>
-                </Card>
-              </Container>
+              <UserInfoCard />
             </Col>
             <Col lg='8' className='mt-3'>
               <Container>
@@ -208,7 +182,6 @@ const SettingsPage: React.FC = () => {
                             <Form.Label>Add Nickname</Form.Label>
                             <InputGroup className='mb-3'>
                               <Form.Control
-                                placeholder='Nick names'
                                 aria-label='Nick names'
                                 aria-describedby='basic-addon2'
                                 value={tempNickname}
@@ -227,13 +200,15 @@ const SettingsPage: React.FC = () => {
                             </InputGroup>
                             <Col lg='12'>
                               <Row>
+                                {nickNames.length !== 0 && (
+                                  <span className='font-weight-bold mr-1'>
+                                    Nicknames:
+                                  </span>
+                                )}
                                 {nickNames && nickNames.length !== 0 ? (
-                                  nickNames.map((n: string) => {
+                                  nickNames.map((n: string, i) => {
                                     return (
-                                      <div className='mr-1'>
-                                        {n}
-                                        ,
-                                      </div>
+                                      <div key={n}>{(i ? ', ' : '') + n}</div>
                                     );
                                   })
                                 ) : (

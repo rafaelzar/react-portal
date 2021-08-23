@@ -1,11 +1,26 @@
 import React from 'react';
+import { Pagination } from 'react-bootstrap';
 
-const Pagination: React.FC = () => {
+interface IProps {
+  pageCount: number;
+  currentPage: number;
+  handlePaginationClick: (e: React.SyntheticEvent, page: number) => void;
+}
+
+const PaginationComponent: React.FC<IProps> = (props) => {
+  const { handlePaginationClick, currentPage, pageCount } = props;
   return (
-    <div>
-      Pagination
-    </div>
+    <Pagination>
+      <Pagination.Prev
+        onClick={(e) => handlePaginationClick(e, currentPage - 1)}
+        disabled={currentPage === 1}
+      />
+      <Pagination.Next
+        onClick={(e) => handlePaginationClick(e, currentPage + 1)}
+        disabled={pageCount === currentPage}
+      />
+    </Pagination>
   );
 };
 
-export default Pagination;
+export default PaginationComponent;

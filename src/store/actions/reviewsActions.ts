@@ -7,7 +7,7 @@ export const getEmployeesReviewsReviewsAction = (queries: string) => {
     try {
       const res = await getEmployeesReviews(queries);
       if (res) {
-        const { data: { data = [] } } = res;
+        const { data = {} } = res;
         return data;
       } else {
         return false;

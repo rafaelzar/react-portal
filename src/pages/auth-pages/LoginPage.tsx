@@ -111,7 +111,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                       id='email'
                       placeholder='email'
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value.trim())}
                       className='mb-3'
                     />
                     <input
@@ -120,7 +120,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                       id='password'
                       placeholder='password'
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      onChange={(e) => setPassword(e.target.value.trim())}
                       className='mb-5'
                     />
                     <button
@@ -144,7 +144,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                         id='newPassword'
                         placeholder='New Password'
                         value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
+                        onChange={(e) => setNewPassword(e.target.value.trim())}
                         className='mb-5'
                       />
                       <button

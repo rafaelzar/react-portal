@@ -29,6 +29,11 @@ export interface IEmployeeReviews {
   platform: string;
 }
 
+export interface IReviewsResponse {
+  data: IEmployeeReviews[];
+  pageCount: number;
+}
+
 export interface IUserInformation {
   first_name: string;
   last_name: string;

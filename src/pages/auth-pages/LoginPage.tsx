@@ -1,7 +1,5 @@
 import React from 'react';
 import { useAppDispatch } from '../../store/store';
-import { useSelector } from 'react-redux';
-import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
 import {
   fetchUserFromDatabaseAuthAction,
   logInCognitoUserAuthAction,
@@ -15,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import logo from '../../lib/assets/img/logo-eyerate.png';
 import { validateLogin } from '../../lib/utils/validator';
+import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 interface IProps {
   history: Array<string>;
@@ -27,13 +26,16 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
-  const userInfo = useSelector((state) => getUserJwtTokenSelector(state));
 
   React.useEffect(() => {
-    if (userInfo !== '') {
-      history.push('/');
+    async function fetchIdToken() {
+      const idToken = await fetchIdTokenCognitoFunction();
+      if (idToken !== false) {
+        history.push('/');
+      }
     }
-  }, [history, userInfo]);
+    fetchIdToken();
+  }, [history]);
 
   const Login = async (e: React.SyntheticEvent) => {
     e.preventDefault();

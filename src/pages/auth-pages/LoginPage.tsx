@@ -30,7 +30,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   React.useEffect(() => {
     if (window.location.href.indexOf('?authStatus=SessionExpired') > -1) {
       swalInfo('Your session has expired. Please log in again.');
-      window.history.replaceState(null, window.location.pathname);
+      window.history.replaceState(null, 'null', window.location.pathname);
     }
     async function fetchIdToken() {
       const idToken = await fetchIdTokenCognitoFunction();

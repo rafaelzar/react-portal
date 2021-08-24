@@ -4,7 +4,7 @@ import { useAppDispatch } from '../store/store';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
 import cross from '../lib/assets/img/cross.png';
-import { swalError, swalSuccess } from '../lib/utils/toasts';
+import { swalSuccess } from '../lib/utils/toasts';
 
 interface IProps {
   toggleSidebar: () => void;

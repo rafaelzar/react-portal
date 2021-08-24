@@ -15,12 +15,13 @@ const UserInfoCard: React.FC = () => {
   return (
     <Card className='user-information-card'>
       <Container className='my-3'>
+        <h2>Full Name</h2>
         <p>
           {userFirstName}
           {' '}
           {userLastName}
         </p>
-        <h2>Nick name</h2>
+        <h2>Nickmames</h2>
         {userNickName ? (
           <>
             <p>{userNickName.join(', ')}</p>

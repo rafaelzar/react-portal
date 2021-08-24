@@ -58,7 +58,7 @@ const SettingsPage: React.FC = () => {
     e.preventDefault();
     const isUserInfoChanged = userFirstName.trim() !== firstName.trim()
       || lastName.trim() !== userLastName.trim()
-      || userNickName.length < nickNames.length
+      || userNickName.length !== nickNames.length
       || userPhone.trim() !== phoneNumber.trim();
 
     const isPasswordChanged = password !== '' || newPassword !== '' || confirmNewPassword !== '';
@@ -135,12 +135,17 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  const deleteNickname = (value: string) => {
+    const newNicknames = nickNames.filter((element) => element !== value);
+    setNickNames(newNicknames);
+  };
+
   return (
     <DefaultLayout>
       <div className='user-settings-wrapper mb-5'>
         <Container fluid>
           <div>
-            <h1 className='mt-5 ml-3'>Account Settings</h1>
+            <h1 className='mt-5'>Account Settings</h1>
           </div>
           <Row>
             <Col lg='4' className='mt-3'>
@@ -155,7 +160,7 @@ const SettingsPage: React.FC = () => {
                     <h3>Contact Information</h3>
                     <Form>
                       <Row>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-3'>
                             <Form.Label>First Name</Form.Label>
                             <Form.Control
@@ -165,7 +170,7 @@ const SettingsPage: React.FC = () => {
                             />
                           </Form.Group>
                         </Col>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-3'>
                             <Form.Label>Last Name</Form.Label>
                             <Form.Control
@@ -177,7 +182,7 @@ const SettingsPage: React.FC = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-3'>
                             <Form.Label>Add Nickname</Form.Label>
                             <InputGroup className='mb-3'>
@@ -198,7 +203,7 @@ const SettingsPage: React.FC = () => {
                                 </Button>
                               </InputGroup.Append>
                             </InputGroup>
-                            <Col lg='12'>
+                            <Col lg='12' md='12'>
                               <Row>
                                 {nickNames.length !== 0 && (
                                   <span className='font-weight-bold mr-1'>
@@ -208,17 +213,30 @@ const SettingsPage: React.FC = () => {
                                 {nickNames && nickNames.length !== 0 ? (
                                   nickNames.map((n: string, i) => {
                                     return (
-                                      <div key={n}>{(i ? ', ' : '') + n}</div>
+                                      <div
+                                        className='pointer'
+                                        onClick={() => deleteNickname(n)}
+                                        key={n}
+                                      >
+                                        {(i ? ', ' : '') + n}
+                                      </div>
                                     );
                                   })
                                 ) : (
                                   <div>You don&apos;t have nicknames.</div>
                                 )}
                               </Row>
+                              <Row>
+                                {nickNames.length !== 0 && (
+                                  <div className='text-info'>
+                                    Click on the nickname to remove it
+                                  </div>
+                                )}
+                              </Row>
                             </Col>
                           </Form.Group>
                         </Col>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-4'>
                             <Form.Label>Phone</Form.Label>
                             <Form.Control

@@ -145,7 +145,7 @@ const SettingsPage: React.FC = () => {
       <div className='user-settings-wrapper mb-5'>
         <Container fluid>
           <div>
-            <h1 className='mt-5 ml-3'>Account Settings</h1>
+            <h1 className='mt-5'>Account Settings</h1>
           </div>
           <Row>
             <Col lg='4' className='mt-3'>

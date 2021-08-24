@@ -160,7 +160,7 @@ const SettingsPage: React.FC = () => {
                     <h3>Contact Information</h3>
                     <Form>
                       <Row>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-3'>
                             <Form.Label>First Name</Form.Label>
                             <Form.Control
@@ -170,7 +170,7 @@ const SettingsPage: React.FC = () => {
                             />
                           </Form.Group>
                         </Col>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-3'>
                             <Form.Label>Last Name</Form.Label>
                             <Form.Control
@@ -182,7 +182,7 @@ const SettingsPage: React.FC = () => {
                         </Col>
                       </Row>
                       <Row>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-3'>
                             <Form.Label>Add Nickname</Form.Label>
                             <InputGroup className='mb-3'>
@@ -203,7 +203,7 @@ const SettingsPage: React.FC = () => {
                                 </Button>
                               </InputGroup.Append>
                             </InputGroup>
-                            <Col lg='12'>
+                            <Col lg='12' md='12'>
                               <Row>
                                 {nickNames.length !== 0 && (
                                   <span className='font-weight-bold mr-1'>
@@ -226,17 +226,17 @@ const SettingsPage: React.FC = () => {
                                   <div>You don&apos;t have nicknames.</div>
                                 )}
                               </Row>
+                              <Row>
+                                {nickNames.length !== 0 && (
+                                  <div className='text-info'>
+                                    Click on the nickname to remove it
+                                  </div>
+                                )}
+                              </Row>
                             </Col>
                           </Form.Group>
                         </Col>
-                        <Col className='mb-3' lg='12'>
-                          {nickNames.length !== 0 && (
-                            <div className='text-info'>
-                              Click on the nickname to remove it
-                            </div>
-                          )}
-                        </Col>
-                        <Col lg='6'>
+                        <Col lg='6' md='12'>
                           <Form.Group className='mb-4'>
                             <Form.Label>Phone</Form.Label>
                             <Form.Control

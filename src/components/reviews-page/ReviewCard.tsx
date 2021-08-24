@@ -17,7 +17,7 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
           }`}
         />
         <div className='d-flex justify-content-between mb-3 review-card-body'>
-          <div>{moment(data.date).format('LL')}</div>
+          <div>{moment(data.created_at).format('LL')}</div>
           <div className='d-flex align-items-center'>
             <span className='mx-2'>{data.platform}</span>
             <div>
@@ -30,7 +30,7 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
         <p>{data.content}</p>
       </div>
       <div className='review-card-footer'>
-        <span>{data.author}</span>
+        <span>{data.name}</span>
         <span> (612) 258-2151</span>
       </div>
     </div>

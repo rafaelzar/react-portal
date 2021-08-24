@@ -22,16 +22,24 @@ export interface IDatePicker {
 
 export interface IEmployeeReviews {
   _id: string;
-  author: string;
+  name: string;
   content?: string;
-  date: string;
+  phone?: string;
+  created_at: string;
   rating: number;
-  platform: string;
+  platform?: string;
+}
+
+export interface IReviewsStats {
+  averageRating: number;
+  chartData: [];
+  numberOfReviews: number;
+  starsData: [];
 }
 
 export interface IReviewsResponse {
   data: IEmployeeReviews[];
-  pageCount: number;
+  stats: IReviewsStats;
 }
 
 export interface IUserInformation {

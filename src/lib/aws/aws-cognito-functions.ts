@@ -28,7 +28,6 @@ export const fetchIdTokenCognitoFunction = async (): Promise<
   try {
     return (await Auth.currentSession()).getIdToken().getJwtToken();
   } catch (error) {
-    errorHandler(error);
     return false;
   }
 };
@@ -60,7 +59,6 @@ export const logInUserWithNewPasswordCognitoFunction = async (
 export const logOutUserCognitoFunction = async (): Promise<boolean> => {
   try {
     await Auth.signOut({ global: true });
-    console.log('logout');
     return true;
   } catch (error) {
     console.log('error signing out: ', error);

@@ -58,7 +58,7 @@ const SettingsPage: React.FC = () => {
     e.preventDefault();
     const isUserInfoChanged = userFirstName.trim() !== firstName.trim()
       || lastName.trim() !== userLastName.trim()
-      || userNickName.length < nickNames.length
+      || userNickName.length !== nickNames.length
       || userPhone.trim() !== phoneNumber.trim();
 
     const isPasswordChanged = password !== '' || newPassword !== '' || confirmNewPassword !== '';
@@ -135,6 +135,11 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  const deleteNickname = (value: string) => {
+    const newNicknames = nickNames.filter((element) => element !== value);
+    setNickNames(newNicknames);
+  };
+
   return (
     <DefaultLayout>
       <div className='user-settings-wrapper mb-5'>
@@ -208,7 +213,13 @@ const SettingsPage: React.FC = () => {
                                 {nickNames && nickNames.length !== 0 ? (
                                   nickNames.map((n: string, i) => {
                                     return (
-                                      <div key={n}>{(i ? ', ' : '') + n}</div>
+                                      <div
+                                        className='pointer'
+                                        onClick={() => deleteNickname(n)}
+                                        key={n}
+                                      >
+                                        {(i ? ', ' : '') + n}
+                                      </div>
                                     );
                                   })
                                 ) : (
@@ -217,6 +228,13 @@ const SettingsPage: React.FC = () => {
                               </Row>
                             </Col>
                           </Form.Group>
+                        </Col>
+                        <Col className='mb-3' lg='12'>
+                          {nickNames.length !== 0 && (
+                            <div className='text-info'>
+                              Click on the nickname to remove it
+                            </div>
+                          )}
                         </Col>
                         <Col lg='6'>
                           <Form.Group className='mb-4'>

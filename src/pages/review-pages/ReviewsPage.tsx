@@ -131,18 +131,23 @@ const ReviewsPage: React.FC = () => {
         'YYYY-MM-DD',
       ),
     }));
+    resetPagination();
+    setToggleDatePicker(!toggleDatePicker);
+  };
+
+  const resetPagination = () => {
+    setPaginationCursor('');
     setDateQueryForPagination((prevState) => ({
       ...prevState,
       lastDate: '',
       firstDate: '',
     }));
-    setPaginationCursor('');
-    setToggleDatePicker(!toggleDatePicker);
   };
 
   const handleDropdownChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLElement;
     setSitesDropdownValue(target.innerText);
+    resetPagination();
   };
 
   const handlePaginationNext = (e: React.SyntheticEvent) => {
@@ -152,6 +157,7 @@ const ReviewsPage: React.FC = () => {
       ...prevState,
       lastDate: employeeReviews[employeeReviews.length - 1].created_at,
     }));
+    // console.log(employeeReviews);
   };
 
   const handlePaginationPrev = (e: React.SyntheticEvent) => {

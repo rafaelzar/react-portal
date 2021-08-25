@@ -25,8 +25,13 @@ const ReviewsPage: React.FC = () => {
   >([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
-  const [numberOfPages, setNumberOfPages] = React.useState(1);
-  const [activePageNumber, setActivePageNumber] = React.useState(1);
+  const [paginationCursor, setPaginationCursor] = React.useState('');
+  const [disableNextPagination, setDisableNextPagination] = React.useState(
+    false,
+  );
+  const [disablePrevPagination, setDisablePrevPagination] = React.useState(
+    false,
+  );
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
   const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
@@ -47,6 +52,10 @@ const ReviewsPage: React.FC = () => {
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
   });
+  const [dateQueryForPaginaton, setDateQueryForPagination] = React.useState({
+    firstDate: '',
+    lastDate: '',
+  });
   const [dateState, setDateState] = React.useState<IDatePicker[]>([
     {
       startDate: subDays(new Date(), 7),
@@ -56,18 +65,34 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   const userID = '607a1d65e4be5100126b827e';
+  const stats = {
+    numberOfReviews: 49,
+    averageRating: 5,
+    starsData: [
+      { stars: 5, percent: 100, number: 49 },
+      { stars: 4, percent: 0, number: 0 },
+      { stars: 3, percent: 0, number: 0 },
+      { stars: 2, percent: 0, number: 0 },
+      { stars: 1, percent: 0, number: 0 },
+    ],
+    chartData: [32, 0, 17, 0, 0],
+  };
 
   React.useEffect(() => {
     const buildQueryFromState = () => {
       let query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
         dateRangeQuery.end
-      }&page=${activePageNumber}&sort=${
-        dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
-      }&sortBy=date`;
+      }&sort=${dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'}`;
       if (starsDropdownValue !== 0)
         query = `${query}&rating=${starsDropdownValue}`;
       if (sitesDropdownValue !== 'All Sites')
         query = `${query}&platform=${sitesDropdownValue}`;
+      if (paginationCursor !== '')
+        query = `${query}&cursor=${paginationCursor}`;
+      if (dateQueryForPaginaton.lastDate !== '')
+        query = `${query}&lastDate=${dateQueryForPaginaton.lastDate}`;
+      if (dateQueryForPaginaton.firstDate !== '')
+        query = `${query}&firstDate=${dateQueryForPaginaton.firstDate}`;
       return query;
     };
 
@@ -76,9 +101,15 @@ const ReviewsPage: React.FC = () => {
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: IReviewsResponse | undefined) => {
         if (res) {
-          const { data: reviews = [], pageCount } = res;
+          const {
+            data: reviews = [],
+            stats = {},
+            isFirst = false,
+            isLast = false,
+          } = res;
           setEmployeeReviews(reviews);
-          setNumberOfPages(pageCount);
+          setDisableNextPagination(isLast);
+          setDisablePrevPagination(isFirst);
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -91,7 +122,8 @@ const ReviewsPage: React.FC = () => {
     starsDropdownValue,
     dispatch,
     dateSortDropdownValue,
-    activePageNumber,
+    paginationCursor,
+    dateQueryForPaginaton,
   ]);
 
   const setDateRangeFilter = () => {
@@ -111,18 +143,42 @@ const ReviewsPage: React.FC = () => {
         'YYYY-MM-DD',
       ),
     }));
-    setActivePageNumber(1);
+    resetPagination();
     setToggleDatePicker(!toggleDatePicker);
+  };
+
+  const resetPagination = () => {
+    setPaginationCursor('');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      lastDate: '',
+      firstDate: '',
+    }));
   };
 
   const handleDropdownChange = (e: SyntheticEvent) => {
     const target = e.target as HTMLElement;
     setSitesDropdownValue(target.innerText);
+    resetPagination();
   };
 
-  const handlePaginationClick = (e: React.SyntheticEvent, index: number) => {
+  const handlePaginationNext = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setActivePageNumber(index);
+    setPaginationCursor('right');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      lastDate: employeeReviews[employeeReviews.length - 1].created_at,
+    }));
+    // console.log(employeeReviews);
+  };
+
+  const handlePaginationPrev = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setPaginationCursor('left');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      firstDate: employeeReviews[0].created_at,
+    }));
   };
 
   return (
@@ -258,7 +314,7 @@ const ReviewsPage: React.FC = () => {
           <DateRangePicker
             onChange={(item) => setDateState([item.selection])}
             inputRanges={[]}
-            staticRanges={[]}
+            // staticRanges={[]}
             showDateDisplay={false}
             showMonthAndYearPickers={false}
             moveRangeOnFirstSelection={false}
@@ -274,7 +330,7 @@ const ReviewsPage: React.FC = () => {
         </div>
         <Row>
           <Col xl={4} lg={5} md={12}>
-            <ReviewStats />
+            <ReviewStats stats={stats} />
           </Col>
           <Col xl={8} lg={7} md={12}>
             {!isLoading ? (
@@ -320,9 +376,10 @@ const ReviewsPage: React.FC = () => {
                 )}
                 {employeeReviews.length > 0 && (
                   <PaginationComponent
-                    pageCount={numberOfPages}
-                    currentPage={activePageNumber}
-                    handlePaginationClick={handlePaginationClick}
+                    disableNextPagination={disableNextPagination}
+                    disablePrevPagination={disablePrevPagination}
+                    handlePaginationNext={handlePaginationNext}
+                    handlePaginationPrev={handlePaginationPrev}
                   />
                 )}
               </Card>

@@ -3,9 +3,28 @@ import {
   Row, Col, Card, ProgressBar,
 } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
-import { chartData, starsData } from '../../lib/utils/chartData';
+import { Chart } from './Chart';
 
-const ReviewStats: React.FC = () => {
+interface IStarsData {
+  stars: number;
+  percent: number;
+  number: number;
+}
+interface IReviewStats {
+  numberOfReviews: number;
+  averageRating: number;
+  starsData: IStarsData[];
+  chartData: Array<number>;
+}
+interface IProps {
+  stats: IReviewStats;
+}
+
+const ReviewStats: React.FC<IProps> = ({ stats }) => {
+  const {
+    numberOfReviews, averageRating, starsData, chartData,
+  } = stats;
+
   return (
     <Card className='p-3'>
       <Card.Title>
@@ -15,11 +34,11 @@ const ReviewStats: React.FC = () => {
         <Row>
           <Col md={6}>
             <p className='font-weight-bold'>New reviews</p>
-            <p className='big-number'>7</p>
+            <p className='big-number'>{numberOfReviews}</p>
           </Col>
           <Col md={6}>
             <p className='font-weight-bold'>Average Rating</p>
-            <p className='big-number'>4.5</p>
+            <p className='big-number'>{averageRating}</p>
           </Col>
         </Row>
         <Row>
@@ -43,7 +62,7 @@ const ReviewStats: React.FC = () => {
           <Col md={12}>
             <p className='font-weight-bold'>Site Distribution</p>
             <Doughnut
-              data={chartData}
+              data={Chart(chartData)}
               options={{ animation: { duration: 0 } }}
             />
           </Col>

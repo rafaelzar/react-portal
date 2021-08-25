@@ -2,22 +2,28 @@ import React from 'react';
 import { Pagination } from 'react-bootstrap';
 
 interface IProps {
-  pageCount: number;
-  currentPage: number;
-  handlePaginationClick: (e: React.SyntheticEvent, page: number) => void;
+  disableNextPagination: boolean;
+  disablePrevPagination: boolean;
+  handlePaginationNext: (e: React.SyntheticEvent) => void;
+  handlePaginationPrev: (e: React.SyntheticEvent) => void;
 }
 
 const PaginationComponent: React.FC<IProps> = (props) => {
-  const { handlePaginationClick, currentPage, pageCount } = props;
+  const {
+    handlePaginationNext,
+    handlePaginationPrev,
+    disableNextPagination,
+    disablePrevPagination,
+  } = props;
   return (
-    <Pagination>
+    <Pagination className='m-auto'>
       <Pagination.Prev
-        onClick={(e) => handlePaginationClick(e, currentPage - 1)}
-        disabled={currentPage === 1}
+        onClick={(e) => handlePaginationPrev(e)}
+        disabled={disablePrevPagination}
       />
       <Pagination.Next
-        onClick={(e) => handlePaginationClick(e, currentPage + 1)}
-        disabled={pageCount === currentPage}
+        onClick={(e) => handlePaginationNext(e)}
+        disabled={disableNextPagination}
       />
     </Pagination>
   );

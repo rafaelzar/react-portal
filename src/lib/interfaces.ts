@@ -40,6 +40,8 @@ export interface IReviewsStats {
 export interface IReviewsResponse {
   data: IEmployeeReviews[];
   stats: IReviewsStats;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
 export interface IUserInformation {

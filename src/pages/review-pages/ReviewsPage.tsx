@@ -26,7 +26,12 @@ const ReviewsPage: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [paginationCursor, setPaginationCursor] = React.useState('');
-  const [disableNextPagination, setDisableNextPagination] = React.useState(false);
+  const [disableNextPagination, setDisableNextPagination] = React.useState(
+    false,
+  );
+  const [disablePrevPagination, setDisablePrevPagination] = React.useState(
+    false,
+  );
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
   const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
@@ -65,9 +70,7 @@ const ReviewsPage: React.FC = () => {
     const buildQueryFromState = () => {
       let query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
         dateRangeQuery.end
-      }&sort=${
-        dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'
-      }`;
+      }&sort=${dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'}`;
       if (starsDropdownValue !== 0)
         query = `${query}&rating=${starsDropdownValue}`;
       if (sitesDropdownValue !== 'All Sites')
@@ -76,6 +79,8 @@ const ReviewsPage: React.FC = () => {
         query = `${query}&cursor=${paginationCursor}`;
       if (dateQueryForPaginaton.lastDate !== '')
         query = `${query}&lastDate=${dateQueryForPaginaton.lastDate}`;
+      if (dateQueryForPaginaton.firstDate !== '')
+        query = `${query}&firstDate=${dateQueryForPaginaton.firstDate}`;
       return query;
     };
 
@@ -84,11 +89,15 @@ const ReviewsPage: React.FC = () => {
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: IReviewsResponse | undefined) => {
         if (res) {
-          const { data: reviews = [], stats = {} } = res;
+          const {
+            data: reviews = [],
+            stats = {},
+            isFirst = false,
+            isLast = false,
+          } = res;
           setEmployeeReviews(reviews);
-          if (reviews.length < 5) {
-            setDisableNextPagination(true);
-          }
+          setDisableNextPagination(isLast);
+          setDisablePrevPagination(isFirst);
           setIsLoading(false);
         } else {
           setIsLoading(false);
@@ -142,6 +151,15 @@ const ReviewsPage: React.FC = () => {
     setDateQueryForPagination((prevState) => ({
       ...prevState,
       lastDate: employeeReviews[employeeReviews.length - 1].created_at,
+    }));
+  };
+
+  const handlePaginationPrev = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setPaginationCursor('left');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      firstDate: employeeReviews[0].created_at,
     }));
   };
 
@@ -278,7 +296,7 @@ const ReviewsPage: React.FC = () => {
           <DateRangePicker
             onChange={(item) => setDateState([item.selection])}
             inputRanges={[]}
-            staticRanges={[]}
+            // staticRanges={[]}
             showDateDisplay={false}
             showMonthAndYearPickers={false}
             moveRangeOnFirstSelection={false}
@@ -341,7 +359,9 @@ const ReviewsPage: React.FC = () => {
                 {employeeReviews.length > 0 && (
                   <PaginationComponent
                     disableNextPagination={disableNextPagination}
+                    disablePrevPagination={disablePrevPagination}
                     handlePaginationNext={handlePaginationNext}
+                    handlePaginationPrev={handlePaginationPrev}
                   />
                 )}
               </Card>

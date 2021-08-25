@@ -3,18 +3,24 @@ import { Pagination } from 'react-bootstrap';
 
 interface IProps {
   disableNextPagination: boolean;
+  disablePrevPagination: boolean;
   handlePaginationNext: (e: React.SyntheticEvent) => void;
+  handlePaginationPrev: (e: React.SyntheticEvent) => void;
 }
 
 const PaginationComponent: React.FC<IProps> = (props) => {
   const {
     handlePaginationNext,
+    handlePaginationPrev,
     disableNextPagination,
-    // disablePrevPagination,
+    disablePrevPagination,
   } = props;
   return (
-    <Pagination>
-      <Pagination.Prev />
+    <Pagination className='m-auto'>
+      <Pagination.Prev
+        onClick={(e) => handlePaginationPrev(e)}
+        disabled={disablePrevPagination}
+      />
       <Pagination.Next
         onClick={(e) => handlePaginationNext(e)}
         disabled={disableNextPagination}

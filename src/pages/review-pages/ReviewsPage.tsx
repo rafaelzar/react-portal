@@ -65,6 +65,18 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   const userID = '607a1d65e4be5100126b827e';
+  const stats = {
+    numberOfReviews: 49,
+    averageRating: 5,
+    starsData: [
+      { stars: 5, percent: 100, number: 49 },
+      { stars: 4, percent: 0, number: 0 },
+      { stars: 3, percent: 0, number: 0 },
+      { stars: 2, percent: 0, number: 0 },
+      { stars: 1, percent: 0, number: 0 },
+    ],
+    chartData: [32, 0, 17, 0, 0],
+  };
 
   React.useEffect(() => {
     const buildQueryFromState = () => {
@@ -318,7 +330,7 @@ const ReviewsPage: React.FC = () => {
         </div>
         <Row>
           <Col xl={4} lg={5} md={12}>
-            <ReviewStats />
+            <ReviewStats stats={stats} />
           </Col>
           <Col xl={8} lg={7} md={12}>
             {!isLoading ? (

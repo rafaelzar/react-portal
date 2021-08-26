@@ -1,6 +1,8 @@
 import React from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
+import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
@@ -23,13 +25,16 @@ const HomePage: React.FC = () => {
       <div>
         <Container fluid>
           <Row>
-            <Col lg={12}>
+            <Col lg={12} className='mb-3'>
               <h1>Home Page</h1>
             </Col>
-            <Col lg={4} className='mt-3'>
+            <Col lg={4}>
               <UserInfoCard withButton />
             </Col>
-            <Col lg={8} />
+            <Col lg={8}>
+              <EarningsAvailableCard />
+              <EarningsStatsCard />
+            </Col>
           </Row>
         </Container>
       </div>

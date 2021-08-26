@@ -37,10 +37,10 @@ export interface IEmployeeReviews {
 }
 
 export interface IReviewStats {
-  numberOfReviews: number;
-  averageRating: number;
-  starsData: IStarsData[];
-  chartData: Array<number>;
+  numberOfReviews?: number;
+  averageRating?: number;
+  starsData?: IStarsData[];
+  chartData?: Array<number>;
 }
 
 export interface IStarsData {

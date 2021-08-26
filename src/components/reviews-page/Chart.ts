@@ -1,6 +1,6 @@
 export const Chart = (data: Array<number>): Record<string, unknown> => {
   const chartData = {
-    labels: ['Google', 'GMB', 'Weedmaps', 'Yelp', 'Eyerate'],
+    labels: ['Weedmaps', 'Yelp', 'Google', 'GMB', 'Eyerate'],
     datasets: [
       {
         label: 'My First Dataset',

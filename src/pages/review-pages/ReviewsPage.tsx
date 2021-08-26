@@ -12,6 +12,7 @@ import {
   IDatePicker,
   IEmployeeReviews,
   IReviewsResponse,
+  IReviewStats,
 } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
@@ -23,6 +24,9 @@ const ReviewsPage: React.FC = () => {
   const [employeeReviews, setEmployeeReviews] = React.useState<
     IEmployeeReviews[]
   >([]);
+  const [reviewStats, setReviewStats] = React.useState<IReviewStats>(
+    {} as IReviewStats,
+  );
   const [isLoading, setIsLoading] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [paginationCursor, setPaginationCursor] = React.useState('');
@@ -65,18 +69,6 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   const userID = '607a1d65e4be5100126b827e';
-  const stats = {
-    numberOfReviews: 49,
-    averageRating: 5,
-    starsData: [
-      { stars: 5, percent: 100, number: 49 },
-      { stars: 4, percent: 0, number: 0 },
-      { stars: 3, percent: 0, number: 0 },
-      { stars: 2, percent: 0, number: 0 },
-      { stars: 1, percent: 0, number: 0 },
-    ],
-    chartData: [32, 0, 17, 0, 0],
-  };
 
   React.useEffect(() => {
     const buildQueryFromState = () => {
@@ -103,11 +95,12 @@ const ReviewsPage: React.FC = () => {
         if (res) {
           const {
             data: reviews = [],
-            stats = {},
+            stats,
             isFirst = false,
             isLast = false,
           } = res;
           setEmployeeReviews(reviews);
+          setReviewStats(stats);
           setDisableNextPagination(isLast);
           setDisablePrevPagination(isFirst);
           setIsLoading(false);
@@ -227,13 +220,19 @@ const ReviewsPage: React.FC = () => {
                   className='custom-dropdown-item'
                   onClick={(e) => handleDropdownChange(e)}
                 >
-                  Google
+                  Weedmaps
                 </div>
                 <div
                   className='custom-dropdown-item'
                   onClick={(e) => handleDropdownChange(e)}
                 >
-                  Weedmaps
+                  Yelp
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Google
                 </div>
                 <div
                   className='custom-dropdown-item'
@@ -245,7 +244,7 @@ const ReviewsPage: React.FC = () => {
                   className='custom-dropdown-item'
                   onClick={(e) => handleDropdownChange(e)}
                 >
-                  Yelp
+                  Eyerate
                 </div>
               </div>
             </div>
@@ -330,7 +329,7 @@ const ReviewsPage: React.FC = () => {
         </div>
         <Row>
           <Col xl={4} lg={5} md={12}>
-            <ReviewStats stats={stats} />
+            <ReviewStats stats={reviewStats} />
           </Col>
           <Col xl={8} lg={7} md={12}>
             {!isLoading ? (

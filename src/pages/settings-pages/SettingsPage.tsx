@@ -20,7 +20,7 @@ import {
   updateUserAuthAction,
 } from '../../store/actions/authActions';
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
-import UserInfoCard from '../../components/home-page/UserInfoCard';
+import UserInfoCard from '../../components/UserInfoCard';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 const SettingsPage: React.FC = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import UserInfoCard from '../../components/home-page/UserInfoCard';
+import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
@@ -27,7 +27,7 @@ const HomePage: React.FC = () => {
               <h1>Home Page</h1>
             </Col>
             <Col lg={4} className='mt-3'>
-              <UserInfoCard />
+              <UserInfoCard withButton />
             </Col>
             <Col lg={8} />
           </Row>

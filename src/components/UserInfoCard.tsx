@@ -46,11 +46,9 @@ const UserInfoCard: React.FC<IProps> = (props) => {
         <h2>Email</h2>
         <p>{userEmail}</p>
         {withButton && (
-          <Button block>
-            <Link to='/settings' className='button-link'>
-              EDIT CONTACT INFO
-            </Link>
-          </Button>
+          <Link to='/settings' className='button-link'>
+            <Button block>EDIT CONTACT INFO</Button>
+          </Link>
         )}
       </Container>
     </Card>

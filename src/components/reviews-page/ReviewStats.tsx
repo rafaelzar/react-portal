@@ -4,18 +4,8 @@ import {
 } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart } from './Chart';
+import { IReviewStats } from '../../lib/interfaces';
 
-interface IStarsData {
-  stars: number;
-  percent: number;
-  number: number;
-}
-interface IReviewStats {
-  numberOfReviews: number;
-  averageRating: number;
-  starsData: IStarsData[];
-  chartData: Array<number>;
-}
 interface IProps {
   stats: IReviewStats;
 }
@@ -30,44 +20,50 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
       <Card.Title>
         <h3>Review Stats</h3>
       </Card.Title>
-      <Card.Text>
-        <Row>
-          <Col md={6}>
-            <p className='font-weight-bold'>New reviews</p>
-            <p className='big-number'>{numberOfReviews}</p>
-          </Col>
-          <Col md={6}>
-            <p className='font-weight-bold'>Average Rating</p>
-            <p className='big-number'>{averageRating}</p>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <p className='font-weight-bold'>Star Distribution</p>
-            <div className='mb-4'>
-              {starsData.map((stars) => (
-                <div key={stars.stars} className='stars-bar-wrapp mb-2'>
-                  <span>
-                    {stars.stars}
-                    {' '}
-                    Star
-                  </span>
-                  <ProgressBar className='star-bar' now={stars.percent} />
-                </div>
-              ))}
-            </div>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={12}>
-            <p className='font-weight-bold'>Site Distribution</p>
-            <Doughnut
-              data={Chart(chartData)}
-              options={{ animation: { duration: 0 } }}
-            />
-          </Col>
-        </Row>
-      </Card.Text>
+      {numberOfReviews !== 0 ? (
+        <Card.Text>
+          <Row>
+            <Col md={6}>
+              <p className='font-weight-bold'>New reviews</p>
+              <p className='big-number'>{numberOfReviews}</p>
+            </Col>
+            <Col md={6}>
+              <p className='font-weight-bold'>Average Rating</p>
+              <p className='big-number'>{averageRating?.toFixed(2)}</p>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <p className='font-weight-bold'>Star Distribution</p>
+              <div className='mb-4'>
+                {starsData?.map((stars) => (
+                  <div key={stars.stars} className='stars-bar-wrapp mb-2'>
+                    <span>
+                      {stars.stars}
+                      {' '}
+                      Star
+                    </span>
+                    <ProgressBar className='star-bar' now={stars.percent} />
+                  </div>
+                ))}
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            {chartData && (
+              <Col md={12}>
+                <p className='font-weight-bold'>Site Distribution</p>
+                <Doughnut
+                  data={Chart(chartData)}
+                  options={{ animation: { duration: 0 } }}
+                />
+              </Col>
+            )}
+          </Row>
+        </Card.Text>
+      ) : (
+        <div>No reviews with this criteria</div>
+      )}
     </Card>
   );
 };

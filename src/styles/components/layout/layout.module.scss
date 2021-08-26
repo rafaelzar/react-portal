@@ -12,7 +12,7 @@ $side-menu-w: 250px;
 	display: inline-block;
 	width: 26px;
 	height: 3px;
-	background: $menu-stripe-color;
+	background: $menu-color;
 	position: relative;
 	@include transition(all .1s linear);
 	
@@ -21,7 +21,7 @@ $side-menu-w: 250px;
 		display: inline-block;
 		width: 26px;
 		height: 3px;
-		background: $menu-stripe-color;
+		background: $menu-color;
 		position: absolute;
 		left: 0;
 		@include transition(all .1s linear);
@@ -66,7 +66,7 @@ $side-menu-w: 250px;
 .side-menu-container {
 	width: $side-menu-w;
 	height: 100%;
-	background-color: #34495e;
+	background-color: $menu-color;
 	color: white;
 	position: fixed;
 	left: 0;
@@ -126,14 +126,17 @@ $side-menu-w: 250px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	-webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+	-webkit-box-shadow: 0px 2px 1px 0px rgba(100, 95, 95, 0.2);
+  box-shadow: 0px 2px 1px 0px rgba(100, 95, 95, 0.2);
+	// border-bottom:1px solid #645f5f;
 	width: $side-menu-w;
 	height: 70px;
 }
 
 .navbar-inner {
 	padding: 1rem;
+	-webkit-box-shadow: 0px 1px 1px 0px rgba(100, 95, 95, 0.2);
+  box-shadow: 0px 1px 1px 0px rgba(100, 95, 95, 0.2);
 }
 
 .nav-link {
@@ -172,5 +175,4 @@ $side-menu-w: 250px;
 
 .navbar-bottom {
 	padding: 1rem;
-	border-top: 1px solid #645f5f;
 }

@@ -20,6 +20,12 @@ export interface IDatePicker {
   key?: string;
 }
 
+export interface IReviewsResponse {
+  data: IEmployeeReviews[];
+  stats: IReviewStats;
+  isFirst: boolean;
+  isLast: boolean;
+}
 export interface IEmployeeReviews {
   _id: string;
   name: string;
@@ -30,18 +36,17 @@ export interface IEmployeeReviews {
   platform?: string;
 }
 
-export interface IReviewsStats {
-  averageRating: number;
-  chartData: [];
-  numberOfReviews: number;
-  starsData: [];
+export interface IReviewStats {
+  numberOfReviews?: number;
+  averageRating?: number;
+  starsData?: IStarsData[];
+  chartData?: Array<number>;
 }
 
-export interface IReviewsResponse {
-  data: IEmployeeReviews[];
-  stats: IReviewsStats;
-  isFirst: boolean;
-  isLast: boolean;
+export interface IStarsData {
+  stars: number;
+  percent: number;
+  number: number;
 }
 
 export interface IUserInformation {

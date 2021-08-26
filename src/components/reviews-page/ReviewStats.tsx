@@ -4,18 +4,8 @@ import {
 } from 'react-bootstrap';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart } from './Chart';
+import { IReviewStats } from '../../lib/interfaces';
 
-interface IStarsData {
-  stars: number;
-  percent: number;
-  number: number;
-}
-interface IReviewStats {
-  numberOfReviews: number;
-  averageRating: number;
-  starsData: IStarsData[];
-  chartData: Array<number>;
-}
 interface IProps {
   stats: IReviewStats;
 }

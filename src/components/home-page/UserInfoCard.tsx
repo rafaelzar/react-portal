@@ -21,7 +21,7 @@ const UserInfoCard: React.FC = () => {
           {' '}
           {userLastName}
         </p>
-        <h2>Nickmames</h2>
+        <h2>Nicknames</h2>
         {userNickName ? (
           <>
             <p>{userNickName.join(', ')}</p>

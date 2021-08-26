@@ -152,153 +152,151 @@ const SettingsPage: React.FC = () => {
               <UserInfoCard />
             </Col>
             <Col lg='8' className='mt-3'>
-              <Container>
-                <Card>
-                  <Container className='my-3'>
-                    <h2 className='big-h2'>General Settings</h2>
-                    <div className='horizontal-line my-3' />
-                    <h3>Contact Information</h3>
-                    <Form>
-                      <Row>
-                        <Col lg='6' md='12'>
-                          <Form.Group className='mb-3'>
-                            <Form.Label>First Name</Form.Label>
+              <Card>
+                <Container className='my-3'>
+                  <h2 className='big-h2'>General Settings</h2>
+                  <div className='horizontal-line my-3' />
+                  <h3>Contact Information</h3>
+                  <Form>
+                    <Row>
+                      <Col lg='6' md='12'>
+                        <Form.Group className='mb-3'>
+                          <Form.Label>First Name</Form.Label>
+                          <Form.Control
+                            type='text'
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col lg='6' md='12'>
+                        <Form.Group className='mb-3'>
+                          <Form.Label>Last Name</Form.Label>
+                          <Form.Control
+                            type='text'
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                          />
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col lg='6' md='12'>
+                        <Form.Group className='mb-3'>
+                          <Form.Label>Add Nickname</Form.Label>
+                          <InputGroup className='mb-3'>
                             <Form.Control
-                              type='text'
-                              value={firstName}
-                              onChange={(e) => setFirstName(e.target.value)}
+                              aria-label='Nick names'
+                              aria-describedby='basic-addon2'
+                              value={tempNickname}
+                              onChange={(e) => setTempNickname(e.target.value)}
                             />
-                          </Form.Group>
-                        </Col>
-                        <Col lg='6' md='12'>
-                          <Form.Group className='mb-3'>
-                            <Form.Label>Last Name</Form.Label>
-                            <Form.Control
-                              type='text'
-                              value={lastName}
-                              onChange={(e) => setLastName(e.target.value)}
-                            />
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col lg='6' md='12'>
-                          <Form.Group className='mb-3'>
-                            <Form.Label>Add Nickname</Form.Label>
-                            <InputGroup className='mb-3'>
-                              <Form.Control
-                                aria-label='Nick names'
-                                aria-describedby='basic-addon2'
-                                value={tempNickname}
-                                onChange={(e) => setTempNickname(e.target.value)}
-                              />
-                              <InputGroup.Append>
-                                <Button
-                                  variant='outline-secondary'
-                                  onClick={() => {
-                                    updateNickname();
-                                  }}
-                                >
-                                  Add
-                                </Button>
-                              </InputGroup.Append>
-                            </InputGroup>
-                            <Col lg='12' md='12'>
-                              <Row>
-                                {nickNames.length !== 0 && (
-                                  <span className='font-weight-bold mr-1'>
-                                    Nicknames:
-                                  </span>
-                                )}
-                                {nickNames && nickNames.length !== 0 ? (
-                                  nickNames.map((n: string, i) => {
-                                    return (
-                                      <div
-                                        className='pointer'
-                                        onClick={() => deleteNickname(n)}
-                                        key={n}
-                                      >
-                                        {(i ? ', ' : '') + n}
-                                      </div>
-                                    );
-                                  })
-                                ) : (
-                                  <div>You don&apos;t have nicknames.</div>
-                                )}
-                              </Row>
-                              <Row>
-                                {nickNames.length !== 0 && (
-                                  <div className='text-info'>
-                                    Click on the nickname to remove it
-                                  </div>
-                                )}
-                              </Row>
-                            </Col>
-                          </Form.Group>
-                        </Col>
-                        <Col lg='6' md='12'>
-                          <Form.Group className='mb-4'>
-                            <Form.Label>Phone</Form.Label>
-                            <Form.Control
-                              type='text'
-                              value={phoneNumber}
-                              onChange={(e) => setPhoneNumber(e.target.value)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col lg='12'>
-                          <div className='horizontal-line mb-3' />
-                        </Col>
-                        <Col lg='6'>
-                          <h3>Password</h3>
-                          <Form.Group className='my-3'>
-                            <Form.Label>Current Password</Form.Label>
-                            <Form.Control
-                              type='password'
-                              placeholder='**********'
-                              onChange={(e) => setPassword(e.target.value)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col lg='6' />
-                        <Col lg='6'>
-                          <Form.Group className='mb-3'>
-                            <Form.Label>New Password</Form.Label>
-                            <Form.Control
-                              type='password'
-                              placeholder='**********'
-                              onChange={(e) => setNewPassword(e.target.value)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col lg='6' />
-                        <Col lg='6'>
-                          <Form.Group className='mb-3'>
-                            <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                              type='password'
-                              placeholder='**********'
-                              onChange={(e) => setConfirmNewPassword(e.target.value)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col lg='12'>
-                          <div className='horizontal-line mt-3 mb-4' />
-                        </Col>
-                        <Col lg='12'>
-                          <Button
-                            className='btn ml-auto'
-                            onClick={updateSubmit}
-                            disabled={disable}
-                          >
-                            Save changes
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Form>
-                  </Container>
-                </Card>
-              </Container>
+                            <InputGroup.Append>
+                              <Button
+                                variant='outline-secondary'
+                                onClick={() => {
+                                  updateNickname();
+                                }}
+                              >
+                                Add
+                              </Button>
+                            </InputGroup.Append>
+                          </InputGroup>
+                          <Col lg='12' md='12'>
+                            <Row>
+                              {nickNames.length !== 0 && (
+                                <span className='font-weight-bold mr-1'>
+                                  Nicknames:
+                                </span>
+                              )}
+                              {nickNames && nickNames.length !== 0 ? (
+                                nickNames.map((n: string, i) => {
+                                  return (
+                                    <div
+                                      className='pointer'
+                                      onClick={() => deleteNickname(n)}
+                                      key={n}
+                                    >
+                                      {(i ? ', ' : '') + n}
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <div>You don&apos;t have nicknames.</div>
+                              )}
+                            </Row>
+                            <Row>
+                              {nickNames.length !== 0 && (
+                                <div className='text-info'>
+                                  Click on the nickname to remove it
+                                </div>
+                              )}
+                            </Row>
+                          </Col>
+                        </Form.Group>
+                      </Col>
+                      <Col lg='6' md='12'>
+                        <Form.Group className='mb-4'>
+                          <Form.Label>Phone</Form.Label>
+                          <Form.Control
+                            type='text'
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col lg='12'>
+                        <div className='horizontal-line mb-3' />
+                      </Col>
+                      <Col lg='6'>
+                        <h3>Password</h3>
+                        <Form.Group className='my-3'>
+                          <Form.Label>Current Password</Form.Label>
+                          <Form.Control
+                            type='password'
+                            placeholder='**********'
+                            onChange={(e) => setPassword(e.target.value)}
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col lg='6' />
+                      <Col lg='6'>
+                        <Form.Group className='mb-3'>
+                          <Form.Label>New Password</Form.Label>
+                          <Form.Control
+                            type='password'
+                            placeholder='**********'
+                            onChange={(e) => setNewPassword(e.target.value)}
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col lg='6' />
+                      <Col lg='6'>
+                        <Form.Group className='mb-3'>
+                          <Form.Label>Confirm Password</Form.Label>
+                          <Form.Control
+                            type='password'
+                            placeholder='**********'
+                            onChange={(e) => setConfirmNewPassword(e.target.value)}
+                          />
+                        </Form.Group>
+                      </Col>
+                      <Col lg='12'>
+                        <div className='horizontal-line mt-3 mb-4' />
+                      </Col>
+                      <Col lg='12'>
+                        <Button
+                          className='btn ml-auto'
+                          onClick={updateSubmit}
+                          disabled={disable}
+                        >
+                          Save changes
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Form>
+                </Container>
+              </Card>
             </Col>
           </Row>
         </Container>

@@ -174,6 +174,12 @@ const ReviewsPage: React.FC = () => {
     }));
   };
 
+  const handleDateSortDropdownChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLElement;
+    setDateSortDropdownValue(target.innerText);
+    resetPagination();
+  };
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -353,13 +359,13 @@ const ReviewsPage: React.FC = () => {
                     >
                       <div
                         className='custom-dropdown-item'
-                        onClick={() => setDateSortDropdownValue('Newest')}
+                        onClick={(e) => handleDateSortDropdownChange(e)}
                       >
                         Newest
                       </div>
                       <div
                         className='custom-dropdown-item'
-                        onClick={() => setDateSortDropdownValue('Oldest')}
+                        onClick={(e) => handleDateSortDropdownChange(e)}
                       >
                         Oldest
                       </div>

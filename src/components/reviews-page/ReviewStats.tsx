@@ -16,7 +16,7 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
   } = stats;
 
   return (
-    <Card className='p-3'>
+    <Card className='p-3 mb-3'>
       <Card.Title>
         <h3>Review Stats</h3>
       </Card.Title>

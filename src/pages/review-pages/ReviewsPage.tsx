@@ -106,6 +106,7 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   const userID = '607a1d65e4be5100126b827e';
+  // const userID = '610ad8f087eb7f7f432a9759';
 
   React.useEffect(() => {
     const buildQueryFromState = () => {
@@ -199,7 +200,6 @@ const ReviewsPage: React.FC = () => {
       ...prevState,
       lastDate: employeeReviews[employeeReviews.length - 1].created_at,
     }));
-    // console.log(employeeReviews);
   };
 
   const handlePaginationPrev = (e: React.SyntheticEvent) => {
@@ -221,10 +221,10 @@ const ReviewsPage: React.FC = () => {
     <DefaultLayout>
       <Container fluid>
         <h2>Reviews</h2>
-        <div className='filters-section d-flex align-items-center mt-3 mb-5'>
+        <div className='filters-section mt-3 mb-5'>
           <span>Show reviews from</span>
           <div
-            className='date-range-btn-wrapp ml-2'
+            className='date-range-btn-wrapp'
             onClick={() => setToggleDatePicker(!toggleDatePicker)}
           >
             <div className='date-range-btn d-none'>Last 4 weeks</div>
@@ -236,8 +236,8 @@ const ReviewsPage: React.FC = () => {
               <span>{dateRange.end}</span>
             </div>
           </div>
-          <div className='d-flex align-items-center ml-2'>
-            <span className='mr-2'>on</span>
+          <div className='filters-site-wrapper'>
+            <span className='mr-2 on-devider'>on</span>
             <div
               className='date-range-btn custom-dropdown d-flex align-items-center'
               onClick={() => {
@@ -247,7 +247,7 @@ const ReviewsPage: React.FC = () => {
             >
               {sitesDropdownValue}
               <div className='arrow-wrapp'>
-                <i className='arrow down ml-5' />
+                <i className='arrow down' />
               </div>
               <div
                 className={`custom-dropdown-menu ${
@@ -270,19 +270,7 @@ const ReviewsPage: React.FC = () => {
                   className='custom-dropdown-item'
                   onClick={(e) => handleDropdownChange(e)}
                 >
-                  Yelp
-                </div>
-                <div
-                  className='custom-dropdown-item'
-                  onClick={(e) => handleDropdownChange(e)}
-                >
                   Google
-                </div>
-                <div
-                  className='custom-dropdown-item'
-                  onClick={(e) => handleDropdownChange(e)}
-                >
-                  GMB
                 </div>
                 <div
                   className='custom-dropdown-item'
@@ -294,7 +282,7 @@ const ReviewsPage: React.FC = () => {
             </div>
           </div>
           <div
-            className='date-range-btn custom-dropdown d-flex align-items-center m-2'
+            className='date-range-btn custom-dropdown d-flex align-items-center'
             onClick={() => {
               setToggleStarsDropdown(!toggleStarsDropdown);
             }}
@@ -306,7 +294,7 @@ const ReviewsPage: React.FC = () => {
               'All Ratings'
             )}
             <div className='arrow-wrapp'>
-              <i className='arrow down ml-3' />
+              <i className='arrow down' />
             </div>
             <div
               className={`custom-dropdown-menu ${
@@ -391,7 +379,7 @@ const ReviewsPage: React.FC = () => {
                   >
                     {dateSortDropdownValue}
                     <div className='arrow-wrapp'>
-                      <i className='arrow down ml-3' />
+                      <i className='arrow down' />
                     </div>
                     <div
                       className={`custom-dropdown-menu ${

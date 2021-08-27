@@ -16,15 +16,15 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
   } = stats;
 
   return (
-    <Card className='p-3'>
+    <Card className='p-3 mb-3'>
       <Card.Title>
         <h3>Review Stats</h3>
       </Card.Title>
-      {numberOfReviews !== 0 ? (
+      {numberOfReviews !== 0 && averageRating ? (
         <Card.Text>
           <Row>
             <Col md={6}>
-              <p className='font-weight-bold'>New reviews</p>
+              <p className='font-weight-bold'>Reviews</p>
               <p className='big-number'>{numberOfReviews}</p>
             </Col>
             <Col md={6}>
@@ -43,7 +43,12 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
                       {' '}
                       Star
                     </span>
-                    <ProgressBar className='star-bar' now={stars.percent} />
+                    <ProgressBar
+                      className='star-bar'
+                      now={stars.percent}
+                    />
+                    {' '}
+                    <span>{stars.number}</span>
                   </div>
                 ))}
               </div>

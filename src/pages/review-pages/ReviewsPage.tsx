@@ -68,6 +68,43 @@ const ReviewsPage: React.FC = () => {
     },
   ]);
 
+  const sitesDropdownRef = React.useRef<HTMLDivElement>(null);
+  const starsDropdownRef = React.useRef<HTMLDivElement>(null);
+  const dateSortDropdownRef = React.useRef<HTMLDivElement>(null);
+  const datePickerDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
+      const isClickedOutsideOfAnyDropdowns = (toggleSitesDropdown
+          && sitesDropdownRef.current
+          && !sitesDropdownRef.current.contains(e.target as Node))
+        || (toggleStarsDropdown
+          && starsDropdownRef.current
+          && !starsDropdownRef.current.contains(e.target as Node))
+        || (toggleDateSortDropdown
+          && dateSortDropdownRef.current
+          && !dateSortDropdownRef.current.contains(e.target as Node))
+        || (toggleDatePicker
+          && datePickerDropdownRef.current
+          && !datePickerDropdownRef.current.contains(e.target as Node));
+      if (isClickedOutsideOfAnyDropdowns) {
+        setToggleSitesDropdown(false);
+        setToggleStarsDropdown(false);
+        setToggleDateSortDropdown(false);
+        setToggleDatePicker(false);
+      }
+    };
+    document.addEventListener('mousedown', checkIfClickedOutside);
+    return () => {
+      document.removeEventListener('mousedown', checkIfClickedOutside);
+    };
+  }, [
+    toggleSitesDropdown,
+    toggleStarsDropdown,
+    toggleDateSortDropdown,
+    toggleDatePicker,
+  ]);
+
   const userID = '607a1d65e4be5100126b827e';
 
   React.useEffect(() => {
@@ -206,6 +243,7 @@ const ReviewsPage: React.FC = () => {
               onClick={() => {
                 setToggleSitesDropdown(!toggleSitesDropdown);
               }}
+              ref={sitesDropdownRef}
             >
               {sitesDropdownValue}
               <div className='arrow-wrapp'>
@@ -260,6 +298,7 @@ const ReviewsPage: React.FC = () => {
             onClick={() => {
               setToggleStarsDropdown(!toggleStarsDropdown);
             }}
+            ref={starsDropdownRef}
           >
             {starsDropdownValue !== 0 ? (
               <StarResolver rating={starsDropdownValue} />
@@ -315,6 +354,7 @@ const ReviewsPage: React.FC = () => {
         </div>
         <div
           className={`date-picker-wrapp ${toggleDatePicker ? 'd-block' : ''}`}
+          ref={datePickerDropdownRef}
         >
           <DateRangePicker
             onChange={(item) => setDateState([item.selection])}
@@ -333,12 +373,12 @@ const ReviewsPage: React.FC = () => {
             </Button>
           </Col>
         </div>
-        <Row>
-          <Col xl={4} lg={5} md={12}>
-            <ReviewStats stats={reviewStats} />
-          </Col>
-          <Col xl={8} lg={7} md={12}>
-            {!isLoading ? (
+        {!isLoading ? (
+          <Row>
+            <Col xl={4} lg={5} md={12}>
+              <ReviewStats stats={reviewStats} />
+            </Col>
+            <Col xl={8} lg={7} md={12}>
               <Card className='p-3 mb-3'>
                 <Card.Title className='d-flex justify-content-between px-2'>
                   <h3>Review List</h3>
@@ -347,6 +387,7 @@ const ReviewsPage: React.FC = () => {
                     onClick={() => {
                       setToggleDateSortDropdown(!toggleDateSortDropdown);
                     }}
+                    ref={dateSortDropdownRef}
                   >
                     {dateSortDropdownValue}
                     <div className='arrow-wrapp'>
@@ -388,11 +429,11 @@ const ReviewsPage: React.FC = () => {
                   />
                 )}
               </Card>
-            ) : (
-              <Spinner className='d-block m-auto' animation='border' />
-            )}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        ) : (
+          <Spinner className='d-block m-auto' animation='border' />
+        )}
       </Container>
     </DefaultLayout>
   );

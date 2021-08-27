@@ -15,6 +15,12 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
     numberOfReviews, averageRating, starsData, chartData,
   } = stats;
 
+  const parseStarsIntoNumber = (percent: number) => {
+    const amountOfReviews = (percent / 100) * (numberOfReviews || 100);
+
+    return `${Math.round(amountOfReviews)}`;
+  };
+
   return (
     <Card className='p-3'>
       <Card.Title>
@@ -43,7 +49,12 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
                       {' '}
                       Star
                     </span>
-                    <ProgressBar className='star-bar' now={stars.percent} />
+                    <ProgressBar
+                      className='star-bar'
+                      now={stars.percent}
+                    />
+                    {' '}
+                    {parseStarsIntoNumber(stars.percent)}
                   </div>
                 ))}
               </div>

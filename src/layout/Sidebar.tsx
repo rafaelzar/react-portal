@@ -60,7 +60,6 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
                 className='nav-link'
                 activeClassName='active-nav-link'
                 to='/reviews'
-                // onClick={closeSidenav}
               >
                 Reviews
               </NavLink>

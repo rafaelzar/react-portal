@@ -15,22 +15,16 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
     numberOfReviews, averageRating, starsData, chartData,
   } = stats;
 
-  const parseStarsIntoNumber = (percent: number) => {
-    const amountOfReviews = (percent / 100) * (numberOfReviews || 100);
-
-    return `${Math.round(amountOfReviews)}`;
-  };
-
   return (
     <Card className='p-3'>
       <Card.Title>
         <h3>Review Stats</h3>
       </Card.Title>
-      {numberOfReviews !== 0 ? (
+      {numberOfReviews !== 0 && averageRating ? (
         <Card.Text>
           <Row>
             <Col md={6}>
-              <p className='font-weight-bold'>New reviews</p>
+              <p className='font-weight-bold'>Reviews</p>
               <p className='big-number'>{numberOfReviews}</p>
             </Col>
             <Col md={6}>
@@ -54,7 +48,7 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
                       now={stars.percent}
                     />
                     {' '}
-                    {parseStarsIntoNumber(stars.percent)}
+                    <span>{stars.number}</span>
                   </div>
                 ))}
               </div>

@@ -72,6 +72,7 @@ const ReviewsPage: React.FC = () => {
   const starsDropdownRef = React.useRef<HTMLDivElement>(null);
   const dateSortDropdownRef = React.useRef<HTMLDivElement>(null);
   const datePickerDropdownRef = React.useRef<HTMLDivElement>(null);
+  const datePickerDropdownRefDateInput = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
@@ -86,7 +87,9 @@ const ReviewsPage: React.FC = () => {
           && !dateSortDropdownRef.current.contains(e.target as Node))
         || (toggleDatePicker
           && datePickerDropdownRef.current
-          && !datePickerDropdownRef.current.contains(e.target as Node));
+          && !datePickerDropdownRef.current.contains(e.target as Node)
+          && datePickerDropdownRefDateInput.current
+          && !datePickerDropdownRefDateInput.current.contains(e.target as Node));
       if (isClickedOutsideOfAnyDropdowns) {
         setToggleSitesDropdown(false);
         setToggleStarsDropdown(false);
@@ -226,8 +229,8 @@ const ReviewsPage: React.FC = () => {
           <div
             className='date-range-btn-wrapp'
             onClick={() => setToggleDatePicker(!toggleDatePicker)}
+            ref={datePickerDropdownRefDateInput}
           >
-            <div className='date-range-btn d-none'>Last 4 weeks</div>
             <div className='date-range-btn'>
               <span>{dateRange.start}</span>
               {' '}

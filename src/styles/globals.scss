@@ -12,6 +12,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: $body-color !important;
 }
 
 code {
@@ -92,4 +93,8 @@ input::placeholder {
   &:hover {
     text-decoration: none;
   }
+}
+
+.chart-wrapp {
+  max-width: 350px;
 }

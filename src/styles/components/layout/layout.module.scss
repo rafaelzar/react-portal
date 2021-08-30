@@ -89,7 +89,7 @@ $side-menu-w: 250px;
 	transition: margin 0.4s;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 876px) {
   .page-content {
     margin-left: $side-menu-w;
 
@@ -110,7 +110,7 @@ $side-menu-w: 250px;
 	height: 70px;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 876px) {
 	.nav-custom {
 		display: none;
 		height: 0;
@@ -161,7 +161,7 @@ $side-menu-w: 250px;
 	right: 15px;
 }	
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 876px) {
 	#menu-trigger {
 		display: inline-block;
 	}

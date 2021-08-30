@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
             <Col lg={12} className='mb-3'>
               <h1>Home Page</h1>
             </Col>
-            <Col lg={4}>
+            <Col lg={4} className='mb-3'>
               <UserInfoCard withButton />
             </Col>
             <Col lg={8}>

@@ -9,26 +9,28 @@ const MentionsChartCard: React.FC = () => {
     <Card className='mb-3'>
       <Container className='py-3'>
         <h2>Review Site Mentions</h2>
-        <div className='mt-3'>
-          <Doughnut
-            data={Chart(chartData)}
-            options={{
-              animation: {
-                duration: 0,
-              },
-              plugins: {
-                legend: {
-                  position: 'bottom',
-                  labels: {
-                    usePointStyle: true,
-                    font: {
-                      size: 16,
+        <div className='mt-3 d-flex justify-content-center'>
+          <div className='chart-wrapp'>
+            <Doughnut
+              data={Chart(chartData)}
+              options={{
+                animation: {
+                  duration: 0,
+                },
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: {
+                      usePointStyle: true,
+                      font: {
+                        size: 16,
+                      },
                     },
                   },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          </div>
         </div>
       </Container>
     </Card>

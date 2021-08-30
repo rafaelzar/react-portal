@@ -227,7 +227,6 @@ const ReviewsPage: React.FC = () => {
             className='date-range-btn-wrapp'
             onClick={() => setToggleDatePicker(!toggleDatePicker)}
           >
-            <div className='date-range-btn d-none'>Last 4 weeks</div>
             <div className='date-range-btn'>
               <span>{dateRange.start}</span>
               {' '}

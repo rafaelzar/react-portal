@@ -13,7 +13,7 @@ const DefaultLayout: React.FC<IProps> = ({ children }) => {
   React.useEffect(() => {
     resizeWindow();
     window.addEventListener('resize', resizeWindow);
-    if (windowWidth < 768) {
+    if (windowWidth < 876) {
       setToggleSideNav(true);
     } else {
       setToggleSideNav(false);

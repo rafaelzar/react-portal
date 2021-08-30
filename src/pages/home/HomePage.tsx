@@ -5,6 +5,7 @@ import EarningsAvailableCard from '../../components/home-page/EarningsAvailableC
 import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import MentionsChartCard from '../../components/home-page/MentionsChartCard';
 import ReviewMentionsCard from '../../components/home-page/ReviewMentionsCard';
+import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
@@ -36,6 +37,7 @@ const HomePage: React.FC = () => {
             <Col lg={8}>
               <EarningsAvailableCard />
               <EarningsStatsCard />
+              <ReviewStatsCard />
               <MentionsChartCard />
               <ReviewMentionsCard />
             </Col>

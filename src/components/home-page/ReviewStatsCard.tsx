@@ -3,23 +3,23 @@ import {
   Container, Card, Row, Col,
 } from 'react-bootstrap';
 
-const EarningsStatsCard: React.FC = () => {
+const ReviewStatsCard: React.FC = () => {
   return (
     <Card className='mb-3'>
       <Container className='py-3'>
-        <h2>Earnings Stats</h2>
+        <h2>Review Stats</h2>
         <Row className='mt-3'>
           <Col md='4' sm='4' className='text-center mb-2'>
-            <h3 className='big-number'>$80</h3>
-            <span>This Month&apos;s Earnings</span>
+            <h3 className='big-number'>5</h3>
+            <span>This Month&apos;s Mentions</span>
           </Col>
           <Col md='4' sm='4' className='text-center mb-2'>
-            <h3 className='big-number'>$345</h3>
-            <span>All Time Earnins</span>
+            <h3 className='big-number'>70</h3>
+            <span>All Time Mentions</span>
           </Col>
           <Col md='4' sm='4' className='text-center mb-2'>
-            <h3 className='big-number'>2</h3>
-            <span>Leaderboard Rank</span>
+            <h3 className='big-number'>4.9</h3>
+            <span>Average Review Rating</span>
           </Col>
         </Row>
       </Container>
@@ -27,4 +27,4 @@ const EarningsStatsCard: React.FC = () => {
   );
 };
 
-export default EarningsStatsCard;
+export default ReviewStatsCard;

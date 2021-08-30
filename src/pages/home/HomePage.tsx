@@ -3,6 +3,8 @@ import { Row, Col, Container } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
 import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
 import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
+import MentionsChartCard from '../../components/home-page/MentionsChartCard';
+import ReviewMentionsCard from '../../components/home-page/ReviewMentionsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
@@ -34,6 +36,8 @@ const HomePage: React.FC = () => {
             <Col lg={8}>
               <EarningsAvailableCard />
               <EarningsStatsCard />
+              <MentionsChartCard />
+              <ReviewMentionsCard />
             </Col>
           </Row>
         </Container>

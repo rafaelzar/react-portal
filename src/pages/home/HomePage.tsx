@@ -9,9 +9,12 @@ import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
+import { homePageData } from '../../lib/utils/mockupData';
+import { IHomePageData } from '../../lib/interfaces';
 
 const HomePage: React.FC = () => {
   const history = useHistory();
+  const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
 
   React.useEffect(() => {
     async function fetchIdToken() {
@@ -21,7 +24,11 @@ const HomePage: React.FC = () => {
       }
     }
     fetchIdToken();
-  }, [history]);
+    if (homePageData) {
+      console.log(data);
+      setData(homePageData);
+    }
+  }, [history, data]);
 
   return (
     <DefaultLayout>
@@ -37,7 +44,7 @@ const HomePage: React.FC = () => {
             <Col lg={8}>
               <EarningsAvailableCard />
               <EarningsStatsCard />
-              <ReviewStatsCard />
+              <ReviewStatsCard stats={homePageData.reviewStats} />
               <MentionsChartCard />
               <ReviewMentionsCard />
             </Col>

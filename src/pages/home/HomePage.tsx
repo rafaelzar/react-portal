@@ -11,7 +11,6 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import { homePageData } from '../../lib/utils/mockupData';
 import { IHomePageData } from '../../lib/interfaces';
-import PlaidComponent from '../../components/home-page/PlaidComponent';
 
 const HomePage: React.FC = () => {
   const history = useHistory();
@@ -41,7 +40,6 @@ const HomePage: React.FC = () => {
             </Col>
             <Col lg={4} className='mb-3'>
               <UserInfoCard withButton />
-              <PlaidComponent />
             </Col>
             <Col lg={8}>
               <EarningsAvailableCard />

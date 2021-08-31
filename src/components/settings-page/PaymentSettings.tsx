@@ -3,7 +3,7 @@ import React, { useCallback, useState, FunctionComponent } from 'react';
 import { PlaidLink, PlaidLinkOnSuccess } from 'react-plaid-link';
 import { getPlaidLinkToken, sendPlaidPublicToken } from '../../store/apiCalls';
 
-const PlaidComponent: FunctionComponent = () => {
+const PaymentSettings: FunctionComponent = () => {
   const [token, setToken] = useState<string | null>(null);
   const userID = '607a1d65e4be5100126b827e';
 
@@ -44,4 +44,4 @@ const PlaidComponent: FunctionComponent = () => {
   );
 };
 
-export default PlaidComponent;
+export default PaymentSettings;

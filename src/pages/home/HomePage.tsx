@@ -45,10 +45,10 @@ const HomePage: React.FC = () => {
             </Col>
             <Col lg={8}>
               <EarningsAvailableCard />
-              <EarningsStatsCard />
+              <EarningsStatsCard earningsStats={homePageData.earningsStats} />
               <ReviewStatsCard stats={homePageData.reviewStats} />
-              <MentionsChartCard />
-              <ReviewMentionsCard />
+              <MentionsChartCard sitesData={homePageData.reviewSiteMentions} />
+              <ReviewMentionsCard reviewsData={homePageData.reviewMentions} />
             </Col>
           </Row>
         </Container>

@@ -3,7 +3,12 @@ import { Container, Card } from 'react-bootstrap';
 import ReviewCard from '../reviews-page/ReviewCard';
 import { IEmployeeReviews } from '../../lib/interfaces';
 
-const ReviewMentionsCard: React.FC = () => {
+interface IProps {
+  reviewsData: IEmployeeReviews[];
+}
+
+const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData }) => {
+  const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
   const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
     'Last 7 Days',
   );
@@ -13,6 +18,7 @@ const ReviewMentionsCard: React.FC = () => {
   const dateSortDropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    setReviews(reviewsData);
     const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
       const isClickedOutsideOfAnyDropdowns = toggleDateSortDropdown
         && dateSortDropdownRef.current
@@ -25,28 +31,7 @@ const ReviewMentionsCard: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', checkIfClickedOutside);
     };
-  }, [toggleDateSortDropdown]);
-
-  const data: IEmployeeReviews[] = [
-    {
-      content:
-        'Excellent service!! This place is awesome! Hadley did an awesome job helping us and their flower is fire!!',
-      created_at: '2021-05-10T22:23:22.000Z',
-      name: 'cnbislvr',
-      platform: 'Weedmaps',
-      rating: 5,
-      _id: '609b13b3d729a722d0e4f46a',
-    },
-    {
-      content:
-        '1st time awesome! Hadley was my Bud tender! She knew her %£!!! Seriously great experience! I’ll be back!',
-      created_at: '2021-05-10T22:23:07.000Z',
-      name: 'wimpything',
-      platform: 'Weedmaps',
-      rating: 5,
-      _id: '609b13b3d729a722d0e4f46b',
-    },
-  ];
+  }, [toggleDateSortDropdown, reviewsData]);
 
   const handleDateSortDropdownChange = (e: React.SyntheticEvent) => {
     const target = e.target as HTMLElement;
@@ -90,8 +75,8 @@ const ReviewMentionsCard: React.FC = () => {
           </div>
         </div>
         <div className='mt-3'>
-          {data.length > 0 ? (
-            data?.map((r) => <ReviewCard key={r._id} data={r} />)
+          {reviews.length > 0 ? (
+            reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
           ) : (
             <div className='m-auto'>No reviews with this criteria</div>
           )}

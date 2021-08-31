@@ -84,6 +84,10 @@ export const homePageData = {
   },
   reviewSiteMentions: [
     {
+      numOfReviews: 2,
+      platform: 'Weedmaps',
+    },
+    {
       numOfReviews: 1,
       platform: 'Google',
     },

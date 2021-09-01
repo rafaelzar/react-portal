@@ -45,3 +45,11 @@ export const getEmployeeStats = async (
   const res = await axios.get(`${baseUrl}/employees/stats/${queries}`);
   return res;
 };
+
+export const getEmployeeRevenueHistory = async (
+  query: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/revenue/${query}`);
+  console.log(res);
+  return res;
+};

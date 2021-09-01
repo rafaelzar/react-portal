@@ -21,3 +21,35 @@ export const updateUser = async (
   const res = await axios.patch(`${baseUrl}/employees/${id}`, data);
   return res;
 };
+
+export const getPlaidLinkToken = async (
+  id: string,
+): Promise<AxiosResponse | any | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/create-link-token/${id}`);
+  return res;
+};
+
+export const sendPlaidPublicToken = async (
+  id: string,
+  token: string,
+): Promise<AxiosResponse | any | undefined> => {
+  const res = await axios.post(`${baseUrl}/employees/token-exchange/${id}`, {
+    public_token: token,
+  });
+  return res;
+};
+
+export const getEmployeeStats = async (
+  queries: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/stats/${queries}`);
+  return res;
+};
+
+export const getEmployeeRevenueHistory = async (
+  query: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/revenue/${query}`);
+  console.log(res);
+  return res;
+};

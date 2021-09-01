@@ -14,3 +14,37 @@
   border-radius: 2px;
   background-color: #c9c9c9;
 }
+
+.settings-nav {
+  -webkit-box-shadow: 0px 2px 1px 0px rgba(100, 95, 95, 0.2);
+  box-shadow: 0px 2px 1px 0px rgba(100, 95, 95, 0.2);
+  height: 62px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+
+  .settings-nav-links {
+
+    .settings-nav-link {
+      margin: 0 10px;
+      cursor: pointer;
+      font-weight: bold;
+      
+      &.active {
+        color: $turq;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  @media screen and (max-width: 370px) {
+    .settings-nav-links {
+      display: flex;
+      flex-direction: column;
+
+      span {
+        margin: 5px 10px;
+      }
+    }
+  }
+}

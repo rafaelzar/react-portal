@@ -57,3 +57,27 @@ export interface IUserInformation {
   phone?: string;
   _id?: string;
 }
+
+export interface IHomePageData {
+  reviewStats: IHomeReviewStats;
+  reviewSiteMentions: IHomeReviewSiteMentions[];
+  reviewMentions: IEmployeeReviews[];
+  earningsStats: IHomeEarningStats;
+}
+
+export interface IHomeReviewStats {
+  mentionsThisMonth: number;
+  mentionsAllTime: number;
+  averageRatingAllTime: number;
+}
+
+export interface IHomeReviewSiteMentions {
+  numOfReviews: number;
+  platform: string;
+}
+
+export interface IHomeEarningStats {
+  allTimeEarnings: number;
+  thisMonthEarnings: number;
+  leaderboardRank: number;
+}

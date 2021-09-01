@@ -75,3 +75,41 @@ export const mockupData = [
     platform: 'Google',
   },
 ];
+
+export const homePageData = {
+  reviewStats: {
+    mentionsThisMonth: 0,
+    mentionsAllTime: 1,
+    averageRatingAllTime: 5,
+  },
+  reviewSiteMentions: [
+    {
+      numOfReviews: 2,
+      platform: 'Weedmaps',
+    },
+    {
+      numOfReviews: 1,
+      platform: 'Google',
+    },
+    {
+      numOfReviews: 0,
+      platform: 'Eyerate',
+    },
+  ],
+  reviewMentions: [
+    {
+      _id: '60dc2ad4cbf89a4e89ac5128',
+      content:
+        "Joe is always so friendly when going in. It's like buying from someone youve known 20 years, even if you just met him.",
+      rating: 5,
+      platform: 'Google',
+      name: 'Michael Greenleaf',
+      created_at: '2021-06-26T08:00:00.000Z',
+    },
+  ],
+  earningsStats: {
+    allTimeEarnings: 18.5,
+    thisMonthEarnings: 11,
+    leaderboardRank: 3650,
+  },
+};

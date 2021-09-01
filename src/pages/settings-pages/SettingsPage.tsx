@@ -22,6 +22,7 @@ import {
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
 import UserInfoCard from '../../components/UserInfoCard';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
+import PaymentSettings from '../../components/settings-page/PaymentSettings';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -41,6 +42,7 @@ const SettingsPage: React.FC = () => {
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
   const [disable, setDisable] = React.useState(false);
+  const [showPaymentSettings, setShowPaymentSettings] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -142,6 +144,26 @@ const SettingsPage: React.FC = () => {
 
   return (
     <DefaultLayout>
+      <div className='settings-nav'>
+        <div className='settings-nav-links'>
+          <span
+            className={`settings-nav-link ${
+              !showPaymentSettings ? 'active' : ''
+            }`}
+            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+          >
+            GENERAL SETTINGS
+          </span>
+          <span
+            className={`settings-nav-link ${
+              showPaymentSettings ? 'active' : ''
+            }`}
+            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+          >
+            PAYMENT SETTINGS
+          </span>
+        </div>
+      </div>
       <div className='user-settings-wrapper mb-5'>
         <Container fluid>
           <div>
@@ -151,153 +173,173 @@ const SettingsPage: React.FC = () => {
             <Col lg='4' className='mt-3'>
               <UserInfoCard />
             </Col>
-            <Col lg='8' className='mt-3'>
-              <Card>
-                <Container className='my-3'>
-                  <h2 className='big-h2'>General Settings</h2>
-                  <div className='horizontal-line my-3' />
-                  <h3>Contact Information</h3>
-                  <Form>
-                    <Row>
-                      <Col lg='6' md='12'>
-                        <Form.Group className='mb-3'>
-                          <Form.Label>First Name</Form.Label>
-                          <Form.Control
-                            type='text'
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col lg='6' md='12'>
-                        <Form.Group className='mb-3'>
-                          <Form.Label>Last Name</Form.Label>
-                          <Form.Control
-                            type='text'
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col lg='6' md='12'>
-                        <Form.Group className='mb-3'>
-                          <Form.Label>Add Nickname</Form.Label>
-                          <InputGroup className='mb-3'>
+            {!showPaymentSettings ? (
+              <Col lg='8' className='mt-3'>
+                <Card>
+                  <Container className='my-3'>
+                    <h2 className='big-h2'>General Settings</h2>
+                    <div className='horizontal-line my-3' />
+                    <h3>Contact Information</h3>
+                    <Form>
+                      <Row>
+                        <Col lg='6' md='12'>
+                          <Form.Group className='mb-3'>
+                            <Form.Label>First Name</Form.Label>
                             <Form.Control
-                              aria-label='Nick names'
-                              aria-describedby='basic-addon2'
-                              value={tempNickname}
-                              onChange={(e) => setTempNickname(e.target.value)}
+                              type='text'
+                              value={firstName}
+                              onChange={(e) => setFirstName(e.target.value)}
                             />
-                            <InputGroup.Append>
-                              <Button
-                                variant='outline-secondary'
-                                onClick={() => {
-                                  updateNickname();
-                                }}
-                              >
-                                Add
-                              </Button>
-                            </InputGroup.Append>
-                          </InputGroup>
-                          <Col lg='12' md='12'>
-                            <Row>
-                              {nickNames.length !== 0 && (
-                                <span className='font-weight-bold mr-1'>
-                                  Nicknames:
-                                </span>
-                              )}
-                              {nickNames && nickNames.length !== 0 ? (
-                                nickNames.map((n: string, i) => {
-                                  return (
-                                    <div
-                                      className='pointer'
-                                      onClick={() => deleteNickname(n)}
-                                      key={n}
-                                    >
-                                      {(i ? ', ' : '') + n}
-                                    </div>
-                                  );
-                                })
-                              ) : (
-                                <div>You don&apos;t have nicknames.</div>
-                              )}
-                            </Row>
-                            <Row>
-                              {nickNames.length !== 0 && (
-                                <div className='text-info'>
-                                  Click on the nickname to remove it
-                                </div>
-                              )}
-                            </Row>
-                          </Col>
-                        </Form.Group>
-                      </Col>
-                      <Col lg='6' md='12'>
-                        <Form.Group className='mb-4'>
-                          <Form.Label>Phone</Form.Label>
-                          <Form.Control
-                            type='text'
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col lg='12'>
-                        <div className='horizontal-line mb-3' />
-                      </Col>
-                      <Col lg='6'>
-                        <h3>Password</h3>
-                        <Form.Group className='my-3'>
-                          <Form.Label>Current Password</Form.Label>
-                          <Form.Control
-                            type='password'
-                            placeholder='**********'
-                            onChange={(e) => setPassword(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col lg='6' />
-                      <Col lg='6'>
-                        <Form.Group className='mb-3'>
-                          <Form.Label>New Password</Form.Label>
-                          <Form.Control
-                            type='password'
-                            placeholder='**********'
-                            onChange={(e) => setNewPassword(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col lg='6' />
-                      <Col lg='6'>
-                        <Form.Group className='mb-3'>
-                          <Form.Label>Confirm Password</Form.Label>
-                          <Form.Control
-                            type='password'
-                            placeholder='**********'
-                            onChange={(e) => setConfirmNewPassword(e.target.value)}
-                          />
-                        </Form.Group>
-                      </Col>
-                      <Col lg='12'>
-                        <div className='horizontal-line mt-3 mb-4' />
-                      </Col>
-                      <Col lg='12'>
-                        <Button
-                          className='btn ml-auto'
-                          onClick={updateSubmit}
-                          disabled={disable}
-                        >
-                          Save changes
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form>
-                </Container>
-              </Card>
-            </Col>
+                          </Form.Group>
+                        </Col>
+                        <Col lg='6' md='12'>
+                          <Form.Group className='mb-3'>
+                            <Form.Label>Last Name</Form.Label>
+                            <Form.Control
+                              type='text'
+                              value={lastName}
+                              onChange={(e) => setLastName(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg='6' md='12'>
+                          <Form.Group className='mb-3'>
+                            <Form.Label>Add Nickname</Form.Label>
+                            <InputGroup className='mb-3'>
+                              <Form.Control
+                                aria-label='Nick names'
+                                aria-describedby='basic-addon2'
+                                value={tempNickname}
+                                onChange={(e) => setTempNickname(e.target.value)}
+                              />
+                              <InputGroup.Append>
+                                <Button
+                                  variant='outline-secondary'
+                                  onClick={() => {
+                                    updateNickname();
+                                  }}
+                                >
+                                  Add
+                                </Button>
+                              </InputGroup.Append>
+                            </InputGroup>
+                            <Col lg='12' md='12'>
+                              <Row>
+                                {nickNames.length !== 0 && (
+                                  <span className='font-weight-bold mr-1'>
+                                    Nicknames:
+                                  </span>
+                                )}
+                                {nickNames && nickNames.length !== 0 ? (
+                                  nickNames.map((n: string, i) => {
+                                    return (
+                                      <div
+                                        className='pointer'
+                                        onClick={() => deleteNickname(n)}
+                                        key={n}
+                                      >
+                                        {(i ? ', ' : '') + n}
+                                      </div>
+                                    );
+                                  })
+                                ) : (
+                                  <div>You don&apos;t have nicknames.</div>
+                                )}
+                              </Row>
+                              <Row>
+                                {nickNames.length !== 0 && (
+                                  <div className='text-info'>
+                                    Click on the nickname to remove it
+                                  </div>
+                                )}
+                              </Row>
+                            </Col>
+                          </Form.Group>
+                        </Col>
+                        <Col lg='6' md='12'>
+                          <Form.Group className='mb-4'>
+                            <Form.Label>Phone</Form.Label>
+                            <Form.Control
+                              type='text'
+                              value={phoneNumber}
+                              onChange={(e) => setPhoneNumber(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col lg='12'>
+                          <div className='horizontal-line mb-3' />
+                        </Col>
+                        <Col lg='6'>
+                          <h3>Password</h3>
+                          <Form.Group className='my-3'>
+                            <Form.Label>Current Password</Form.Label>
+                            <Form.Control
+                              type='password'
+                              placeholder='**********'
+                              onChange={(e) => setPassword(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col lg='6' />
+                        <Col lg='6'>
+                          <Form.Group className='mb-3'>
+                            <Form.Label>New Password</Form.Label>
+                            <Form.Control
+                              type='password'
+                              placeholder='**********'
+                              onChange={(e) => setNewPassword(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col lg='6' />
+                        <Col lg='6'>
+                          <Form.Group className='mb-3'>
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control
+                              type='password'
+                              placeholder='**********'
+                              onChange={(e) => setConfirmNewPassword(e.target.value)}
+                            />
+                          </Form.Group>
+                        </Col>
+                        <Col lg='12'>
+                          <div className='horizontal-line mt-3 mb-4' />
+                        </Col>
+                        <Col lg='12'>
+                          <Button
+                            className='btn ml-auto'
+                            onClick={updateSubmit}
+                            disabled={disable}
+                          >
+                            Save changes
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Container>
+                </Card>
+              </Col>
+            ) : (
+              <Col lg='8' className='mt-3'>
+                <Card className='mb-3'>
+                  <Container className='my-3'>
+                    <h2 className='big-h2'>Payment Settings</h2>
+                    <span className='font-weight-bold'>Balance</span>
+                    <div className='big-number'>$25.00</div>
+                    <div className='horizontal-line my-3' />
+                    <span className='font-weight-bold'>Last Payment</span>
+                    <p>$35.00 on June 28th</p>
+                  </Container>
+                </Card>
+                <Card>
+                  <Container className='my-3'>
+                    <PaymentSettings />
+                  </Container>
+                </Card>
+              </Col>
+            )}
           </Row>
         </Container>
       </div>

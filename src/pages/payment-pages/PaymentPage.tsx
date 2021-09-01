@@ -2,21 +2,60 @@ import React from 'react';
 import {
   Container, Row, Col, Button, Table,
 } from 'react-bootstrap';
+import { useAppDispatch } from '../../store/store';
 import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
+import { IDatePicker } from '../../lib/interfaces';
+import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
+import { AxiosResponse } from 'axios';
 
 const PaymentPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const history = useHistory();
+  const [revenueInfo, setRevenueInfo] = React.useState([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
-  const datePickerDropdownRefDateInput = React.useRef<HTMLDivElement>(null);
   const [dateRange, setDateRange] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
     end: `${moment(new Date()).format('MMM DD')}`,
   });
+  const [dateRangeQuery, setDateRangeQuery] = React.useState({
+    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    end: `${moment(new Date()).format('YYYY-MM-DD')}`,
+  });
+  const [dateState, setDateState] = React.useState<IDatePicker[]>([
+    {
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+
+  const datePickerDropdownRefDateInput = React.useRef<HTMLDivElement>(null);
+  const datePickerDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // const userID = '607a1d65e4be5100126b827e';
+  const userID = '60261996b55f7d0012ba8104';
+
+  React.useEffect(() => {
+    const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
+      const isClickedOutsideOfAnyDropdowns = toggleDatePicker
+        && datePickerDropdownRef.current
+        && !datePickerDropdownRef.current.contains(e.target as Node)
+        && datePickerDropdownRefDateInput.current
+        && !datePickerDropdownRefDateInput.current.contains(e.target as Node);
+      if (isClickedOutsideOfAnyDropdowns) {
+        setToggleDatePicker(false);
+      }
+    };
+    document.addEventListener('mousedown', checkIfClickedOutside);
+    return () => {
+      document.removeEventListener('mousedown', checkIfClickedOutside);
+    };
+  }, [toggleDatePicker]);
 
   React.useEffect(() => {
     async function fetchIdToken() {
@@ -26,7 +65,16 @@ const PaymentPage: React.FC = () => {
       }
     }
     fetchIdToken();
-  }, [history]);
+
+    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+    dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
+      (res: AxiosResponse) => {
+        if (res) {
+          console.log(res);
+        }
+      },
+    );
+  }, [dispatch, history, dateRangeQuery]);
 
   const tableData = [
     {
@@ -49,6 +97,26 @@ const PaymentPage: React.FC = () => {
     },
   ];
 
+  const setDateRangeFilter = () => {
+    setDateRange((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'MMM DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
+    }));
+    setDateRangeQuery((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
+    }));
+    setToggleDatePicker(!toggleDatePicker);
+  };
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -70,6 +138,29 @@ const PaymentPage: React.FC = () => {
           </div>
           <Button>EXPORT CSV</Button>
         </div>
+        <div
+          className={`date-picker-wrapp payment-page ${
+            toggleDatePicker ? 'd-block' : ''
+          }`}
+          ref={datePickerDropdownRef}
+        >
+          <DateRangePicker
+            onChange={(item) => setDateState([item.selection])}
+            inputRanges={[]}
+            // staticRanges={[]}
+            showDateDisplay={false}
+            showMonthAndYearPickers={false}
+            moveRangeOnFirstSelection={false}
+            maxDate={new Date()}
+            ranges={dateState}
+            direction='vertical'
+          />
+          <Col md={12} className='mb-4'>
+            <Button className='w-100' onClick={setDateRangeFilter}>
+              Filter
+            </Button>
+          </Col>
+        </div>
         <Row>
           <Col>
             <Table responsive>
@@ -83,14 +174,14 @@ const PaymentPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className='list'>
-                {tableData?.map(td => (
+                {tableData?.map((td) => (
                   <tr key={`${td?._id}`}>
                     <th scope='row' className='text-left'>
-                      <span className='mb-0 text-sm'>{moment(td?.date).format('MMM DD YYYY')}</span>
+                      <span className='mb-0 text-sm'>
+                        {moment(td?.date).format('MMM DD YYYY')}
+                      </span>
                     </th>
-                    <td>
-                      {td?.description}
-                    </td>
+                    <td>{td?.description}</td>
                     <td className='text-right'>
                       {td?.amount}
                       <span>$</span>

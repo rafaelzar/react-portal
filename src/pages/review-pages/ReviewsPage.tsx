@@ -220,6 +220,11 @@ const ReviewsPage: React.FC = () => {
     resetPagination();
   };
 
+  const handeRatingStarsChange = (rating: number) => {
+    setStarsDropdownValue(rating);
+    resetPagination();
+  };
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -306,19 +311,19 @@ const ReviewsPage: React.FC = () => {
             >
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(0)}
+                onClick={() => handeRatingStarsChange(0)}
               >
                 All Ratings
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(1)}
+                onClick={() => handeRatingStarsChange(1)}
               >
                 <StarResolver rating={1} />
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(2)}
+                onClick={() => handeRatingStarsChange(2)}
               >
                 <StarResolver rating={2} />
               </div>
@@ -330,13 +335,13 @@ const ReviewsPage: React.FC = () => {
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(4)}
+                onClick={() => handeRatingStarsChange(4)}
               >
                 <StarResolver rating={4} />
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(5)}
+                onClick={() => handeRatingStarsChange(5)}
               >
                 <StarResolver rating={5} />
               </div>

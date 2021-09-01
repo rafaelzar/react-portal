@@ -79,4 +79,5 @@ export interface IHomeReviewSiteMentions {
 export interface IHomeEarningStats {
   allTimeEarnings: number;
   thisMonthEarnings: number;
+  leaderboardRank: number;
 }

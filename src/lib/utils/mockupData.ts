@@ -110,5 +110,6 @@ export const homePageData = {
   earningsStats: {
     allTimeEarnings: 18.5,
     thisMonthEarnings: 11,
+    leaderboardRank: 3650,
   },
 };

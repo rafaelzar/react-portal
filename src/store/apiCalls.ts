@@ -36,6 +36,12 @@ export const sendPlaidPublicToken = async (
   const res = await axios.post(`${baseUrl}/employees/token-exchange/${id}`, {
     public_token: token,
   });
-  console.log(res);
+  return res;
+};
+
+export const getEmployeeStats = async (
+  queries: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/stats/${queries}`);
   return res;
 };

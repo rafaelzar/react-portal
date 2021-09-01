@@ -8,8 +8,8 @@ interface IProps {
   stats: IHomeReviewStats;
 }
 
-const ReviewStatsCard: React.FC<IProps> = ({ stats }) => {
-  const { mentionsThisMonth, mentionsAllTime, averageRatingAllTime } = stats;
+const ReviewStatsCard: React.FC<IProps> = ({ stats = {} }) => {
+  const { mentionsThisMonth = 0, mentionsAllTime = 0, averageRatingAllTime = 0 } = stats;
   return (
     <Card className='mb-3'>
       <Container className='py-3'>
@@ -24,7 +24,7 @@ const ReviewStatsCard: React.FC<IProps> = ({ stats }) => {
             <span>All Time Mentions</span>
           </Col>
           <Col md='4' sm='4' className='text-center mb-2'>
-            <h3 className='big-number'>{averageRatingAllTime}</h3>
+            <h3 className='big-number'>{averageRatingAllTime.toFixed(2)}</h3>
             <span>Average Review Rating</span>
           </Col>
         </Row>

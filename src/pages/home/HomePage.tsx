@@ -1,6 +1,9 @@
 import React from 'react';
-import { Row, Col, Container } from 'react-bootstrap';
+import {
+  Row, Col, Container, Spinner,
+} from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import { useAppDispatch } from '../../store/store';
 import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
 import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import MentionsChartCard from '../../components/home-page/MentionsChartCard';
@@ -11,10 +14,14 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import { homePageData } from '../../lib/utils/mockupData';
 import { IHomePageData } from '../../lib/interfaces';
+import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
 
 const HomePage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const userID = '607a1d65e4be5100126b827e';
 
   React.useEffect(() => {
     async function fetchIdToken() {
@@ -24,11 +31,24 @@ const HomePage: React.FC = () => {
       }
     }
     fetchIdToken();
-    if (homePageData) {
-      console.log(data);
-      setData(homePageData);
-    }
-  }, [history, data]);
+    const buildQueryFromState = () => {
+      const queryData = `${userID}?sort=desc`;
+      return queryData;
+    };
+    const query = buildQueryFromState();
+    setIsLoading(true);
+    dispatch(getEmployeeStatsStatsAction(query)).then(
+      (res: IHomePageData | undefined) => {
+        if (res) {
+          setData(res);
+          console.log(res);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
+  }, [dispatch, history]);
 
   return (
     <DefaultLayout>
@@ -41,13 +61,19 @@ const HomePage: React.FC = () => {
             <Col lg={4} className='mb-3'>
               <UserInfoCard withButton />
             </Col>
-            <Col lg={8}>
-              <EarningsAvailableCard />
-              <EarningsStatsCard earningsStats={homePageData.earningsStats} />
-              <ReviewStatsCard stats={homePageData.reviewStats} />
-              <MentionsChartCard sitesData={homePageData.reviewSiteMentions} />
-              <ReviewMentionsCard reviewsData={homePageData.reviewMentions} />
-            </Col>
+            {!isLoading ? (
+              <Col lg={8}>
+                <EarningsAvailableCard />
+                <EarningsStatsCard earningsStats={data.earningsStats} />
+                <ReviewStatsCard stats={data.reviewStats} />
+                <MentionsChartCard
+                  sitesData={homePageData.reviewSiteMentions}
+                />
+                <ReviewMentionsCard reviewsData={data.reviewMentions} />
+              </Col>
+            ) : (
+              <Spinner className='d-block m-auto' animation='border' />
+            )}
           </Row>
         </Container>
       </div>

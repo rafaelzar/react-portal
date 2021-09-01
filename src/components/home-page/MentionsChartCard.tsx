@@ -13,8 +13,8 @@ const MentionsChartCard: React.FC<IProps> = ({ sitesData }) => {
   const [chartDataSites, setChartDataSites] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
-    setChartDataNumbers(sitesData.map((d) => d.numOfReviews));
-    setChartDataSites(sitesData.map((d) => d.platform));
+    setChartDataNumbers(sitesData?.map((d) => d.numOfReviews));
+    setChartDataSites(sitesData?.map((d) => d.platform));
   }, [sitesData]);
 
   return (

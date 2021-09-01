@@ -8,7 +8,6 @@ export const getEmployeeStatsStatsAction = (queries: string) => {
       const res = await getEmployeeStats(queries);
       if (res) {
         const { data = {} } = res;
-        console.log(res);
         return data;
       } else {
         return false;

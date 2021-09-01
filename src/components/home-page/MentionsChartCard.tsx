@@ -10,9 +10,11 @@ interface IProps {
 
 const MentionsChartCard: React.FC<IProps> = ({ sitesData }) => {
   const [chartDataNumbers, setChartDataNumbers] = React.useState([0, 0, 0]);
+  const [chartDataSites, setChartDataSites] = React.useState<Array<string>>([]);
 
   React.useEffect(() => {
     setChartDataNumbers(sitesData.map((d) => d.numOfReviews));
+    setChartDataSites(sitesData.map((d) => d.platform));
   }, [sitesData]);
 
   return (
@@ -22,7 +24,7 @@ const MentionsChartCard: React.FC<IProps> = ({ sitesData }) => {
         <div className='mt-3 d-flex justify-content-center'>
           <div className='chart-wrapp'>
             <Doughnut
-              data={Chart(chartDataNumbers)}
+              data={Chart(chartDataNumbers, chartDataSites)}
               options={{
                 animation: {
                   duration: 0,

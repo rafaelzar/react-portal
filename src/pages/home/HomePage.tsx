@@ -67,7 +67,7 @@ const HomePage: React.FC = () => {
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
                 <MentionsChartCard
-                  sitesData={homePageData.reviewSiteMentions}
+                  sitesData={data.reviewSiteMentions}
                 />
                 <ReviewMentionsCard reviewsData={data.reviewMentions} />
               </Col>

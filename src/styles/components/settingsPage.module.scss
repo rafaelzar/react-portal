@@ -24,10 +24,16 @@
   padding: 0 5px;
 
   .settings-nav-links {
-    span {
+
+    .settings-nav-link {
       margin: 0 10px;
       cursor: pointer;
       font-weight: bold;
+      
+      &.active {
+        color: $turq;
+        text-decoration: underline;
+      }
     }
   }
 

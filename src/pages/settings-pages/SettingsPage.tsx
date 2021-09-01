@@ -146,8 +146,22 @@ const SettingsPage: React.FC = () => {
     <DefaultLayout>
       <div className='settings-nav'>
         <div className='settings-nav-links'>
-          <span onClick={() => setShowPaymentSettings(false)}>GENERAL SETTINGS</span>
-          <span onClick={() => setShowPaymentSettings(true)}>PAYMENT SETTINGS</span>
+          <span
+            className={`settings-nav-link ${
+              !showPaymentSettings ? 'active' : ''
+            }`}
+            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+          >
+            GENERAL SETTINGS
+          </span>
+          <span
+            className={`settings-nav-link ${
+              showPaymentSettings ? 'active' : ''
+            }`}
+            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+          >
+            PAYMENT SETTINGS
+          </span>
         </div>
       </div>
       <div className='user-settings-wrapper mb-5'>
@@ -312,7 +326,11 @@ const SettingsPage: React.FC = () => {
                 <Card className='mb-3'>
                   <Container className='my-3'>
                     <h2 className='big-h2'>Payment Settings</h2>
+                    <span className='font-weight-bold'>Balance</span>
+                    <div className='big-number'>$25.00</div>
                     <div className='horizontal-line my-3' />
+                    <span className='font-weight-bold'>Last Payment</span>
+                    <p>$35.00 on June 28th</p>
                   </Container>
                 </Card>
                 <Card>

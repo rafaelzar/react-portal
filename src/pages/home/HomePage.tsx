@@ -12,7 +12,6 @@ import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { homePageData } from '../../lib/utils/mockupData';
 import { IHomePageData } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
 

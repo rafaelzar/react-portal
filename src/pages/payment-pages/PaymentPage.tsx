@@ -15,13 +15,9 @@ import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/pay
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
+
   const [revenueInfo, setRevenueInfo] = React.useState<IRevenueHistory[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
-  const [paidDates, setPaidDates] = React.useState<Array<any>>([]);
-  const [dateRange, setDateRange] = React.useState({
-    start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
-    end: `${moment(new Date()).format('MMM DD')}`,
-  });
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
@@ -72,57 +68,24 @@ const PaymentPage: React.FC = () => {
         if (res) {
           console.log(res);
           setRevenueInfo(res);
-          const objectsByStatusPaid = res.map((r) => {
-            const eventsArray = r.events.find(e => e.status === 'PAID');
-            return eventsArray;
-          });
-          // const datesByStatusPaid = objectsByStatusPaid.map(d => d?.date);
-          console.log(objectsByStatusPaid);
-          setPaidDates(objectsByStatusPaid);
         }
       },
     );
   }, [dispatch, history, dateRangeQuery]);
 
-  const tableData = [
-    {
-      _id: '8f00fe0397c16035f8ca790f72fa8991',
-      date: '2021-05-28T01:45:05Z',
-      description: 'Deposit - Google Review',
-      amount: 15,
-    },
-    {
-      _id: 'ce7e82c10ce564a905d9c9694d7c3357',
-      date: '2021-06-02T14:51:45Z',
-      description: 'Deposit - Weedmaps Review',
-      amount: 25,
-    },
-    {
-      _id: 'd1c11650f946bbfec3a726adebd9be4c',
-      date: '2021-07-25T01:45:05Z',
-      description: 'Deposit - Eyerate Review',
-      amount: 35,
-    },
-  ];
-
   const setDateRangeFilter = () => {
-    setDateRange((prevState) => ({
-      ...prevState,
-      start: moment(dateState.map((d) => d.startDate).toString()).format(
-        'MMM DD',
-      ),
-      end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
-    }));
     setDateRangeQuery((prevState) => ({
       ...prevState,
-      start: moment(dateState.map((d) => d.startDate).toString()).format(
-        'YYYY-MM-DD',
-      ),
-      end: moment(dateState.map((d) => d.endDate).toString()).format(
-        'YYYY-MM-DD',
-      ),
+      start: moment(dateState[0]?.startDate).format('YYYY-MM-DD'),
+      end: moment(dateState[0]?.endDate).format('YYYY-MM-DD'),
     }));
     setToggleDatePicker(!toggleDatePicker);
+  };
+
+  const parsePaymentDate = (singleRevenue: IRevenueHistory) => {
+    const { events = [] } = singleRevenue;
+    const paidEvent = events.find((e) => e.status === 'PAID') || { date: '' };
+    return moment(paidEvent.date).format('MMM DD YYYY');
   };
 
   return (
@@ -137,11 +100,11 @@ const PaymentPage: React.FC = () => {
               onClick={() => setToggleDatePicker(!toggleDatePicker)}
               ref={datePickerDropdownRefDateInput}
             >
-              <span>{dateRange.start}</span>
+              <span>{moment(dateRangeQuery.start).format('MMM DD')}</span>
               {' '}
               -
               {' '}
-              <span>{dateRange.end}</span>
+              <span>{moment(dateRangeQuery.end).format('MMM DD')}</span>
             </div>
           </div>
           <Button>EXPORT CSV</Button>
@@ -182,20 +145,24 @@ const PaymentPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className='list'>
-                {revenueInfo?.map((td) => (
-                  <tr key={`${td?.check_id}`}>
-                    <th scope='row' className='text-left'>
-                      <span className='mb-0 text-sm'>
-                        {moment(paidDates?.map(e => e.date).toString()).format('MMM DD YYYY')}
-                      </span>
-                    </th>
-                    <td>Withdrawal</td>
-                    <td className='text-right'>
-                      <span>-$</span>
-                      {td?.amount}
-                    </td>
-                  </tr>
-                ))}
+                {revenueInfo && revenueInfo.length !== 0 ? (
+                  revenueInfo?.map((singleRevenue) => (
+                    <tr key={`${singleRevenue?.check_id}`}>
+                      <th scope='row' className='text-left'>
+                        <span className='mb-0 text-sm'>
+                          {parsePaymentDate(singleRevenue)}
+                        </span>
+                      </th>
+                      <td>Withdrawal</td>
+                      <td className='text-right'>
+                        <span>-$</span>
+                        {singleRevenue?.amount}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <>No Data.</>
+                )}
               </tbody>
             </Table>
           </Col>

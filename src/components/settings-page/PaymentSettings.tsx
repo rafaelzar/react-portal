@@ -4,13 +4,13 @@ import { useSelector } from 'react-redux';
 import { PlaidLink, PlaidLinkOnSuccess } from 'react-plaid-link';
 import { useAppDispatch } from '../../store/store';
 import { getPlaidLinkToken, sendPlaidPublicToken } from '../../store/apiCalls';
-import { getUserSelector } from '../../store/selectors/selectors';
+import { getUserIDSelector } from '../../store/selectors/selectors';
 import { fetchUserFromDatabaseAuthAction } from '../../store/actions/authActions';
 
 const PaymentSettings: FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const userInfo = useSelector((state) => getUserSelector(state));
-  const { _id: userId = '' } = userInfo;
+  const userId = useSelector((state) => getUserIDSelector(state));
+  console.log('userId', userId);
   const [token, setToken] = useState<string | null>(null);
   // const userID = '607a1d65e4be5100126b827e';
 
@@ -23,8 +23,8 @@ const PaymentSettings: FunctionComponent = () => {
       setToken(link_token);
       console.log(link_token);
     }
-    createLinkToken();
-  }, []);
+    if (userId) createLinkToken();
+  }, [userId]);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(
     async (public_token, metadata) => {

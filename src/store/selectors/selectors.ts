@@ -6,3 +6,10 @@ export const getUserSelector = (state: any): IUserInformation => {
   } = state;
   return user || {};
 };
+
+export const getUserIDSelector = (state: any): string => {
+  const {
+    user: { user: { _id: userID = '' } = {} },
+  } = state;
+  return userID || '';
+};

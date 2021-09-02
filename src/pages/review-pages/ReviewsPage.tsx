@@ -48,10 +48,6 @@ const ReviewsPage: React.FC = () => {
   const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
     'Newest',
   );
-  const [dateRange, setDateRange] = React.useState({
-    start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
-    end: `${moment(new Date()).format('MMM DD')}`,
-  });
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
@@ -161,13 +157,6 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   const setDateRangeFilter = () => {
-    setDateRange((prevState) => ({
-      ...prevState,
-      start: moment(dateState.map((d) => d.startDate).toString()).format(
-        'MMM DD',
-      ),
-      end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
-    }));
     setDateRangeQuery((prevState) => ({
       ...prevState,
       start: moment(dateState.map((d) => d.startDate).toString()).format(
@@ -237,11 +226,13 @@ const ReviewsPage: React.FC = () => {
             ref={datePickerDropdownRefDateInput}
           >
             <div className='date-range-btn'>
-              <span>{dateRange.start}</span>
-              {' '}
-              -
-              {' '}
-              <span>{dateRange.end}</span>
+              <span>
+                {moment(dateRangeQuery.start).format('MMM DD')}
+                {' '}
+                -
+                {' '}
+                {moment(dateRangeQuery.end).format('MMM DD')}
+              </span>
             </div>
           </div>
           <div className='filters-site-wrapper'>

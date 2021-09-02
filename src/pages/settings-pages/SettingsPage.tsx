@@ -339,7 +339,7 @@ const SettingsPage: React.FC = () => {
                     {!plaidAccount ? (
                       <PaymentSettings />
                     ) : (
-                      <p>Bank Account is conntected</p>
+                      <p>Bank Account is connected</p>
                     )}
                   </Container>
                 </Card>

@@ -67,10 +67,10 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
             <Nav.Item>
               <NavLink
                 className='nav-link'
-                to='/payment'
+                to='/revenue'
                 activeClassName='active-nav-link'
               >
-                Payment
+                Revenue
               </NavLink>
             </Nav.Item>
           </Nav>

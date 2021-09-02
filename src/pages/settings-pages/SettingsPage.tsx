@@ -55,6 +55,10 @@ const SettingsPage: React.FC = () => {
       }
     }
     fetchIdToken();
+    if (window.location.href.indexOf('#payment') > -1) {
+      setShowPaymentSettings(true);
+      window.history.replaceState(null, 'null', window.location.pathname);
+    }
   }, [history]);
 
   const updateSubmit = async (e: React.SyntheticEvent) => {

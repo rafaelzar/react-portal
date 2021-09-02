@@ -12,7 +12,6 @@ import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { homePageData } from '../../lib/utils/mockupData';
 import { IHomePageData } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
 
@@ -21,7 +20,8 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
   const [isLoading, setIsLoading] = React.useState(false);
-  const userID = '607a1d65e4be5100126b827e';
+  // const userID = '607a1d65e4be5100126b827e';
+  const userID = '60ad43e35e08070013432c0b';
 
   React.useEffect(() => {
     async function fetchIdToken() {
@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
             </Col>
             {!isLoading ? (
               <Col lg={8}>
-                <EarningsAvailableCard />
+                <EarningsAvailableCard earningsStats={data.earningsStats} />
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
                 <MentionsChartCard

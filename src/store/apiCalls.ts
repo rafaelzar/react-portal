@@ -7,6 +7,11 @@ export const sendJWTToken = async (): Promise<AxiosResponse | undefined> => {
   return res;
 };
 
+// export const sendFirstTimeLoginCognitoUser = async (): Promise<AxiosResponse | undefined> => {
+//   const res = await axios.get(`${baseUrl}/employees/first-login`);
+//   return res;
+// };
+
 export const getEmployeesReviews = async (
   queries: string,
 ): Promise<AxiosResponse | undefined> => {

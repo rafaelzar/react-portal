@@ -27,7 +27,7 @@ const EarningsStatsCard: React.FC<IProps> = ({ earningsStats = {} }) => {
               $
               {allTimeEarnings}
             </h3>
-            <span>All Time Earnins</span>
+            <span>All Time Earnings</span>
           </Col>
           <Col md='4' sm='4' className='text-center mb-2'>
             <h3 className='big-number'>{leaderboardRank}</h3>

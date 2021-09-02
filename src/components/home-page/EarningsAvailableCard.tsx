@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Card, Button } from 'react-bootstrap';
 import { IHomeEarningStats } from '../../lib/interfaces';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   earningsStats: IHomeEarningStats;
@@ -24,8 +25,9 @@ const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
           Balances greater than $5.00 will be automatically sent every 2 weeks.
         </span>
         <div className='d-flex mt-3'>
-          <Button className='mr-2'>GET PAID NOW</Button>
-          <Button>PAYMENT SETTINGS</Button>
+          <Link to='/settings#payment' className='button-link'>
+            <Button>PAYMENT SETTINGS</Button>
+          </Link>
         </div>
       </Container>
     </Card>

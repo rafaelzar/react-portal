@@ -9,15 +9,15 @@ import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { IDatePicker } from '../../lib/interfaces';
+import { IDatePicker, IRevenueHistory } from '../../lib/interfaces';
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
-import { AxiosResponse } from 'axios';
 
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
-  const [revenueInfo, setRevenueInfo] = React.useState([]);
+  const [revenueInfo, setRevenueInfo] = React.useState<IRevenueHistory[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [paidDates, setPaidDates] = React.useState<Array<any>>([]);
   const [dateRange, setDateRange] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
     end: `${moment(new Date()).format('MMM DD')}`,
@@ -68,9 +68,17 @@ const PaymentPage: React.FC = () => {
 
     const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
     dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
-      (res: AxiosResponse) => {
+      (res: Array<IRevenueHistory>) => {
         if (res) {
           console.log(res);
+          setRevenueInfo(res);
+          const objectsByStatusPaid = res.map((r) => {
+            const eventsArray = r.events.find(e => e.status === 'PAID');
+            return eventsArray;
+          });
+          // const datesByStatusPaid = objectsByStatusPaid.map(d => d?.date);
+          console.log(objectsByStatusPaid);
+          setPaidDates(objectsByStatusPaid);
         }
       },
     );
@@ -174,17 +182,17 @@ const PaymentPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className='list'>
-                {tableData?.map((td) => (
-                  <tr key={`${td?._id}`}>
+                {revenueInfo?.map((td) => (
+                  <tr key={`${td?.check_id}`}>
                     <th scope='row' className='text-left'>
                       <span className='mb-0 text-sm'>
-                        {moment(td?.date).format('MMM DD YYYY')}
+                        {moment(paidDates?.map(e => e.date).toString()).format('MMM DD YYYY')}
                       </span>
                     </th>
-                    <td>{td?.description}</td>
+                    <td>Withdrawal</td>
                     <td className='text-right'>
+                      <span>-$</span>
                       {td?.amount}
-                      <span>$</span>
                     </td>
                   </tr>
                 ))}

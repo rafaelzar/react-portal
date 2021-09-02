@@ -2,13 +2,13 @@
 import React, { useCallback, useState, FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { PlaidLink, PlaidLinkOnSuccess } from 'react-plaid-link';
-// import { useAppDispatch } from '../../store/store';
+import { useAppDispatch } from '../../store/store';
 import { getPlaidLinkToken, sendPlaidPublicToken } from '../../store/apiCalls';
 import { getUserSelector } from '../../store/selectors/selectors';
-// import { fetchUserFromDatabaseAuthAction } from '../../store/actions/authActions';
+import { fetchUserFromDatabaseAuthAction } from '../../store/actions/authActions';
 
 const PaymentSettings: FunctionComponent = () => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const userInfo = useSelector((state) => getUserSelector(state));
   const { _id: userId = '' } = userInfo;
   const [token, setToken] = useState<string | null>(null);
@@ -17,7 +17,9 @@ const PaymentSettings: FunctionComponent = () => {
   React.useEffect(() => {
     async function createLinkToken() {
       const response = await getPlaidLinkToken(userId);
-      const { data: { link_token } } = response;
+      const {
+        data: { link_token },
+      } = response;
       setToken(link_token);
       console.log(link_token);
     }
@@ -25,15 +27,17 @@ const PaymentSettings: FunctionComponent = () => {
   }, []);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(
-    (public_token, metadata) => {
-      const res = sendPlaidPublicToken(userId, public_token);
+    async (public_token, metadata) => {
+      const res = await sendPlaidPublicToken(userId, public_token);
       if (res) {
         console.log(res);
-        // dispatch(fetchUserFromDatabaseAuthAction()).then((response: boolean | undefined) => {
-        //   if (response) {
-        //     console.log(response);
-        //   }
-        // });
+        dispatch(fetchUserFromDatabaseAuthAction()).then(
+          (response: boolean | undefined) => {
+            if (response) {
+              console.log(response);
+            }
+          },
+        );
       }
       console.log(metadata);
     },

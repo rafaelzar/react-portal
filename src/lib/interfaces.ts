@@ -56,6 +56,7 @@ export interface IUserInformation {
   email: string;
   phone?: string;
   _id?: string;
+  plaid_account?: string;
 }
 
 export interface IHomePageData {
@@ -82,4 +83,15 @@ export interface IHomeEarningStats {
   allTimeEarnings: number;
   thisMonthEarnings: number;
   leaderboardRank: number;
+}
+
+export interface IRevenueHistory {
+  check_id: string;
+  amount: number;
+  events: IRevenueEvents[];
+}
+
+export interface IRevenueEvents {
+  date: string;
+  status: string;
 }

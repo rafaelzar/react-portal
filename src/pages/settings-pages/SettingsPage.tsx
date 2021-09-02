@@ -27,6 +27,7 @@ import PaymentSettings from '../../components/settings-page/PaymentSettings';
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
   const {
+    plaid_account: plaidAccount = '',
     first_name: userFirstName = '',
     last_name: userLastName = '',
     nick_names: userNickName = [''],
@@ -335,7 +336,11 @@ const SettingsPage: React.FC = () => {
                 </Card>
                 <Card>
                   <Container className='my-3'>
-                    <PaymentSettings />
+                    {!plaidAccount ? (
+                      <PaymentSettings />
+                    ) : (
+                      <p>Bank Account is conntected</p>
+                    )}
                   </Container>
                 </Card>
               </Col>

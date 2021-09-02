@@ -63,7 +63,7 @@ const HomePage: React.FC = () => {
             </Col>
             {!isLoading ? (
               <Col lg={8}>
-                <EarningsAvailableCard />
+                <EarningsAvailableCard earningsStats={data.earningsStats} />
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
                 <MentionsChartCard

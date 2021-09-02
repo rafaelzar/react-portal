@@ -77,6 +77,8 @@ export interface IHomeReviewSiteMentions {
 }
 
 export interface IHomeEarningStats {
+  earningsAvailable: number;
+  lastPayment: number;
   allTimeEarnings: number;
   thisMonthEarnings: number;
   leaderboardRank: number;

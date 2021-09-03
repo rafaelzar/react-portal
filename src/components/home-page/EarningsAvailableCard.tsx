@@ -21,9 +21,6 @@ const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
           Last Payment: $
           {lastPayment.toFixed(2)}
         </p>
-        <span className='text-secondary'>
-          Balances greater than $5.00 will be automatically sent every 2 weeks.
-        </span>
         <div className='d-flex mt-3'>
           <Link to='/settings#payment' className='button-link'>
             <Button>PAYMENT SETTINGS</Button>

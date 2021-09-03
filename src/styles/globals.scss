@@ -98,3 +98,13 @@ input::placeholder {
 .chart-wrapp {
   max-width: 350px;
 }
+
+.no-revenue-block {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 20px;
+}

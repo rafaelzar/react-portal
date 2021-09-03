@@ -161,7 +161,7 @@ const PaymentPage: React.FC = () => {
                     </tr>
                   ))
                 ) : (
-                  <>No Data.</>
+                  <div className='no-revenue-block'>No Data</div>
                 )}
               </tbody>
             </Table>

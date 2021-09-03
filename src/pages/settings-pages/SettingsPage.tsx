@@ -45,6 +45,7 @@ const SettingsPage: React.FC = () => {
     phone: userPhone = '',
     _id: userId = '',
   } = userInfo;
+  // user with earning details
   // const userId = '60ad43e35e08070013432c0b';
   const [firstName, setFirstName] = React.useState(userFirstName.trim());
   const [lastName, setLastName] = React.useState(userLastName);
@@ -62,6 +63,7 @@ const SettingsPage: React.FC = () => {
   const [bankAccountDetails, setBankAccountDetails] = React.useState<
     IAccounts[]
   >([]);
+  const [bankName, setBankName] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -89,13 +91,14 @@ const SettingsPage: React.FC = () => {
         }
       },
     );
-    if (plaidAccount) {
+    if (plaidAccount !== '') {
       dispatch(getEmployeeBankDetailsPaymentAction(userId)).then(
         (res: IBankAccount) => {
           if (res) {
             // console.log(res);
-            const { accounts } = res;
+            const { accounts, bank } = res;
             setBankAccountDetails(accounts);
+            setBankName(bank);
           } else {
             console.log('No plaid account');
           }
@@ -382,15 +385,17 @@ const SettingsPage: React.FC = () => {
                           <div>
                             <h2 className='big-h2'>Payment Methods</h2>
                             <p>Bank Account is connected</p>
+                            <div className='mb-3'>
+                              <h4>Bank:</h4>
+                              {bankName || ''}
+                            </div>
                             <h4>Card details:</h4>
                             <div className='font-weight-bold my-2'>
                               **** **** ****
                               {' '}
-                              {bankAccountDetails[0].mask}
+                              {bankAccountDetails[0]?.mask}
                             </div>
-                            <div>
-                              {bankAccountDetails[0].official_name}
-                            </div>
+                            <div>{bankAccountDetails[0]?.official_name}</div>
                           </div>
                         )}
                       </Container>

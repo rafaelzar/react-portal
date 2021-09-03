@@ -104,7 +104,7 @@ export interface IEmployeeEarningsDetails {
 
 export interface IBankAccount {
   accounts: IAccounts[];
-  bank?: string;
+  bank: string;
 }
 
 export interface IAccounts {

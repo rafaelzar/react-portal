@@ -41,7 +41,6 @@ const HomePage: React.FC = () => {
       (res: IHomePageData | undefined) => {
         if (res) {
           setData(res);
-          console.log(res);
           setIsLoading(false);
         } else {
           setIsLoading(false);

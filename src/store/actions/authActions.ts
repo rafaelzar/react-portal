@@ -6,7 +6,6 @@ import {
   logInUserWithNewPasswordCognitoFunction,
   logOutUserCognitoFunction,
 } from '../../lib/aws/aws-cognito-functions';
-import errorHandler from '../../lib/utils/errorHandler';
 import { swalError, swalInfo } from '../../lib/utils/toasts';
 import { sendJWTToken, updateUser } from '../apiCalls';
 import { AppDispatch } from '../store';
@@ -170,7 +169,7 @@ export const changePasswordAuthAction = (
         return res;
       }
     } catch (error) {
-      errorHandler(error);
+      swalInfo('Something went wrong');
       return false;
     }
   };

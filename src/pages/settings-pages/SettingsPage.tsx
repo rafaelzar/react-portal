@@ -24,8 +24,15 @@ import { validateChangePasswordSubmit } from '../../lib/utils/validator';
 import UserInfoCard from '../../components/UserInfoCard';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import PaymentSettings from '../../components/settings-page/PaymentSettings';
-import { getEmployeeEarningsPaymentAction } from '../../store/actions/paymentActions';
-import { IEmployeeEarningsDetails } from '../../lib/interfaces';
+import {
+  getEmployeeBankDetailsPaymentAction,
+  getEmployeeEarningsPaymentAction,
+} from '../../store/actions/paymentActions';
+import {
+  IEmployeeEarningsDetails,
+  IBankAccount,
+  IAccounts,
+} from '../../lib/interfaces';
 import EarningDetails from '../../components/settings-page/EarningDetails';
 
 const SettingsPage: React.FC = () => {
@@ -36,9 +43,9 @@ const SettingsPage: React.FC = () => {
     last_name: userLastName = '',
     nick_names: userNickName = [''],
     phone: userPhone = '',
-    // _id: userId = '',
+    _id: userId = '',
   } = userInfo;
-  const userId = '60ad43e35e08070013432c0b';
+  // const userId = '60ad43e35e08070013432c0b';
   const [firstName, setFirstName] = React.useState(userFirstName.trim());
   const [lastName, setLastName] = React.useState(userLastName);
   const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
@@ -52,6 +59,9 @@ const SettingsPage: React.FC = () => {
   const [earningsData, setEarningsData] = React.useState<
     IEmployeeEarningsDetails
   >({} as IEmployeeEarningsDetails);
+  const [bankAccountDetails, setBankAccountDetails] = React.useState<
+    IAccounts[]
+  >([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -79,7 +89,20 @@ const SettingsPage: React.FC = () => {
         }
       },
     );
-  }, [dispatch, userId, history]);
+    if (plaidAccount) {
+      dispatch(getEmployeeBankDetailsPaymentAction(userId)).then(
+        (res: IBankAccount) => {
+          if (res) {
+            // console.log(res);
+            const { accounts } = res;
+            setBankAccountDetails(accounts);
+          } else {
+            console.log('No plaid account');
+          }
+        },
+      );
+    }
+  }, [dispatch, userId, plaidAccount, history]);
 
   const updateSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -356,7 +379,19 @@ const SettingsPage: React.FC = () => {
                         {!plaidAccount ? (
                           <PaymentSettings />
                         ) : (
-                          <p>Bank Account is connected</p>
+                          <div>
+                            <h2 className='big-h2'>Payment Methods</h2>
+                            <p>Bank Account is connected</p>
+                            <h4>Card details:</h4>
+                            <div className='font-weight-bold my-2'>
+                              **** **** ****
+                              {' '}
+                              {bankAccountDetails[0].mask}
+                            </div>
+                            <div>
+                              {bankAccountDetails[0].official_name}
+                            </div>
+                          </div>
                         )}
                       </Container>
                     </Card>

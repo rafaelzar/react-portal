@@ -7,11 +7,6 @@ export const sendJWTToken = async (): Promise<AxiosResponse | undefined> => {
   return res;
 };
 
-// export const sendFirstTimeLoginCognitoUser = async (): Promise<AxiosResponse | undefined> => {
-//   const res = await axios.get(`${baseUrl}/employees/first-login`);
-//   return res;
-// };
-
 export const getEmployeesReviews = async (
   queries: string,
 ): Promise<AxiosResponse | undefined> => {
@@ -62,5 +57,12 @@ export const getEmployeeEarnings = async (
   id: string,
 ): Promise<AxiosResponse | undefined> => {
   const res = await axios.get(`${baseUrl}/employees/earnings/${id}`);
+  return res;
+};
+
+export const getEmployeeBankDetails = async (
+  id: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/bank-accounts/${id}`);
   return res;
 };

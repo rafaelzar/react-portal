@@ -2,17 +2,18 @@
 import React, { useCallback, useState, FunctionComponent } from 'react';
 import { useSelector } from 'react-redux';
 import { PlaidLink, PlaidLinkOnSuccess } from 'react-plaid-link';
+import { Spinner } from 'react-bootstrap';
 import { useAppDispatch } from '../../store/store';
 import { getPlaidLinkToken, sendPlaidPublicToken } from '../../store/apiCalls';
 import { getUserIDSelector } from '../../store/selectors/selectors';
 import { fetchUserFromDatabaseAuthAction } from '../../store/actions/authActions';
+import { swalSuccess } from '../../lib/utils/toasts';
 
 const PaymentSettings: FunctionComponent = () => {
   const dispatch = useAppDispatch();
   const userId = useSelector((state) => getUserIDSelector(state));
-  console.log('userId', userId);
   const [token, setToken] = useState<string | null>(null);
-  // const userID = '607a1d65e4be5100126b827e';
+  // const userId = '607a1d65e4be5100126b827e';
 
   React.useEffect(() => {
     async function createLinkToken() {
@@ -34,19 +35,18 @@ const PaymentSettings: FunctionComponent = () => {
         dispatch(fetchUserFromDatabaseAuthAction()).then(
           (response: boolean | undefined) => {
             if (response) {
-              console.log(response);
+              swalSuccess('Bank account is connected');
             }
           },
         );
       }
       console.log(metadata);
     },
-    [userId],
+    [dispatch, userId],
   );
 
   return token === null ? (
-    // insert your loading animation here
-    <div className='loader' />
+    <Spinner className='d-block m-auto' animation='border' />
   ) : (
     <PlaidLink
       token={token}

@@ -12,6 +12,7 @@ import {
   Form,
   Button,
   InputGroup,
+  Spinner,
 } from 'react-bootstrap';
 import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
@@ -23,6 +24,16 @@ import { validateChangePasswordSubmit } from '../../lib/utils/validator';
 import UserInfoCard from '../../components/UserInfoCard';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import PaymentSettings from '../../components/settings-page/PaymentSettings';
+import {
+  getEmployeeBankDetailsPaymentAction,
+  getEmployeeEarningsPaymentAction,
+} from '../../store/actions/paymentActions';
+import {
+  IEmployeeEarningsDetails,
+  IBankAccount,
+  IAccounts,
+} from '../../lib/interfaces';
+import EarningDetails from '../../components/settings-page/EarningDetails';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -34,6 +45,8 @@ const SettingsPage: React.FC = () => {
     phone: userPhone = '',
     _id: userId = '',
   } = userInfo;
+  // user with earning details
+  // const userId = '60ad43e35e08070013432c0b';
   const [firstName, setFirstName] = React.useState(userFirstName.trim());
   const [lastName, setLastName] = React.useState(userLastName);
   const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
@@ -43,7 +56,15 @@ const SettingsPage: React.FC = () => {
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
   const [disable, setDisable] = React.useState(false);
-  const [showPaymentSettings, setShowPaymentSettings] = React.useState(false);
+  const [actveSection, setActveSection] = React.useState('general');
+  const [earningsData, setEarningsData] = React.useState<
+    IEmployeeEarningsDetails
+  >({} as IEmployeeEarningsDetails);
+  const [bankAccountDetails, setBankAccountDetails] = React.useState<
+    IAccounts[]
+  >([]);
+  const [bankName, setBankName] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -56,10 +77,35 @@ const SettingsPage: React.FC = () => {
     }
     fetchIdToken();
     if (window.location.href.indexOf('#payment') > -1) {
-      setShowPaymentSettings(true);
+      setActveSection('payment');
       window.history.replaceState(null, 'null', window.location.pathname);
     }
-  }, [history]);
+    setIsLoading(true);
+    dispatch(getEmployeeEarningsPaymentAction(userId)).then(
+      (res: IEmployeeEarningsDetails) => {
+        if (res) {
+          setEarningsData(res);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
+    if (plaidAccount !== '') {
+      dispatch(getEmployeeBankDetailsPaymentAction(userId)).then(
+        (res: IBankAccount) => {
+          if (res) {
+            // console.log(res);
+            const { accounts, bank } = res;
+            setBankAccountDetails(accounts);
+            setBankName(bank);
+          } else {
+            console.log('No plaid account');
+          }
+        },
+      );
+    }
+  }, [dispatch, userId, plaidAccount, history]);
 
   const updateSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -153,17 +199,17 @@ const SettingsPage: React.FC = () => {
         <div className='settings-nav-links'>
           <span
             className={`settings-nav-link ${
-              !showPaymentSettings ? 'active' : ''
+              actveSection === 'general' ? 'active' : ''
             }`}
-            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+            onClick={() => setActveSection('general')}
           >
             GENERAL SETTINGS
           </span>
           <span
             className={`settings-nav-link ${
-              showPaymentSettings ? 'active' : ''
+              actveSection === 'payment' ? 'active' : ''
             }`}
-            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+            onClick={() => setActveSection('payment')}
           >
             PAYMENT SETTINGS
           </span>
@@ -178,7 +224,7 @@ const SettingsPage: React.FC = () => {
             <Col lg='4' className='mt-3'>
               <UserInfoCard />
             </Col>
-            {!showPaymentSettings ? (
+            {actveSection === 'general' ? (
               <Col lg='8' className='mt-3'>
                 <Card>
                   <Container className='my-3'>
@@ -328,25 +374,36 @@ const SettingsPage: React.FC = () => {
               </Col>
             ) : (
               <Col lg='8' className='mt-3'>
-                <Card className='mb-3'>
-                  <Container className='my-3'>
-                    <h2 className='big-h2'>Payment Settings</h2>
-                    <span className='font-weight-bold'>Balance</span>
-                    <div className='big-number'>$25.00</div>
-                    <div className='horizontal-line my-3' />
-                    <span className='font-weight-bold'>Last Payment</span>
-                    <p>$35.00 on June 28th</p>
-                  </Container>
-                </Card>
-                <Card>
-                  <Container className='my-3'>
-                    {!plaidAccount ? (
-                      <PaymentSettings />
-                    ) : (
-                      <p>Bank Account is connected</p>
-                    )}
-                  </Container>
-                </Card>
+                {!isLoading ? (
+                  <>
+                    <EarningDetails data={earningsData} />
+                    <Card>
+                      <Container className='my-3'>
+                        {!plaidAccount ? (
+                          <PaymentSettings />
+                        ) : (
+                          <div>
+                            <h2 className='big-h2'>Payment Methods</h2>
+                            <p>Bank Account is connected</p>
+                            <div className='mb-3'>
+                              <h4>Bank:</h4>
+                              {bankName || ''}
+                            </div>
+                            <h4>Card details:</h4>
+                            <div className='font-weight-bold my-2'>
+                              **** **** ****
+                              {' '}
+                              {bankAccountDetails[0]?.mask}
+                            </div>
+                            <div>{bankAccountDetails[0]?.official_name}</div>
+                          </div>
+                        )}
+                      </Container>
+                    </Card>
+                  </>
+                ) : (
+                  <Spinner className='d-block m-auto' animation='border' />
+                )}
               </Col>
             )}
           </Row>

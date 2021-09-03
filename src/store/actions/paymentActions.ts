@@ -1,6 +1,9 @@
 import { AxiosResponse } from 'axios';
-import errorHandler from '../../lib/utils/errorHandler';
-import { getEmployeeRevenueHistory } from '../apiCalls';
+import {
+  getEmployeeRevenueHistory,
+  getEmployeeEarnings,
+  getEmployeeBankDetails,
+} from '../apiCalls';
 
 export const getEmployeesRevenueHistoryPaymentAction = (queries: string) => {
   return async (): Promise<AxiosResponse | boolean> => {
@@ -13,7 +16,39 @@ export const getEmployeesRevenueHistoryPaymentAction = (queries: string) => {
         return false;
       }
     } catch (error) {
-      errorHandler(error);
+      return false;
+    }
+  };
+};
+
+export const getEmployeeEarningsPaymentAction = (id: string) => {
+  return async (): Promise<AxiosResponse | boolean> => {
+    try {
+      const res = await getEmployeeEarnings(id);
+      if (res) {
+        const { data = {} } = res;
+        return data;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      return false;
+    }
+  };
+};
+
+export const getEmployeeBankDetailsPaymentAction = (id: string) => {
+  return async (): Promise<AxiosResponse | boolean> => {
+    try {
+      const res = await getEmployeeBankDetails(id);
+      if (res) {
+        const { data: { authResponse = {} } } = res;
+        console.log(authResponse);
+        return authResponse;
+      } else {
+        return false;
+      }
+    } catch (error) {
       return false;
     }
   };

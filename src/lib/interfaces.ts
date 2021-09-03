@@ -95,3 +95,32 @@ export interface IRevenueEvents {
   date: string;
   status: string;
 }
+
+export interface IEmployeeEarningsDetails {
+  earningsAvailable: number;
+  lastPayment: number;
+  lastPaymentDate?: string | null;
+}
+
+export interface IBankAccount {
+  accounts: IAccounts[];
+  bank: string;
+}
+
+export interface IAccounts {
+  account_id: string;
+  balances: IBalances;
+  mask: string;
+  name: string;
+  official_name: string;
+  subtype: string;
+  type: string;
+}
+
+export interface IBalances {
+  available: number;
+  current: number;
+  iso_currency_code: string;
+  limit?: string | number | null;
+  unoficial_currency_code?: string | null;
+}

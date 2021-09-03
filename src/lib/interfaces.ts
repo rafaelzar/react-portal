@@ -95,3 +95,9 @@ export interface IRevenueEvents {
   date: string;
   status: string;
 }
+
+export interface IEmployeeEarningsDetails {
+  earningsAvailable: number;
+  lastPayment: number;
+  lastPaymentDate?: string | null;
+}

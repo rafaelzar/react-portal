@@ -12,6 +12,7 @@ import {
   Form,
   Button,
   InputGroup,
+  Spinner,
 } from 'react-bootstrap';
 import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
@@ -23,6 +24,9 @@ import { validateChangePasswordSubmit } from '../../lib/utils/validator';
 import UserInfoCard from '../../components/UserInfoCard';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import PaymentSettings from '../../components/settings-page/PaymentSettings';
+import { getEmployeeEarningsPaymentAction } from '../../store/actions/paymentActions';
+import { IEmployeeEarningsDetails } from '../../lib/interfaces';
+import EarningDetails from '../../components/settings-page/EarningDetails';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -32,8 +36,9 @@ const SettingsPage: React.FC = () => {
     last_name: userLastName = '',
     nick_names: userNickName = [''],
     phone: userPhone = '',
-    _id: userId = '',
+    // _id: userId = '',
   } = userInfo;
+  const userId = '60ad43e35e08070013432c0b';
   const [firstName, setFirstName] = React.useState(userFirstName.trim());
   const [lastName, setLastName] = React.useState(userLastName);
   const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
@@ -44,6 +49,10 @@ const SettingsPage: React.FC = () => {
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
   const [disable, setDisable] = React.useState(false);
   const [actveSection, setActveSection] = React.useState('general');
+  const [earningsData, setEarningsData] = React.useState<
+    IEmployeeEarningsDetails
+  >({} as IEmployeeEarningsDetails);
+  const [isLoading, setIsLoading] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -59,7 +68,18 @@ const SettingsPage: React.FC = () => {
       setActveSection('payment');
       window.history.replaceState(null, 'null', window.location.pathname);
     }
-  }, [history]);
+    setIsLoading(true);
+    dispatch(getEmployeeEarningsPaymentAction(userId)).then(
+      (res: IEmployeeEarningsDetails) => {
+        if (res) {
+          setEarningsData(res);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
+  }, [dispatch, userId, history]);
 
   const updateSubmit = async (e: React.SyntheticEvent) => {
     e.preventDefault();
@@ -328,25 +348,22 @@ const SettingsPage: React.FC = () => {
               </Col>
             ) : (
               <Col lg='8' className='mt-3'>
-                <Card className='mb-3'>
-                  <Container className='my-3'>
-                    <h2 className='big-h2'>Payment Settings</h2>
-                    <span className='font-weight-bold'>Balance</span>
-                    <div className='big-number'>$25.00</div>
-                    <div className='horizontal-line my-3' />
-                    <span className='font-weight-bold'>Last Payment</span>
-                    <p>$35.00 on June 28th</p>
-                  </Container>
-                </Card>
-                <Card>
-                  <Container className='my-3'>
-                    {!plaidAccount ? (
-                      <PaymentSettings />
-                    ) : (
-                      <p>Bank Account is connected</p>
-                    )}
-                  </Container>
-                </Card>
+                {!isLoading ? (
+                  <>
+                    <EarningDetails data={earningsData} />
+                    <Card>
+                      <Container className='my-3'>
+                        {!plaidAccount ? (
+                          <PaymentSettings />
+                        ) : (
+                          <p>Bank Account is connected</p>
+                        )}
+                      </Container>
+                    </Card>
+                  </>
+                ) : (
+                  <Spinner className='d-block m-auto' animation='border' />
+                )}
               </Col>
             )}
           </Row>

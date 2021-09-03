@@ -55,6 +55,12 @@ export const getEmployeeRevenueHistory = async (
   query: string,
 ): Promise<AxiosResponse | undefined> => {
   const res = await axios.get(`${baseUrl}/employees/revenue/${query}`);
-  console.log(res);
+  return res;
+};
+
+export const getEmployeeEarnings = async (
+  id: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/earnings/${id}`);
   return res;
 };

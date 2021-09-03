@@ -43,7 +43,7 @@ const SettingsPage: React.FC = () => {
   const [newPassword, setNewPassword] = React.useState('');
   const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
   const [disable, setDisable] = React.useState(false);
-  const [showPaymentSettings, setShowPaymentSettings] = React.useState(false);
+  const [actveSection, setActveSection] = React.useState('general');
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -56,7 +56,7 @@ const SettingsPage: React.FC = () => {
     }
     fetchIdToken();
     if (window.location.href.indexOf('#payment') > -1) {
-      setShowPaymentSettings(true);
+      setActveSection('payment');
       window.history.replaceState(null, 'null', window.location.pathname);
     }
   }, [history]);
@@ -153,17 +153,17 @@ const SettingsPage: React.FC = () => {
         <div className='settings-nav-links'>
           <span
             className={`settings-nav-link ${
-              !showPaymentSettings ? 'active' : ''
+              actveSection === 'general' ? 'active' : ''
             }`}
-            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+            onClick={() => setActveSection('general')}
           >
             GENERAL SETTINGS
           </span>
           <span
             className={`settings-nav-link ${
-              showPaymentSettings ? 'active' : ''
+              actveSection === 'payment' ? 'active' : ''
             }`}
-            onClick={() => setShowPaymentSettings(!showPaymentSettings)}
+            onClick={() => setActveSection('payment')}
           >
             PAYMENT SETTINGS
           </span>
@@ -178,7 +178,7 @@ const SettingsPage: React.FC = () => {
             <Col lg='4' className='mt-3'>
               <UserInfoCard />
             </Col>
-            {!showPaymentSettings ? (
+            {actveSection === 'general' ? (
               <Col lg='8' className='mt-3'>
                 <Card>
                   <Container className='my-3'>

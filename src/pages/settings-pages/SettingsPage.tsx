@@ -69,6 +69,7 @@ const SettingsPage: React.FC = () => {
   >([]);
   const [bankName, setBankName] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isDeleteBankLoading, setIsDeleteBankLoading] = React.useState(false);
   const [showModal, setShowModal] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -200,6 +201,7 @@ const SettingsPage: React.FC = () => {
 
   const deleteBankAccount = () => {
     if (plaidAccount !== '') {
+      setIsDeleteBankLoading(true);
       dispatch(deletePlaidAccountPlaidAction(userId)).then(
         (res: IUserInformation) => {
           if (res) {
@@ -209,11 +211,13 @@ const SettingsPage: React.FC = () => {
                 if (response) {
                   swalSuccess('Bank account deleted');
                   setShowModal(false);
+                  setIsDeleteBankLoading(false);
                 }
               },
             );
           } else {
             console.log('error');
+            setIsDeleteBankLoading(false);
           }
         },
       );
@@ -442,7 +446,16 @@ const SettingsPage: React.FC = () => {
                             <p>Are you sure you want to delete bank account?</p>
                           </Modal.Body>
                           <Modal.Footer>
-                            <Button onClick={deleteBankAccount}>Yes</Button>
+                            <Button
+                              disabled={isDeleteBankLoading}
+                              onClick={deleteBankAccount}
+                            >
+                              {isDeleteBankLoading ? (
+                                <Spinner animation='border' />
+                              ) : (
+                                'Yes'
+                              )}
+                            </Button>
                             <Button onClick={() => setShowModal(false)}>
                               No
                             </Button>

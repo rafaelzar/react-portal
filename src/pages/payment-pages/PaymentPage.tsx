@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import moment from 'moment';
 import { DateRangePicker } from 'react-date-range';
 import { subDays } from 'date-fns';
+import { CSVLink } from 'react-csv';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import { IDatePicker, IRevenueHistory } from '../../lib/interfaces';
@@ -17,6 +18,7 @@ const PaymentPage: React.FC = () => {
   const history = useHistory();
 
   const [revenueInfo, setRevenueInfo] = React.useState<IRevenueHistory[]>([]);
+  const [infoForCsv, setInfoForCsv] = React.useState<{amount: number}[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
@@ -107,7 +109,13 @@ const PaymentPage: React.FC = () => {
               <span>{moment(dateRangeQuery.end).format('MMM DD')}</span>
             </div>
           </div>
-          <Button>EXPORT CSV</Button>
+          {revenueInfo.length < 1 ? (
+            <Button disabled={revenueInfo.length < 1}> Export CSV </Button>
+          ) : (
+            <CSVLink data={revenueInfo}>
+              <Button>Export CSV</Button>
+            </CSVLink>
+          )}
         </div>
         <div
           className={`date-picker-wrapp payment-page ${

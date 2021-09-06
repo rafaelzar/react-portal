@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Row, Col, Container, Spinner,
 } from 'react-bootstrap';
+import moment from 'moment';
+import { subDays } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
 import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
@@ -20,6 +22,11 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [dateRangeQuery, setDateRangeQuery] = React.useState({
+    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    end: `${moment(new Date()).format('YYYY-MM-DD')}`,
+  });
+  const [dateRangeLabel, setDateRangeLabel] = React.useState('Last 7 Days');
   // const userID = '607a1d65e4be5100126b827e';
   const userID = '60ad43e35e08070013432c0b';
 
@@ -32,7 +39,7 @@ const HomePage: React.FC = () => {
     }
     fetchIdToken();
     const buildQueryFromState = () => {
-      const queryData = `${userID}?sort=desc`;
+      const queryData = `${userID}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
       return queryData;
     };
     const query = buildQueryFromState();
@@ -47,7 +54,27 @@ const HomePage: React.FC = () => {
         }
       },
     );
-  }, [dispatch, history]);
+  }, [dispatch, dateRangeQuery, history]);
+
+  const getReviewsFromLastMonth = () => {
+    setDateRangeQuery((prevState) => ({
+      ...prevState,
+      start: `${moment(subDays(new Date(), 30)).format('YYYY-MM-DD')}`,
+    }));
+    setDateRangeLabel('Last 30 Days');
+  };
+
+  const setDateRangeForReviews = (day: number) => {
+    setDateRangeQuery((prevState) => ({
+      ...prevState,
+      start: `${moment(subDays(new Date(), day)).format('YYYY-MM-DD')}`,
+    }));
+    if (day === 30) {
+      setDateRangeLabel('Last 30 Days');
+    } else {
+      setDateRangeLabel('Last 7 Days');
+    }
+  };
 
   return (
     <DefaultLayout>
@@ -65,10 +92,12 @@ const HomePage: React.FC = () => {
                 <EarningsAvailableCard earningsStats={data.earningsStats} />
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
-                <MentionsChartCard
-                  sitesData={data.reviewSiteMentions}
+                <MentionsChartCard sitesData={data.reviewSiteMentions} />
+                <ReviewMentionsCard
+                  reviewsData={data.reviewMentions}
+                  setDateRangeForReviews={setDateRangeForReviews}
+                  dateRangeLabel={dateRangeLabel}
                 />
-                <ReviewMentionsCard reviewsData={data.reviewMentions} />
               </Col>
             ) : (
               <Spinner className='d-block m-auto' animation='border' />

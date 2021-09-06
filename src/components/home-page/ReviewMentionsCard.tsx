@@ -5,13 +5,12 @@ import { IEmployeeReviews } from '../../lib/interfaces';
 
 interface IProps {
   reviewsData: IEmployeeReviews[];
+  setDateRangeForReviews: (arg: number) => void;
+  dateRangeLabel: string;
 }
 
-const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData }) => {
+const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData, setDateRangeForReviews, dateRangeLabel }) => {
   const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
-  const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
-    'Last 7 Days',
-  );
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
     false,
   );
@@ -33,9 +32,8 @@ const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData }) => {
     };
   }, [toggleDateSortDropdown, reviewsData]);
 
-  const handleDateSortDropdownChange = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLElement;
-    setDateSortDropdownValue(target.innerText);
+  const handleDateSortDropdownChange = (arg: number) => {
+    setDateRangeForReviews(arg);
   };
 
   return (
@@ -50,7 +48,8 @@ const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData }) => {
             }}
             ref={dateSortDropdownRef}
           >
-            {dateSortDropdownValue}
+            {/* {dateSortDropdownValue} */}
+            {dateRangeLabel}
             <div className='arrow-wrapp'>
               <i className='arrow down' />
             </div>
@@ -61,13 +60,13 @@ const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData }) => {
             >
               <div
                 className='custom-dropdown-item'
-                onClick={(e) => handleDateSortDropdownChange(e)}
+                onClick={() => handleDateSortDropdownChange(7)}
               >
                 Last 7 Days
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={(e) => handleDateSortDropdownChange(e)}
+                onClick={() => handleDateSortDropdownChange(30)}
               >
                 Last 30 Days
               </div>
@@ -75,10 +74,10 @@ const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData }) => {
           </div>
         </div>
         <div className='mt-3'>
-          {reviews.length > 0 ? (
+          {reviews && reviews.length > 0 ? (
             reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
           ) : (
-            <div className='m-auto'>No reviews with this criteria</div>
+            <div className='m-auto'>No reviews on this dates</div>
           )}
         </div>
       </Container>

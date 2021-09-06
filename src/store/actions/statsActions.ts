@@ -13,7 +13,7 @@ export const getEmployeeStatsStatsAction = (queries: string) => {
         return false;
       }
     } catch (error) {
-      errorHandler(error);
+      console.log(error);
       return false;
     }
   };

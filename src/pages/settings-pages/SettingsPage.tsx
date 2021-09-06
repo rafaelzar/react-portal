@@ -34,6 +34,7 @@ import {
   IAccounts,
 } from '../../lib/interfaces';
 import EarningDetails from '../../components/settings-page/EarningDetails';
+import { deletePlaidAccountPlaidAction } from '../../store/actions/plaidActions';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -191,6 +192,19 @@ const SettingsPage: React.FC = () => {
   const deleteNickname = (value: string) => {
     const newNicknames = nickNames.filter((element) => element !== value);
     setNickNames(newNicknames);
+  };
+
+  const deleteBankAccount = () => {
+    console.log(userId);
+    if (plaidAccount !== '') {
+      dispatch(deletePlaidAccountPlaidAction(userId)).then((res: any) => {
+        if (res) {
+          console.log(res);
+        } else {
+          console.log('error');
+        }
+      });
+    }
   };
 
   return (
@@ -396,6 +410,12 @@ const SettingsPage: React.FC = () => {
                               {bankAccountDetails[0]?.mask}
                             </div>
                             <div>{bankAccountDetails[0]?.official_name}</div>
+                            <Button
+                              className='my-3'
+                              onClick={deleteBankAccount}
+                            >
+                              Delete Bank Account
+                            </Button>
                           </div>
                         )}
                       </Container>

@@ -39,6 +39,13 @@ export const sendPlaidPublicToken = async (
   return res;
 };
 
+export const deletePlaidAccount = async (
+  id: string,
+): Promise<AxiosResponse | undefined | any> => {
+  const res = await axios.delete(`${baseUrl}/employees/plaid-account/${id}`);
+  return res;
+};
+
 export const getEmployeeStats = async (
   queries: string,
 ): Promise<AxiosResponse | undefined> => {

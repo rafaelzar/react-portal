@@ -13,10 +13,12 @@ import {
   Button,
   InputGroup,
   Spinner,
+  Modal,
 } from 'react-bootstrap';
 import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
   changePasswordAuthAction,
+  fetchUserFromDatabaseAuthAction,
   logOutCognitoUserAuthAction,
   updateUserAuthAction,
 } from '../../store/actions/authActions';
@@ -32,8 +34,10 @@ import {
   IEmployeeEarningsDetails,
   IBankAccount,
   IAccounts,
+  IUserInformation,
 } from '../../lib/interfaces';
 import EarningDetails from '../../components/settings-page/EarningDetails';
+import { deletePlaidAccountPlaidAction } from '../../store/actions/plaidActions';
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
@@ -65,6 +69,8 @@ const SettingsPage: React.FC = () => {
   >([]);
   const [bankName, setBankName] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isDeleteBankLoading, setIsDeleteBankLoading] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -191,6 +197,31 @@ const SettingsPage: React.FC = () => {
   const deleteNickname = (value: string) => {
     const newNicknames = nickNames.filter((element) => element !== value);
     setNickNames(newNicknames);
+  };
+
+  const deleteBankAccount = () => {
+    if (plaidAccount !== '') {
+      setIsDeleteBankLoading(true);
+      dispatch(deletePlaidAccountPlaidAction(userId)).then(
+        (res: IUserInformation) => {
+          if (res) {
+            console.log(res);
+            dispatch(fetchUserFromDatabaseAuthAction()).then(
+              (response: boolean | undefined) => {
+                if (response) {
+                  swalSuccess('Bank account deleted');
+                  setShowModal(false);
+                  setIsDeleteBankLoading(false);
+                }
+              },
+            );
+          } else {
+            console.log('error');
+            setIsDeleteBankLoading(false);
+          }
+        },
+      );
+    }
   };
 
   return (
@@ -396,8 +427,40 @@ const SettingsPage: React.FC = () => {
                               {bankAccountDetails[0]?.mask}
                             </div>
                             <div>{bankAccountDetails[0]?.official_name}</div>
+                            <Button
+                              className='my-3'
+                              onClick={() => setShowModal(true)}
+                            >
+                              Delete Bank Account
+                            </Button>
                           </div>
                         )}
+                        <Modal
+                          show={showModal}
+                          onHide={() => setShowModal(false)}
+                        >
+                          <Modal.Header closeButton>
+                            <Modal.Title>Delete Bank Account</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body>
+                            <p>Are you sure you want to delete bank account?</p>
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button
+                              disabled={isDeleteBankLoading}
+                              onClick={deleteBankAccount}
+                            >
+                              {isDeleteBankLoading ? (
+                                <Spinner animation='border' />
+                              ) : (
+                                'Yes'
+                              )}
+                            </Button>
+                            <Button onClick={() => setShowModal(false)}>
+                              No
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
                       </Container>
                     </Card>
                   </>

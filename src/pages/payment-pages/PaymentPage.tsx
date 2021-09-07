@@ -18,7 +18,6 @@ const PaymentPage: React.FC = () => {
   const history = useHistory();
 
   const [revenueInfo, setRevenueInfo] = React.useState<IRevenueHistory[]>([]);
-  const [infoForCsv, setInfoForCsv] = React.useState<{amount: number}[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
@@ -68,7 +67,6 @@ const PaymentPage: React.FC = () => {
     dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
       (res: Array<IRevenueHistory>) => {
         if (res) {
-          console.log(res);
           setRevenueInfo(res);
         }
       },
@@ -88,6 +86,19 @@ const PaymentPage: React.FC = () => {
     const { events = [] } = singleRevenue;
     const paidEvent = events.find((e) => e.status === 'PAID') || { date: '' };
     return moment(paidEvent.date).format('MMM DD YYYY');
+  };
+
+  const getCsvData = () => {
+    const data = revenueInfo?.map((d) => {
+      return {
+        Date: d.events
+          .filter((da) => da.status === 'PAID')
+          .map((dates) => moment(dates?.date).format('MMM DD YYYY'))
+          .toString(),
+        'Amount($)': `- ${d.amount}`,
+      };
+    });
+    return data;
   };
 
   return (
@@ -112,7 +123,12 @@ const PaymentPage: React.FC = () => {
           {revenueInfo.length < 1 ? (
             <Button disabled={revenueInfo.length < 1}> Export CSV </Button>
           ) : (
-            <CSVLink data={revenueInfo}>
+            <CSVLink
+              filename={`EyeRate_Revenue_${moment(new Date()).format(
+                'MM-DD-YYYY',
+              )}.csv`}
+              data={getCsvData()}
+            >
               <Button>Export CSV</Button>
             </CSVLink>
           )}

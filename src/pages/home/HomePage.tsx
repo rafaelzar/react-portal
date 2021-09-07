@@ -22,6 +22,7 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [loadRevews, setLoadReviews] = React.useState(false);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
@@ -39,7 +40,11 @@ const HomePage: React.FC = () => {
     }
     fetchIdToken();
     const buildQueryFromState = () => {
-      const queryData = `${userID}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+      const queryData = `${userID}?sort=desc&startDate=${moment(
+        subDays(new Date(), 7),
+      ).format('YYYY-MM-DD')}&endDate=${moment(new Date()).format(
+        'YYYY-MM-DD',
+      )}`;
       return queryData;
     };
     const query = buildQueryFromState();
@@ -54,15 +59,7 @@ const HomePage: React.FC = () => {
         }
       },
     );
-  }, [dispatch, dateRangeQuery, history]);
-
-  const getReviewsFromLastMonth = () => {
-    setDateRangeQuery((prevState) => ({
-      ...prevState,
-      start: `${moment(subDays(new Date(), 30)).format('YYYY-MM-DD')}`,
-    }));
-    setDateRangeLabel('Last 30 Days');
-  };
+  }, [dispatch, history]);
 
   const setDateRangeForReviews = (day: number) => {
     setDateRangeQuery((prevState) => ({
@@ -74,6 +71,18 @@ const HomePage: React.FC = () => {
     } else {
       setDateRangeLabel('Last 7 Days');
     }
+    const query = `${userID}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+    setLoadReviews(true);
+    dispatch(getEmployeeStatsStatsAction(query)).then(
+      (res: IHomePageData | undefined) => {
+        if (res) {
+          setData(res);
+          setLoadReviews(false);
+        } else {
+          setLoadReviews(false);
+        }
+      },
+    );
   };
 
   return (
@@ -97,6 +106,7 @@ const HomePage: React.FC = () => {
                   reviewsData={data.reviewMentions}
                   setDateRangeForReviews={setDateRangeForReviews}
                   dateRangeLabel={dateRangeLabel}
+                  loadRevews={loadRevews}
                 />
               </Col>
             ) : (

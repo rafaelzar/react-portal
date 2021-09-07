@@ -18,7 +18,6 @@ const PaymentPage: React.FC = () => {
   const history = useHistory();
 
   const [revenueInfo, setRevenueInfo] = React.useState<IRevenueHistory[]>([]);
-  const [infoForCsv, setInfoForCsv] = React.useState<{amount: number}[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
@@ -90,6 +89,18 @@ const PaymentPage: React.FC = () => {
     return moment(paidEvent.date).format('MMM DD YYYY');
   };
 
+  const getCsvData = () => {
+    const data = revenueInfo?.map((d) => {
+      return {
+        amount: `- ${d.amount}`,
+        date: d.events
+          .filter((da) => da.status === 'PAID')
+          .map((dates) => moment(dates?.date).format('MMM DD YYYY')).toString(),
+      };
+    });
+    return data;
+  };
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -112,7 +123,7 @@ const PaymentPage: React.FC = () => {
           {revenueInfo.length < 1 ? (
             <Button disabled={revenueInfo.length < 1}> Export CSV </Button>
           ) : (
-            <CSVLink data={revenueInfo}>
+            <CSVLink filename='revenue-info.csv' data={getCsvData()}>
               <Button>Export CSV</Button>
             </CSVLink>
           )}

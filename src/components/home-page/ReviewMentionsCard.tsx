@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Card } from 'react-bootstrap';
+import { Container, Card, Spinner } from 'react-bootstrap';
 import ReviewCard from '../reviews-page/ReviewCard';
 import { IEmployeeReviews } from '../../lib/interfaces';
 
@@ -7,9 +7,15 @@ interface IProps {
   reviewsData: IEmployeeReviews[];
   setDateRangeForReviews: (arg: number) => void;
   dateRangeLabel: string;
+  loadRevews: boolean;
 }
 
-const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData, setDateRangeForReviews, dateRangeLabel }) => {
+const ReviewMentionsCard: React.FC<IProps> = ({
+  reviewsData,
+  setDateRangeForReviews,
+  dateRangeLabel,
+  loadRevews,
+}) => {
   const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
     false,
@@ -73,13 +79,17 @@ const ReviewMentionsCard: React.FC<IProps> = ({ reviewsData, setDateRangeForRevi
             </div>
           </div>
         </div>
-        <div className='mt-3'>
-          {reviews && reviews.length > 0 ? (
-            reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
-          ) : (
-            <div className='m-auto'>No reviews on this dates</div>
-          )}
-        </div>
+        {!loadRevews ? (
+          <div className='mt-3'>
+            {reviews && reviews.length > 0 ? (
+              reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
+            ) : (
+              <div className='m-auto'>No reviews on this dates</div>
+            )}
+          </div>
+        ) : (
+          <Spinner className='d-block m-auto' animation='border' />
+        )}
       </Container>
     </Card>
   );

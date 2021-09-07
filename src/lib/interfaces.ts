@@ -124,3 +124,7 @@ export interface IBalances {
   limit?: string | number | null;
   unoficial_currency_code?: string | null;
 }
+
+export interface ISize {
+  width: number | undefined;
+}

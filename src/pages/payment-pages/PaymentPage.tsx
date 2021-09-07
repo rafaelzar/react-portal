@@ -91,10 +91,11 @@ const PaymentPage: React.FC = () => {
   const getCsvData = () => {
     const data = revenueInfo?.map((d) => {
       return {
-        amount: `- ${d.amount}`,
-        date: d.events
+        Date: d.events
           .filter((da) => da.status === 'PAID')
-          .map((dates) => moment(dates?.date).format('MMM DD YYYY')).toString(),
+          .map((dates) => moment(dates?.date).format('MMM DD YYYY'))
+          .toString(),
+        'Amount($)': `- ${d.amount}`,
       };
     });
     return data;
@@ -122,7 +123,12 @@ const PaymentPage: React.FC = () => {
           {revenueInfo.length < 1 ? (
             <Button disabled={revenueInfo.length < 1}> Export CSV </Button>
           ) : (
-            <CSVLink filename='revenue-info.csv' data={getCsvData()}>
+            <CSVLink
+              filename={`EyeRate_Revenue_${moment(new Date()).format(
+                'MM-DD-YYYY',
+              )}.csv`}
+              data={getCsvData()}
+            >
               <Button>Export CSV</Button>
             </CSVLink>
           )}

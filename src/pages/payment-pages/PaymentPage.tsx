@@ -67,7 +67,6 @@ const PaymentPage: React.FC = () => {
     dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
       (res: Array<IRevenueHistory>) => {
         if (res) {
-          console.log(res);
           setRevenueInfo(res);
         }
       },

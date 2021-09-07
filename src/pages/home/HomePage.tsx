@@ -56,14 +56,6 @@ const HomePage: React.FC = () => {
     );
   }, [dispatch, dateRangeQuery, history]);
 
-  const getReviewsFromLastMonth = () => {
-    setDateRangeQuery((prevState) => ({
-      ...prevState,
-      start: `${moment(subDays(new Date(), 30)).format('YYYY-MM-DD')}`,
-    }));
-    setDateRangeLabel('Last 30 Days');
-  };
-
   const setDateRangeForReviews = (day: number) => {
     setDateRangeQuery((prevState) => ({
       ...prevState,

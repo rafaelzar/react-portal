@@ -1,0 +1,58 @@
+.no-revenue-block {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.revenue-header-wrapp {
+  display: flex;
+  justify-content: space-between;
+}
+
+.statement-period-wrapp {
+  display: flex;
+  align-items: center;
+}
+
+.date-picker-wrapp {
+  &.payment-page {
+    margin-top: 0px !important;
+  }
+}
+
+@media screen and (max-width: 480px){
+  .revenue-header-wrapp {
+    flex-direction: column;
+
+    button {
+      margin: 15px 0;
+      width: 100%;
+    }
+  }
+
+  .statement-period-wrapp {
+    flex-direction: column;
+
+    & > span {
+      margin-right: 0 !important;
+    }
+  }
+
+  .date-picker-wrapp {
+    &.payment-page {
+      margin-top: -80px !important;
+    }
+  }
+
+  .date-range-btn {
+    &.payment-page {
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+    }
+  }
+}

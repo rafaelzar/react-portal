@@ -122,11 +122,11 @@ const PaymentPage: React.FC = () => {
     <DefaultLayout>
       <Container fluid>
         <h2>Revenue History</h2>
-        <div className='d-flex justify-content-between my-3'>
-          <div className='d-flex align-items-center'>
+        <div className='revenue-header-wrapp my-3'>
+          <div className='statement-period-wrapp'>
             <span className='mr-2'>Statement Period</span>
             <div
-              className='date-range-btn custom-dropdown'
+              className='date-range-btn custom-dropdown payment-page'
               onClick={() => setToggleDatePicker(!toggleDatePicker)}
               ref={datePickerDropdownRefDateInput}
             >

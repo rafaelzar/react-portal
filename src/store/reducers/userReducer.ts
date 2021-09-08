@@ -13,7 +13,6 @@ export const userReducer = (state = initState, action: Action): any => {
   case 'LOGIN_SUCCESS':
     return {
       ...state,
-      auth: action.user,
     };
 
   case 'UPDATE_USER':

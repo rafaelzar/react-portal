@@ -86,14 +86,26 @@ export interface IHomeEarningStats {
 }
 
 export interface IRevenueHistory {
-  check_id: string;
+  check_id?: string;
   amount: number;
-  events: IRevenueEvents[];
+  events?: IRevenueEvents[];
+  date?: string;
+  review?: IReviews;
+  platform?: string;
 }
 
 export interface IRevenueEvents {
   date: string;
   status: string;
+}
+
+export interface IRevenueDetails {
+  amount: number | string;
+  date: string | undefined;
+  description: string;
+  review?: IReviews;
+  check_id?: string;
+  platform?: string;
 }
 
 export interface IEmployeeEarningsDetails {

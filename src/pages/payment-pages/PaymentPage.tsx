@@ -21,7 +21,7 @@ const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const [revenueInfo, setRevenueInfo] = React.useState<any[]>([]);
+  const [revenueInfo, setRevenueInfo] = React.useState<IRevenueDetails[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
@@ -88,10 +88,10 @@ const PaymentPage: React.FC = () => {
                 description: `Deposit - ${r.platform} Review`,
                 date: r.date,
                 review: r.review,
+                platform: r.platform,
               };
             }
           });
-          console.log(resParsed);
           setRevenueInfo(resParsed);
         }
       },
@@ -107,20 +107,12 @@ const PaymentPage: React.FC = () => {
     setToggleDatePicker(!toggleDatePicker);
   };
 
-  const parsePaymentDate = (singleRevenue: IRevenueHistory) => {
-    const { events = [] } = singleRevenue;
-    const paidEvent = events.find((e) => e.status === 'PAID') || { date: '' };
-    return moment(paidEvent.date).format('MMM DD YYYY');
-  };
-
   const getCsvData = () => {
     const data = revenueInfo?.map((d) => {
       return {
-        Date: d.events
-          ?.filter((da: any) => da.status === 'PAID')
-          .map((dates: any) => moment(dates?.date).format('MMM DD YYYY'))
-          .toString(),
-        'Amount($)': `- ${d.amount}`,
+        Date: moment(d.date).format('MMM DD YYYY'),
+        Description: d.description,
+        'Amount($)': `${d.check_id ? '-$' : '+$'} ${d.amount}`,
       };
     });
     return data;
@@ -148,14 +140,14 @@ const PaymentPage: React.FC = () => {
           {revenueInfo.length < 1 ? (
             <Button disabled={revenueInfo.length < 1}> Export CSV </Button>
           ) : (
-            // <CSVLink
-            //   filename={`EyeRate_Revenue_${moment(new Date()).format(
-            //     'MM-DD-YYYY',
-            //   )}.csv`}
-            //   data={getCsvData()}
-            // >
-            <Button>Export CSV</Button>
-            // </CSVLink>
+            <CSVLink
+              filename={`EyeRate_Revenue_${moment(new Date()).format(
+                'MM-DD-YYYY',
+              )}.csv`}
+              data={getCsvData()}
+            >
+              <Button>Export CSV</Button>
+            </CSVLink>
           )}
         </div>
         <div

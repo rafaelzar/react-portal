@@ -105,6 +105,7 @@ export interface IRevenueDetails {
   description: string;
   review?: IReviews;
   check_id?: string;
+  platform?: string;
 }
 
 export interface IEmployeeEarningsDetails {

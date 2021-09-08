@@ -10,14 +10,14 @@ import { subDays } from 'date-fns';
 import { CSVLink } from 'react-csv';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { IDatePicker, IRevenueHistory } from '../../lib/interfaces';
+import { IDatePicker, IRevenueHistory, IRevenueDetails } from '../../lib/interfaces';
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
 
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const [revenueInfo, setRevenueInfo] = React.useState<IRevenueHistory[]>([]);
+  const [revenueInfo, setRevenueInfo] = React.useState<any[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
@@ -35,7 +35,7 @@ const PaymentPage: React.FC = () => {
   const datePickerDropdownRef = React.useRef<HTMLDivElement>(null);
 
   // const userID = '607a1d65e4be5100126b827e';
-  const userID = '60261996b55f7d0012ba8104';
+  const userID = '5f876451946f720b216ca65b';
 
   React.useEffect(() => {
     const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
@@ -67,7 +67,25 @@ const PaymentPage: React.FC = () => {
     dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
       (res: Array<IRevenueHistory>) => {
         if (res) {
-          setRevenueInfo(res);
+          const resParsed: Array<IRevenueDetails> = res.map(r => {
+            if (r.check_id) {
+              return {
+                amount: r.amount.toFixed(2),
+                description: 'Withdrawal',
+                date: r.events?.filter((da) => da.status === 'PAID').map(d => d.date).toString(),
+                check_id: r.check_id,
+              };
+            } else {
+              return {
+                amount: r.amount.toFixed(2),
+                description: `Deposit - ${r.platform} Review`,
+                date: r.date,
+                review: r.review,
+              };
+            }
+          });
+          console.log(resParsed);
+          setRevenueInfo(resParsed);
         }
       },
     );
@@ -92,8 +110,8 @@ const PaymentPage: React.FC = () => {
     const data = revenueInfo?.map((d) => {
       return {
         Date: d.events
-          .filter((da) => da.status === 'PAID')
-          .map((dates) => moment(dates?.date).format('MMM DD YYYY'))
+          ?.filter((da: any) => da.status === 'PAID')
+          .map((dates: any) => moment(dates?.date).format('MMM DD YYYY'))
           .toString(),
         'Amount($)': `- ${d.amount}`,
       };
@@ -123,14 +141,14 @@ const PaymentPage: React.FC = () => {
           {revenueInfo.length < 1 ? (
             <Button disabled={revenueInfo.length < 1}> Export CSV </Button>
           ) : (
-            <CSVLink
-              filename={`EyeRate_Revenue_${moment(new Date()).format(
-                'MM-DD-YYYY',
-              )}.csv`}
-              data={getCsvData()}
-            >
-              <Button>Export CSV</Button>
-            </CSVLink>
+            // <CSVLink
+            //   filename={`EyeRate_Revenue_${moment(new Date()).format(
+            //     'MM-DD-YYYY',
+            //   )}.csv`}
+            //   data={getCsvData()}
+            // >
+            <Button>Export CSV</Button>
+            // </CSVLink>
           )}
         </div>
         <div
@@ -174,12 +192,12 @@ const PaymentPage: React.FC = () => {
                     <tr key={`${singleRevenue?.check_id}`}>
                       <th scope='row' className='text-left'>
                         <span className='mb-0 text-sm'>
-                          {parsePaymentDate(singleRevenue)}
+                          {moment(singleRevenue.date).format('MMM DD YYYY')}
                         </span>
                       </th>
-                      <td>Withdrawal</td>
+                      <td>{singleRevenue.description}</td>
                       <td className='text-right'>
-                        <span>-$</span>
+                        <span>{singleRevenue.check_id ? '-$' : '+$' }</span>
                         {singleRevenue?.amount}
                       </td>
                     </tr>

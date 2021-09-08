@@ -10,7 +10,11 @@ import { subDays } from 'date-fns';
 import { CSVLink } from 'react-csv';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { IDatePicker, IRevenueHistory, IRevenueDetails } from '../../lib/interfaces';
+import {
+  IDatePicker,
+  IRevenueHistory,
+  IRevenueDetails,
+} from '../../lib/interfaces';
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
 
 const PaymentPage: React.FC = () => {
@@ -67,12 +71,15 @@ const PaymentPage: React.FC = () => {
     dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
       (res: Array<IRevenueHistory>) => {
         if (res) {
-          const resParsed: Array<IRevenueDetails> = res.map(r => {
+          const resParsed: Array<IRevenueDetails> = res.map((r) => {
             if (r.check_id) {
               return {
                 amount: r.amount.toFixed(2),
                 description: 'Withdrawal',
-                date: r.events?.filter((da) => da.status === 'PAID').map(d => d.date).toString(),
+                date: r.events
+                  ?.filter((da) => da.status === 'PAID')
+                  .map((d) => d.date)
+                  .toString(),
                 check_id: r.check_id,
               };
             } else {
@@ -176,7 +183,7 @@ const PaymentPage: React.FC = () => {
         </div>
         <Row>
           <Col>
-            <Table responsive>
+            <Table striped bordered responsive>
               <thead className='thead-dark'>
                 <tr>
                   <th className='pointer text-left'>Date</th>
@@ -196,8 +203,14 @@ const PaymentPage: React.FC = () => {
                         </span>
                       </th>
                       <td>{singleRevenue.description}</td>
-                      <td className='text-right'>
-                        <span>{singleRevenue.check_id ? '-$' : '+$' }</span>
+                      <td
+                        className={`text-right ${
+                          singleRevenue.check_id
+                            ? 'text-danger'
+                            : 'text-success'
+                        }`}
+                      >
+                        <span>{singleRevenue.check_id ? '-$' : '+$'}</span>
                         {singleRevenue?.amount}
                       </td>
                     </tr>

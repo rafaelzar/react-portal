@@ -56,6 +56,7 @@ export interface IUserInformation {
   email?: string;
   phone?: string;
   _id?: string;
+  cognito_id?: string;
   plaid_account?: string;
 }
 
@@ -141,4 +142,10 @@ export interface IBalances {
 
 export interface ISize {
   width: number | undefined;
+}
+
+export interface IStore {
+  user: {
+    user?: IUserInformation | Record<string, never>;
+  }
 }

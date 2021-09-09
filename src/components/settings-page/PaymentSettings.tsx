@@ -27,7 +27,7 @@ const PaymentSettings: FunctionComponent = () => {
   }, [userId]);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(
-    async (public_token, metadata) => {
+    async (public_token) => {
       const res = await sendPlaidPublicToken(userId, public_token);
       if (res) {
         dispatch(fetchUserFromDatabaseAuthAction()).then(

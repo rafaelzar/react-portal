@@ -1,4 +1,3 @@
-import errorHandler from '../../lib/utils/errorHandler';
 import { getEmployeeStats } from '../apiCalls';
 import { IHomePageData } from '../../lib/interfaces';
 
@@ -13,7 +12,6 @@ export const getEmployeeStatsStatsAction = (queries: string) => {
         return false;
       }
     } catch (error) {
-      console.log(error);
       return false;
     }
   };

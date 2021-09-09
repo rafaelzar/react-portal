@@ -5,7 +5,6 @@ const initState = {
 interface Action {
   type?: string;
   user?: Record<string, unknown>;
-  auth?: Record<string, unknown>;
 }
 
 export const userReducer = (state = initState, action: Action): any => {

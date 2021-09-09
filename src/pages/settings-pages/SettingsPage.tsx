@@ -101,12 +101,9 @@ const SettingsPage: React.FC = () => {
       dispatch(getEmployeeBankDetailsPaymentAction(userId)).then(
         (res: IBankAccount) => {
           if (res) {
-            // console.log(res);
             const { accounts, bank } = res;
             setBankAccountDetails(accounts);
             setBankName(bank);
-          } else {
-            console.log('No plaid account');
           }
         },
       );
@@ -205,7 +202,6 @@ const SettingsPage: React.FC = () => {
       dispatch(deletePlaidAccountPlaidAction(userId)).then(
         (res: IUserInformation) => {
           if (res) {
-            console.log(res);
             dispatch(fetchUserFromDatabaseAuthAction()).then(
               (response: boolean | undefined) => {
                 if (response) {
@@ -216,7 +212,6 @@ const SettingsPage: React.FC = () => {
               },
             );
           } else {
-            console.log('error');
             setIsDeleteBankLoading(false);
           }
         },

@@ -43,7 +43,6 @@ export const getEmployeeBankDetailsPaymentAction = (id: string) => {
       const res = await getEmployeeBankDetails(id);
       if (res) {
         const { data: { authResponse = {} } } = res;
-        console.log(authResponse);
         return authResponse;
       } else {
         return false;

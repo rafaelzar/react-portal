@@ -81,6 +81,7 @@ const PaymentPage: React.FC = () => {
           const resParsed: Array<IRevenueDetails> = res.map((r) => {
             if (r.check_id) {
               return {
+                _id: r._id,
                 amount: r.amount.toFixed(2),
                 description: 'Withdrawal',
                 date: r.events
@@ -91,6 +92,7 @@ const PaymentPage: React.FC = () => {
               };
             } else {
               return {
+                _id: r._id,
                 amount: r.amount.toFixed(2),
                 description: `Deposit - ${r.platform} Review`,
                 date: r.date,
@@ -196,7 +198,7 @@ const PaymentPage: React.FC = () => {
                 {revenueInfo && revenueInfo.length !== 0 ? (
                   revenueInfo?.map((singleRevenue) => (
                     <tr
-                      key={`${singleRevenue?.check_id}`}
+                      key={`${singleRevenue?._id}`}
                       className={`${singleRevenue.review ? 'pointer' : ''}`}
                       onClick={() => {
                         if (singleRevenue.review) {

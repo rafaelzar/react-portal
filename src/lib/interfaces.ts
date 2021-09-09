@@ -87,6 +87,7 @@ export interface IHomeEarningStats {
 
 export interface IRevenueHistory {
   check_id?: string;
+  _id: string;
   amount: number;
   events?: IRevenueEvents[];
   date?: string;
@@ -103,6 +104,7 @@ export interface IRevenueDetails {
   amount: number | string;
   date: string | undefined;
   description: string;
+  _id: string;
   review?: IReviews;
   check_id?: string;
   platform?: string;

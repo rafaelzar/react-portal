@@ -45,7 +45,7 @@ const ReviewMentionsCard: React.FC<IProps> = ({
   return (
     <Card className='mb-3'>
       <Container className='py-3'>
-        <div className='d-flex justify-content-between'>
+        <div className='review-mentions-card-header'>
           <h2>Review Mentions</h2>
           <div
             className='date-range-btn custom-dropdown d-flex align-items-center'
@@ -84,7 +84,7 @@ const ReviewMentionsCard: React.FC<IProps> = ({
             {reviews && reviews.length > 0 ? (
               reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
             ) : (
-              <div className='m-auto'>No reviews on this dates</div>
+              <div className='m-auto text-center'>No reviews on this dates</div>
             )}
           </div>
         ) : (

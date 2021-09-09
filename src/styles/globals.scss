@@ -99,3 +99,14 @@ input::placeholder {
 .chart-wrapp {
   max-width: 350px;
 }
+
+.review-mentions-card-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 450px) {
+  .review-mentions-card-header {
+    flex-direction: column;
+  }
+}

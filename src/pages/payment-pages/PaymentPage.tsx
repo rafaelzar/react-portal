@@ -18,6 +18,7 @@ import {
 } from '../../lib/interfaces';
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
 import RevenueInfoModal from '../../components/payment-page/RevenueInfoModal';
+import reviewIcon from '../../lib/assets/img/review.png';
 
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -209,7 +210,12 @@ const PaymentPage: React.FC = () => {
                           {moment(singleRevenue.date).format('MMM DD YYYY')}
                         </span>
                       </th>
-                      <td>{singleRevenue.description}</td>
+                      <td>
+                        {singleRevenue.description}
+                        {singleRevenue.review && (
+                          <img className='ml-3' src={reviewIcon} alt='review icon' />
+                        )}
+                      </td>
                       <td
                         className={`text-right ${
                           singleRevenue.check_id

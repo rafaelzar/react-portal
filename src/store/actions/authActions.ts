@@ -9,6 +9,7 @@ import {
 import { swalError, swalInfo } from '../../lib/utils/toasts';
 import { sendJWTToken, updateUser } from '../apiCalls';
 import { AppDispatch } from '../store';
+import { IUserInformation } from '../../lib/interfaces';
 
 export const logInCognitoUserAuthAction = (
   username: string,
@@ -78,7 +79,7 @@ export const logOutCognitoUserAuthAction = () => {
   };
 };
 
-export const updateUserAuthAction = (id: string, user: any) => {
+export const updateUserAuthAction = (id: string, user: IUserInformation) => {
   return async (dispatch: AppDispatch): Promise<boolean | undefined> => {
     try {
       const res = await updateUser(id, user);
@@ -148,8 +149,7 @@ export const fetchUserFromDatabaseAuthAction = () => {
         return false;
       }
     } catch (error) {
-      console.log(error);
-      swalInfo('This is a test user which is not in the database');
+      swalInfo('This is user is not in the database');
       return false;
     }
   };

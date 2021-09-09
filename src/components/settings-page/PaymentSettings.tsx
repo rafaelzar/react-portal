@@ -22,16 +22,14 @@ const PaymentSettings: FunctionComponent = () => {
         data: { link_token },
       } = response;
       setToken(link_token);
-      console.log(link_token);
     }
     if (userId) createLinkToken();
   }, [userId]);
 
   const onSuccess = useCallback<PlaidLinkOnSuccess>(
-    async (public_token, metadata) => {
+    async (public_token) => {
       const res = await sendPlaidPublicToken(userId, public_token);
       if (res) {
-        console.log(res);
         dispatch(fetchUserFromDatabaseAuthAction()).then(
           (response: boolean | undefined) => {
             if (response) {
@@ -40,7 +38,6 @@ const PaymentSettings: FunctionComponent = () => {
           },
         );
       }
-      console.log(metadata);
     },
     [dispatch, userId],
   );

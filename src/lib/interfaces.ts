@@ -53,9 +53,10 @@ export interface IUserInformation {
   first_name: string;
   last_name: string;
   nick_names?: Array<string>;
-  email: string;
+  email?: string;
   phone?: string;
   _id?: string;
+  cognito_id?: string;
   plaid_account?: string;
 }
 
@@ -87,6 +88,7 @@ export interface IHomeEarningStats {
 
 export interface IRevenueHistory {
   check_id?: string;
+  _id: string;
   amount: number;
   events?: IRevenueEvents[];
   date?: string;
@@ -103,6 +105,7 @@ export interface IRevenueDetails {
   amount: number | string;
   date: string | undefined;
   description: string;
+  _id: string;
   review?: IReviews;
   check_id?: string;
   platform?: string;
@@ -139,4 +142,10 @@ export interface IBalances {
 
 export interface ISize {
   width: number | undefined;
+}
+
+export interface IStore {
+  user: {
+    user?: IUserInformation | Record<string, never>;
+  }
 }

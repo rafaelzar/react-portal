@@ -14,8 +14,11 @@ import {
   IDatePicker,
   IRevenueHistory,
   IRevenueDetails,
+  IReviews,
 } from '../../lib/interfaces';
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
+import RevenueInfoModal from '../../components/payment-page/RevenueInfoModal';
+import reviewIcon from '../../lib/assets/img/review.png';
 
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +26,10 @@ const PaymentPage: React.FC = () => {
 
   const [revenueInfo, setRevenueInfo] = React.useState<IRevenueDetails[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+  const [activeRevenueReview, setActiveRevenueReview] = React.useState<
+    IReviews
+  >({} as IReviews);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
@@ -74,6 +81,7 @@ const PaymentPage: React.FC = () => {
           const resParsed: Array<IRevenueDetails> = res.map((r) => {
             if (r.check_id) {
               return {
+                _id: r._id,
                 amount: r.amount.toFixed(2),
                 description: 'Withdrawal',
                 date: r.events
@@ -84,6 +92,7 @@ const PaymentPage: React.FC = () => {
               };
             } else {
               return {
+                _id: r._id,
                 amount: r.amount.toFixed(2),
                 description: `Deposit - ${r.platform} Review`,
                 date: r.date,
@@ -188,13 +197,27 @@ const PaymentPage: React.FC = () => {
               <tbody className='list'>
                 {revenueInfo && revenueInfo.length !== 0 ? (
                   revenueInfo?.map((singleRevenue) => (
-                    <tr key={`${singleRevenue?.check_id}`}>
+                    <tr
+                      key={`${singleRevenue?._id}`}
+                      className={`${singleRevenue.review ? 'pointer' : ''}`}
+                      onClick={() => {
+                        if (singleRevenue.review) {
+                          setShowModal(true);
+                          setActiveRevenueReview(singleRevenue.review);
+                        }
+                      }}
+                    >
                       <th scope='row' className='text-left'>
                         <span className='mb-0 text-sm'>
                           {moment(singleRevenue.date).format('MMM DD YYYY')}
                         </span>
                       </th>
-                      <td>{singleRevenue.description}</td>
+                      <td>
+                        {singleRevenue.description}
+                        {singleRevenue.review && (
+                          <img className='ml-3' src={reviewIcon} alt='review icon' />
+                        )}
+                      </td>
                       <td
                         className={`text-right ${
                           singleRevenue.check_id
@@ -212,6 +235,11 @@ const PaymentPage: React.FC = () => {
                 )}
               </tbody>
             </Table>
+            <RevenueInfoModal
+              data={activeRevenueReview}
+              showModal={showModal}
+              setShowModal={setShowModal}
+            />
           </Col>
         </Row>
       </Container>

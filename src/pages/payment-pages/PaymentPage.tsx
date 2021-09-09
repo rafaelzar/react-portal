@@ -14,8 +14,10 @@ import {
   IDatePicker,
   IRevenueHistory,
   IRevenueDetails,
+  IReviews,
 } from '../../lib/interfaces';
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
+import RevenueInfoModal from '../../components/payment-page/RevenueInfoModal';
 
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -23,6 +25,10 @@ const PaymentPage: React.FC = () => {
 
   const [revenueInfo, setRevenueInfo] = React.useState<IRevenueDetails[]>([]);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
+  const [activeRevenueReview, setActiveRevenueReview] = React.useState<
+    IReviews
+  >({} as IReviews);
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
@@ -188,7 +194,16 @@ const PaymentPage: React.FC = () => {
               <tbody className='list'>
                 {revenueInfo && revenueInfo.length !== 0 ? (
                   revenueInfo?.map((singleRevenue) => (
-                    <tr key={`${singleRevenue?.check_id}`}>
+                    <tr
+                      key={`${singleRevenue?.check_id}`}
+                      className={`${singleRevenue.review ? 'pointer' : ''}`}
+                      onClick={() => {
+                        if (singleRevenue.review) {
+                          setShowModal(true);
+                          setActiveRevenueReview(singleRevenue.review);
+                        }
+                      }}
+                    >
                       <th scope='row' className='text-left'>
                         <span className='mb-0 text-sm'>
                           {moment(singleRevenue.date).format('MMM DD YYYY')}
@@ -212,6 +227,11 @@ const PaymentPage: React.FC = () => {
                 )}
               </tbody>
             </Table>
+            <RevenueInfoModal
+              data={activeRevenueReview}
+              showModal={showModal}
+              setShowModal={setShowModal}
+            />
           </Col>
         </Row>
       </Container>

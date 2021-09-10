@@ -428,7 +428,7 @@ const SettingsPage: React.FC = () => {
                               className='my-3'
                               onClick={() => setShowModal(true)}
                             >
-                              Delete Bank Account
+                              Disconnect Bank Account
                             </Button>
                           </div>
                         )}

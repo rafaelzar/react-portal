@@ -1,0 +1,143 @@
+<html>
+
+<head>
+  <title></title>
+  <style>
+    .main-wrapper {
+      background-color: #eeeeee;
+      padding: 50px;
+      font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+
+    .main-content {
+      margin: auto;
+      padding: 24px;
+      max-width: 668px;
+      background-color: #ffffff;
+      color: #565656;
+      border-radius: 5px;
+      text-align: center;
+      -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.2);
+      box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      color: #343434;
+      text-align: left;
+      font-weight: 600;
+      font-size: 22px;
+    }
+
+    .week-text {
+      font-size: 23px;
+      margin-top: 9px;
+    }
+
+    .logo {
+      text-align: left;
+    }
+
+    @media screen and (max-width: 600px) {
+      .main-wrapper {
+        padding: 5px;
+      }
+
+      .weekly-update {
+        width: 100%;
+      }
+
+      .week-text {
+        font-size: 16px;
+      }
+
+      .logo {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body style="background-color: #eeeeee;">
+  <div class="main-wrapper">
+    <div class="main-content">
+      <div class="logo" style="margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid #eeeeee;">
+        <img src="https://www.eyeratebusiness.com/static/eyerate-full.png" width="210">
+        <div class="weekly-update" style="float: right; font-weight: 600; text-align: center; color: #354778">
+          <p class="week-text">New Review</p>
+        </div>
+        <div style="clear: both;"></div>
+      </div>
+      <div class="mail-content">
+        <div style="padding: 5px;">
+          <div>
+            <span style="float: left;">
+              {{review_date}}
+            </span>
+            <span style="color: #dda737; float: right;">
+              {{#greaterThan review_rating 0.9}}
+              <span> &#9733; </span>
+              {{/greaterThan}}
+              {{#greaterThan review_rating 1.5}}
+              <span> &#9733; </span>
+              {{/greaterThan}}
+              {{#greaterThan review_rating 2.5}}
+              <span> &#9733; </span>
+              {{/greaterThan}}
+              {{#greaterThan review_rating 3.5}}
+              <span> &#9733; </span>
+              {{/greaterThan}}
+              {{#greaterThan review_rating 4.5}}
+              <span> &#9733; </span>
+              {{/greaterThan}}
+            </span>
+          </div>
+          <div style="clear: both;"></div>
+          <div style="padding: 20px; margin: 20px 0;">
+            {{#if review_text}}
+            {{review_text}}
+            {{else}}
+            Customer didn't write a review text.
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <div style="padding: 80px 5px; background-color: #354778; margin-top: 40px; border-radius: 5px;">
+        <a style="background-color:#dda737;color:#FFF; padding: 10px 40px; border: none; border-radius: 5px; text-decoration: none; font-weight: 600;"
+          href={{employee_link}} rel="noopener" target="_blank">Employee link</a>
+      </div>
+    </div>
+    <div style="max-width: 668px; padding: 24px; margin: auto; text-align: center;">
+      <p style="text-align: center; font-size: 14px; line-height:25px">If you have any questions, feel free to
+        contact
+        as at <span style="font-weight: bold; color: #354778;">contact@eyeratebusiness.com</span></p>
+    </div>
+  </div>
+  <div data-role="module-unsubscribe" class="module" role="module" data-type="unsubscribe"
+    style="color:#444444; font-size:12px; line-height:20px; padding:16px 16px 16px 16px; text-align:Center;"
+    data-muid="4e838cf3-9892-4a6d-94d6-170e474d21e5">
+    <div class="Unsubscribe--addressLine">
+      <p class="Unsubscribe--senderName" style="font-size:12px;line-height:20px">
+        {{Sender_Name}}
+      </p>
+      <p style="font-size:12px;line-height:20px">
+        <span class="Unsubscribe--senderAddress">{{Sender_Address}}</span>, <span
+          class="Unsubscribe--senderCity">{{Sender_City}}</span>, <span
+          class="Unsubscribe--senderState">{{Sender_State}}</span> <span
+          class="Unsubscribe--senderZip">{{Sender_Zip}}</span>
+      </p>
+    </div>
+    <p style="font-size:12px; line-height:20px;">
+      <a class="Unsubscribe--unsubscribeLink" href="{{{unsubscribe}}}" target="_blank"
+        style="font-family:sans-serif;text-decoration:none;">
+        Unsubscribe
+      </a>
+      -
+      <a href="{{{unsubscribe_preferences}}}" target="_blank" class="Unsubscribe--unsubscribePreferences"
+        style="font-family:sans-serif;text-decoration:none;">
+        Unsubscribe Preferences
+      </a>
+    </p>
+  </div>
+</body>
+
+</html>

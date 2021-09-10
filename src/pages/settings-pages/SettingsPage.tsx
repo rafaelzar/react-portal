@@ -87,26 +87,28 @@ const SettingsPage: React.FC = () => {
       window.history.replaceState(null, 'null', window.location.pathname);
     }
     setIsLoading(true);
-    dispatch(getEmployeeEarningsPaymentAction(userId)).then(
-      (res: IEmployeeEarningsDetails) => {
-        if (res) {
-          setEarningsData(res);
-          setIsLoading(false);
-        } else {
-          setIsLoading(false);
-        }
-      },
-    );
-    if (plaidAccount !== '') {
-      dispatch(getEmployeeBankDetailsPaymentAction(userId)).then(
-        (res: IBankAccount) => {
+    if (userId) {
+      dispatch(getEmployeeEarningsPaymentAction(userId)).then(
+        (res: IEmployeeEarningsDetails) => {
           if (res) {
-            const { accounts, bank } = res;
-            setBankAccountDetails(accounts);
-            setBankName(bank);
+            setEarningsData(res);
+            setIsLoading(false);
+          } else {
+            setIsLoading(false);
           }
         },
       );
+      if (plaidAccount !== '') {
+        dispatch(getEmployeeBankDetailsPaymentAction(userId)).then(
+          (res: IBankAccount) => {
+            if (res) {
+              const { accounts, bank } = res;
+              setBankAccountDetails(accounts);
+              setBankName(bank);
+            }
+          },
+        );
+      }
     }
   }, [dispatch, userId, plaidAccount, history]);
 
@@ -426,7 +428,7 @@ const SettingsPage: React.FC = () => {
                               className='my-3'
                               onClick={() => setShowModal(true)}
                             >
-                              Delete Bank Account
+                              Disconnect Bank Account
                             </Button>
                           </div>
                         )}

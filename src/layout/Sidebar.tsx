@@ -4,6 +4,11 @@ import { useAppDispatch } from '../store/store';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
 import cross from '../lib/assets/img/cross.png';
+import dashboardIcon from '../lib/assets/icons/layout-outline.svg';
+import logoutIcon from '../lib/assets/icons/log-out-outline.svg';
+import reviewsIcon from '../lib/assets/icons/star-outline.svg';
+import settingsIcon from '../lib/assets/icons/settings-outline.svg';
+import revenueIcon from '../lib/assets/icons/credit-card.svg';
 import { swalSuccess } from '../lib/utils/toasts';
 
 interface IProps {
@@ -52,7 +57,13 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
                 className='nav-link'
                 activeClassName='active-nav-link'
               >
-                Home
+                <img
+                  className='mr-1'
+                  width='20'
+                  src={dashboardIcon}
+                  alt='dashboard'
+                />
+                Dashboard
               </NavLink>
             </Nav.Item>
             <Nav.Item>
@@ -61,6 +72,12 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
                 activeClassName='active-nav-link'
                 to='/reviews'
               >
+                <img
+                  className='mr-1'
+                  width='20'
+                  src={reviewsIcon}
+                  alt='reviews'
+                />
                 Reviews
               </NavLink>
             </Nav.Item>
@@ -70,6 +87,12 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
                 to='/revenue'
                 activeClassName='active-nav-link'
               >
+                <img
+                  className='mr-1'
+                  width='20'
+                  src={revenueIcon}
+                  alt='revenue'
+                />
                 Revenue
               </NavLink>
             </Nav.Item>
@@ -83,11 +106,25 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
                 to='/settings'
                 activeClassName='active-nav-link'
               >
+                <img
+                  className='mr-1'
+                  width='20'
+                  src={settingsIcon}
+                  alt='settings'
+                />
                 Settings
               </NavLink>
             </Nav.Item>
             <Nav.Item onClick={logout}>
-              <div className='nav-link pointer'>Logout</div>
+              <div className='nav-link pointer'>
+                <img
+                  className='mr-1'
+                  width='20'
+                  src={logoutIcon}
+                  alt='logout'
+                />
+                Logout
+              </div>
             </Nav.Item>
           </Nav>
         </div>

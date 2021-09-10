@@ -16,6 +16,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import { IHomePageData } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
+// import { getUserIDSelector } from '../../store/selectors/selectors';
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -28,8 +29,12 @@ const HomePage: React.FC = () => {
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
   });
   const [dateRangeLabel, setDateRangeLabel] = React.useState('Last 7 Days');
-  // const userID = '607a1d65e4be5100126b827e';
-  const userID = '60ad43e35e08070013432c0b';
+
+  // ! Uncomment this line and import line in order to see real data for the current employee
+  // const userId = useSelector((state) => getUserIDSelector(state));
+
+  const userID = '607a1d65e4be5100126b827e';
+  // const userID = '60ad43e35e08070013432c0b';
 
   React.useEffect(() => {
     async function fetchIdToken() {

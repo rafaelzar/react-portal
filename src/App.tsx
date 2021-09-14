@@ -39,7 +39,7 @@ export class App extends Component {
         <Switch>
           <Route path="/" exact component={HomePage} />
           <Route path="/reviews" exact component={ReviewsPage} />
-          <Route path="/payment" exact component={PaymentPage} />
+          <Route path="/revenue" exact component={PaymentPage} />
           <Route path="/settings" exact component={SettingsPage} />
           <Route path="/login" exact component={LoginPage} />
           <Route path="/forgot-password" exact component={ForgotPasswordPage} />

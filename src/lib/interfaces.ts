@@ -53,7 +53,99 @@ export interface IUserInformation {
   first_name: string;
   last_name: string;
   nick_names?: Array<string>;
-  email: string;
+  email?: string;
   phone?: string;
   _id?: string;
+  cognito_id?: string;
+  plaid_account?: string;
+}
+
+export interface IHomePageData {
+  reviewStats: IHomeReviewStats;
+  reviewSiteMentions: IHomeReviewSiteMentions[];
+  reviewMentions: IEmployeeReviews[];
+  earningsStats: IHomeEarningStats;
+}
+
+export interface IHomeReviewStats {
+  mentionsThisMonth: number;
+  mentionsAllTime: number;
+  averageRatingAllTime: number;
+}
+
+export interface IHomeReviewSiteMentions {
+  numOfReviews: number;
+  platform: string;
+}
+
+export interface IHomeEarningStats {
+  earningsAvailable: number;
+  lastPayment: number;
+  allTimeEarnings: number;
+  thisMonthEarnings: number;
+  leaderboardRank: number;
+}
+
+export interface IRevenueHistory {
+  check_id?: string;
+  _id: string;
+  amount: number;
+  events?: IRevenueEvents[];
+  date?: string;
+  review?: IReviews;
+  platform?: string;
+}
+
+export interface IRevenueEvents {
+  date: string;
+  status: string;
+}
+
+export interface IRevenueDetails {
+  amount: number | string;
+  date: string | undefined;
+  description: string;
+  _id: string;
+  review?: IReviews;
+  check_id?: string;
+  platform?: string;
+}
+
+export interface IEmployeeEarningsDetails {
+  earningsAvailable: number;
+  lastPayment: number;
+  lastPaymentDate?: string | null;
+}
+
+export interface IBankAccount {
+  accounts: IAccounts[];
+  bank: string;
+}
+
+export interface IAccounts {
+  account_id: string;
+  balances: IBalances;
+  mask: string;
+  name: string;
+  official_name: string;
+  subtype: string;
+  type: string;
+}
+
+export interface IBalances {
+  available: number;
+  current: number;
+  iso_currency_code: string;
+  limit?: string | number | null;
+  unoficial_currency_code?: string | null;
+}
+
+export interface ISize {
+  width: number | undefined;
+}
+
+export interface IStore {
+  user: {
+    user?: IUserInformation | Record<string, never>;
+  }
 }

@@ -1,18 +1,29 @@
 import React from 'react';
-import { Container, Card } from 'react-bootstrap';
+import { Container, Card, Spinner } from 'react-bootstrap';
 import ReviewCard from '../reviews-page/ReviewCard';
 import { IEmployeeReviews } from '../../lib/interfaces';
 
-const ReviewMentionsCard: React.FC = () => {
-  const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
-    'Last 7 Days',
-  );
+interface IProps {
+  reviewsData: IEmployeeReviews[];
+  setDateRangeForReviews: (arg: number) => void;
+  dateRangeLabel: string;
+  loadRevews: boolean;
+}
+
+const ReviewMentionsCard: React.FC<IProps> = ({
+  reviewsData,
+  setDateRangeForReviews,
+  dateRangeLabel,
+  loadRevews,
+}) => {
+  const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
     false,
   );
   const dateSortDropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    setReviews(reviewsData);
     const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
       const isClickedOutsideOfAnyDropdowns = toggleDateSortDropdown
         && dateSortDropdownRef.current
@@ -25,38 +36,16 @@ const ReviewMentionsCard: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', checkIfClickedOutside);
     };
-  }, [toggleDateSortDropdown]);
+  }, [toggleDateSortDropdown, reviewsData]);
 
-  const data: IEmployeeReviews[] = [
-    {
-      content:
-        'Excellent service!! This place is awesome! Hadley did an awesome job helping us and their flower is fire!!',
-      created_at: '2021-05-10T22:23:22.000Z',
-      name: 'cnbislvr',
-      platform: 'Weedmaps',
-      rating: 5,
-      _id: '609b13b3d729a722d0e4f46a',
-    },
-    {
-      content:
-        '1st time awesome! Hadley was my Bud tender! She knew her %£!!! Seriously great experience! I’ll be back!',
-      created_at: '2021-05-10T22:23:07.000Z',
-      name: 'wimpything',
-      platform: 'Weedmaps',
-      rating: 5,
-      _id: '609b13b3d729a722d0e4f46b',
-    },
-  ];
-
-  const handleDateSortDropdownChange = (e: React.SyntheticEvent) => {
-    const target = e.target as HTMLElement;
-    setDateSortDropdownValue(target.innerText);
+  const handleDateSortDropdownChange = (arg: number) => {
+    setDateRangeForReviews(arg);
   };
 
   return (
     <Card className='mb-3'>
       <Container className='py-3'>
-        <div className='d-flex justify-content-between'>
+        <div className='review-mentions-card-header'>
           <h2>Review Mentions</h2>
           <div
             className='date-range-btn custom-dropdown d-flex align-items-center'
@@ -65,7 +54,8 @@ const ReviewMentionsCard: React.FC = () => {
             }}
             ref={dateSortDropdownRef}
           >
-            {dateSortDropdownValue}
+            {/* {dateSortDropdownValue} */}
+            {dateRangeLabel}
             <div className='arrow-wrapp'>
               <i className='arrow down' />
             </div>
@@ -76,26 +66,30 @@ const ReviewMentionsCard: React.FC = () => {
             >
               <div
                 className='custom-dropdown-item'
-                onClick={(e) => handleDateSortDropdownChange(e)}
+                onClick={() => handleDateSortDropdownChange(7)}
               >
                 Last 7 Days
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={(e) => handleDateSortDropdownChange(e)}
+                onClick={() => handleDateSortDropdownChange(30)}
               >
                 Last 30 Days
               </div>
             </div>
           </div>
         </div>
-        <div className='mt-3'>
-          {data.length > 0 ? (
-            data?.map((r) => <ReviewCard key={r._id} data={r} />)
-          ) : (
-            <div className='m-auto'>No reviews with this criteria</div>
-          )}
-        </div>
+        {!loadRevews ? (
+          <div className='mt-3'>
+            {reviews && reviews.length > 0 ? (
+              reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
+            ) : (
+              <div className='m-auto text-center'>No reviews on this dates</div>
+            )}
+          </div>
+        ) : (
+          <Spinner className='d-block m-auto' animation='border' />
+        )}
       </Container>
     </Card>
   );

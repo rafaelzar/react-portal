@@ -18,6 +18,7 @@ import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 import StarResolver from '../../components/reviews-page/StarResolver';
 import PaginationComponent from '../../components/reviews-page/Pagination';
+// import { getUserIDSelector } from '../../store/selectors/selectors';
 
 const ReviewsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -48,10 +49,6 @@ const ReviewsPage: React.FC = () => {
   const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
     'Newest',
   );
-  const [dateRange, setDateRange] = React.useState({
-    start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
-    end: `${moment(new Date()).format('MMM DD')}`,
-  });
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
     start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
@@ -108,6 +105,8 @@ const ReviewsPage: React.FC = () => {
     toggleDatePicker,
   ]);
 
+  // ! Uncomment this line and import line in order to see real data for the current employee
+  // const userId = useSelector((state) => getUserIDSelector(state));
   const userID = '607a1d65e4be5100126b827e';
   // const userID = '610ad8f087eb7f7f432a9759';
 
@@ -161,13 +160,6 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   const setDateRangeFilter = () => {
-    setDateRange((prevState) => ({
-      ...prevState,
-      start: moment(dateState.map((d) => d.startDate).toString()).format(
-        'MMM DD',
-      ),
-      end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
-    }));
     setDateRangeQuery((prevState) => ({
       ...prevState,
       start: moment(dateState.map((d) => d.startDate).toString()).format(
@@ -220,6 +212,11 @@ const ReviewsPage: React.FC = () => {
     resetPagination();
   };
 
+  const handeRatingStarsChange = (rating: number) => {
+    setStarsDropdownValue(rating);
+    resetPagination();
+  };
+
   return (
     <DefaultLayout>
       <Container fluid>
@@ -232,11 +229,13 @@ const ReviewsPage: React.FC = () => {
             ref={datePickerDropdownRefDateInput}
           >
             <div className='date-range-btn'>
-              <span>{dateRange.start}</span>
-              {' '}
-              -
-              {' '}
-              <span>{dateRange.end}</span>
+              <span>
+                {moment(dateRangeQuery.start).format('MMM DD')}
+                {' '}
+                -
+                {' '}
+                {moment(dateRangeQuery.end).format('MMM DD')}
+              </span>
             </div>
           </div>
           <div className='filters-site-wrapper'>
@@ -306,19 +305,19 @@ const ReviewsPage: React.FC = () => {
             >
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(0)}
+                onClick={() => handeRatingStarsChange(0)}
               >
                 All Ratings
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(1)}
+                onClick={() => handeRatingStarsChange(1)}
               >
                 <StarResolver rating={1} />
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(2)}
+                onClick={() => handeRatingStarsChange(2)}
               >
                 <StarResolver rating={2} />
               </div>
@@ -330,13 +329,13 @@ const ReviewsPage: React.FC = () => {
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(4)}
+                onClick={() => handeRatingStarsChange(4)}
               >
                 <StarResolver rating={4} />
               </div>
               <div
                 className='custom-dropdown-item'
-                onClick={() => setStarsDropdownValue(5)}
+                onClick={() => handeRatingStarsChange(5)}
               >
                 <StarResolver rating={5} />
               </div>

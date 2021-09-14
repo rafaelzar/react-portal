@@ -1,37 +1,37 @@
 import React from 'react';
+import moment from 'moment';
+import { IEmployeeReviews } from '../../lib/interfaces';
+import StarResolver from './StarResolver';
 
 interface IProps {
-  name: string,
-  date: string,
-  body: string,
-  rating: number,
-  type?: string,
+  data: IEmployeeReviews;
 }
 
-const ReviewCard: React.FC<IProps> = ({
-  name, date, body, rating, type,
-}) => {
+const ReviewCard: React.FC<IProps> = ({ data }) => {
   return (
     <div className='review-card'>
       <div className='review-card-header'>
-        <div className={`header-border ${type === 'Negative' ? 'negative-review-color' : ''}`} />
+        <div
+          className={`header-border ${
+            data.rating < 3 ? 'negative-review-color' : ''
+          }`}
+        />
         <div className='d-flex justify-content-between mb-3 review-card-body'>
-          <div>{date}</div>
-          <div>
-            <span>{rating}</span>
-            {' '}
-            Google
+          <div>{moment(data.created_at).format('LL')}</div>
+          <div className='d-flex align-items-center'>
+            <span className='mx-2'>{data.platform}</span>
+            <div>
+              <StarResolver rating={data.rating} />
+            </div>
           </div>
         </div>
       </div>
       <div className='review-card-body'>
-        <p>
-          {body}
-        </p>
+        <p>{data.content}</p>
       </div>
       <div className='review-card-footer'>
-        <span>{name}</span>
-        <span>(612) 258-2151</span>
+        <span>{data.name}</span>
+        <span> (612) 258-2151</span>
       </div>
     </div>
   );

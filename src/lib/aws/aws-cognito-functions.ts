@@ -23,9 +23,13 @@ export const logInUserCognitoFunction = async (
 };
 
 export const fetchIdTokenCognitoFunction = async (): Promise<
-  string | undefined
+  string | boolean | undefined
 > => {
-  return (await Auth.currentSession()).getIdToken().getJwtToken();
+  try {
+    return (await Auth.currentSession()).getIdToken().getJwtToken();
+  } catch (error) {
+    return false;
+  }
 };
 
 export const logInUserWithNewPasswordCognitoFunction = async (
@@ -55,7 +59,6 @@ export const logInUserWithNewPasswordCognitoFunction = async (
 export const logOutUserCognitoFunction = async (): Promise<boolean> => {
   try {
     await Auth.signOut({ global: true });
-    console.log('logout');
     return true;
   } catch (error) {
     console.log('error signing out: ', error);
@@ -95,6 +98,27 @@ export const forgotPasswordSubmitFunctionCognitoFunction = async (
     return true;
   } catch (error) {
     console.log('forgot password error: ', error);
+    errorHandler(error);
+    return false;
+  }
+};
+
+export const changePasswordFunctionCognitoFunction = async (
+  oldPassword: string,
+  newPassword: string,
+): Promise<boolean | void | string> => {
+  try {
+    const currentUser = await Auth.currentAuthenticatedUser();
+    if (currentUser) {
+      const changePasswordRes = await Auth.changePassword(
+        currentUser,
+        oldPassword,
+        newPassword,
+      );
+      return changePasswordRes;
+    }
+    return false;
+  } catch (error) {
     errorHandler(error);
     return false;
   }

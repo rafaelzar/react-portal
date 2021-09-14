@@ -12,6 +12,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: $body-color !important;
 }
 
 code {
@@ -37,7 +38,7 @@ input,
   font-size: 15px;
   padding: 8px 8px 8px 8px;
   border: 0.4px solid #e6e6f0;
-  margin: 10px;
+  // margin: 10px;
 }
 
 input {
@@ -86,4 +87,14 @@ input::placeholder {
   &:focus {
     box-shadow: 0 7px 14px rgba(50, 50, 93, 0.3), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
   }
+}
+
+.button-link {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.chart-wrapp {
+  max-width: 350px;
 }

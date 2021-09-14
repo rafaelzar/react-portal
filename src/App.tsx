@@ -5,20 +5,24 @@ import HomePage from './pages/home/HomePage';
 import PaymentPage from './pages/payment-pages/PaymentPage';
 import ReviewsPage from './pages/review-pages/ReviewsPage';
 import ForgotPasswordPage from './pages/auth-pages/ForgotPasswordPage';
-import './styles/globals.scss';
+import SettingsPage from './pages/settings-pages/SettingsPage';
 import Amplify from 'aws-amplify';
 import { awsconfig } from './lib/aws-exports';
 import axios from 'axios';
 import { fetchIdTokenCognitoFunction } from './lib/aws/aws-cognito-functions';
 
+import './styles/globals.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SettingsPage from './pages/settings-pages/SettingsPage';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 Amplify.configure(awsconfig);
 axios.interceptors.request.use(
   async (config) => {
     const idToken = await fetchIdTokenCognitoFunction();
-    if (idToken != null) {
+    if (idToken === false) {
+      window.location.href = '/login?authStatus=SessionExpired';
+    } else if (idToken !== null) {
       config.headers.Authorization = `Bearer ${idToken}`;
     }
     return config;

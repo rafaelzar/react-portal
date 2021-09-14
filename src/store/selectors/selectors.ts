@@ -1,12 +1,8 @@
-export const getUserSelector = (
-  state: any,
-): Record<string, unknown> | Record<string, never> => {
-  const { user = {} } = state;
-  return user || {};
-};
+import { IUserInformation } from '../../lib/interfaces';
 
-export const getUserJwtTokenSelector = (state: any): string => {
-  const { user: { auth: { signInUserSession = {} } = {} } = {} } = state;
-  const { idToken: { jwtToken = '' } = {} } = signInUserSession || {};
-  return jwtToken || '';
+export const getUserSelector = (state: any): IUserInformation => {
+  const {
+    user: { user = {} },
+  } = state;
+  return user || {};
 };

@@ -16,6 +16,13 @@ export const userReducer = (state = initState, action: Action): any => {
       ...state,
       auth: action.user,
     };
+
+  case 'UPDATE_USER':
+    return {
+      ...state,
+      user: action.user,
+    };
+
   case 'SET_USER':
     return {
       ...state,

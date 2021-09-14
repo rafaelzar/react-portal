@@ -1,3 +1,51 @@
+@media screen and (max-width: 600px) {
+  .filters-section {
+    flex-direction: column;
+    align-items: stretch !important;
+
+    .date-range-btn-wrapp {
+      margin: 10px 0;
+    }
+
+    .on-devider {
+      display: none;
+    }
+
+    .filters-site-wrapper {
+      margin: 0 0 10px 0;
+      display: block !important;
+    }
+
+    div {
+      button {
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .rdrDefinedRangesWrapper {
+    display: none;
+  }
+
+  .custom-dropdown {
+    justify-content: space-between;
+  }
+
+  .date-picker-wrapp {
+    margin-top: -130px !important;
+  }
+}
+
+.filters-section {
+  display: flex;
+  align-items: center;
+}
+
+.filters-site-wrapper {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
 .big-number {
   font-weight: bold;
   font-size: 3rem;
@@ -9,6 +57,20 @@
   margin: 10px;
 }
 
+@media screen and (max-width: 500px) {
+  .review-card {
+    margin: 10px 0;
+  }
+
+  .review-card-body {
+    flex-direction: column;
+
+    span {
+      margin-left: 0 !important;
+    }
+  }
+}
+
 .header-border {
   height: 5px;
   background-color: #66cdbb;
@@ -16,9 +78,124 @@
 
 .review-card-body,
 .review-card-footer {
-  padding: 1rem;
+  padding: 0.75rem 1rem;
 }
 
 .negative-review-color {
   background-color: #f57d6b;
+}
+
+.stars-bar-wrapp {
+  display: flex;
+  align-items: center;
+
+  .star-bar {
+    width: 67%;
+    height: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    .progress-bar {
+      background-color: #39bcb4;
+    }
+  }
+}
+
+.date-picker-wrapp {
+  margin-top: -40px;
+  display: none;
+  position: absolute;
+  left: 15px;
+  z-index: 999;
+  padding: 0 20px;
+  background: #fff;
+  -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.2);
+}
+
+@media screen and (max-width: 400px) {
+  .date-picker-wrapp {
+    left: 5px;
+  }
+
+  .rdrDateRangeWrapper {
+    width: 270px;
+    .rdrMonth {
+      width: 100%;
+    }
+  }
+}
+
+@media screen and (max-width: 300px) {
+  .rdrDateRangeWrapper {
+    width: 100%;
+  }
+}
+
+.date-range-btn-wrapp {
+  margin-left: 10px;
+  display: flex;
+  border: 1px solid #e5e8ed;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.date-range-btn {
+  padding: 5px 15px;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 10px;
+
+  &.custom-dropdown {
+    border: 1px solid #e5e8ed;
+    border-radius: 10px;
+    position: relative;
+  }
+
+  .custom-dropdown-menu {
+    display: none;
+    position: absolute;
+    z-index: 999;
+    top: 37px;
+    left: 0;
+    overflow: hidden;
+    background: #fff;
+    min-width: 150px;
+    border: 1px solid #e5e8ed;
+    border-radius: 10px;
+
+    &.home {
+      top: 45px;
+    }
+  }
+
+  .custom-dropdown-item {
+    padding: 10px;
+
+    &:hover {
+      background: $white;
+    }
+  }
+}
+
+.arrow-wrapp {
+  margin-top: -5px;
+  margin-left: 30px;
+}
+
+.arrow {
+  border: solid $blackHighlight;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+}
+
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+
+@media screen and (max-width: 992px) {
+  .arrow-wrapp {
+    margin-left: 10px;
+  }
 }

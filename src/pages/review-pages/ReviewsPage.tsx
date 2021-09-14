@@ -1,68 +1,430 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
+import { useAppDispatch } from '../../store/store';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
-  Container,
-  Dropdown,
-  DropdownButton,
-  Row,
-  Col,
-  Card,
+  Container, Row, Col, Card, Button, Spinner,
 } from 'react-bootstrap';
+import { DateRangePicker } from 'react-date-range';
+import { subDays } from 'date-fns';
+import moment from 'moment';
 import ReviewCard from '../../components/reviews-page/ReviewCard';
-import { mockupData } from '../../lib/utils/mockupData';
-import { IReviews } from '../../lib/interfaces';
+import {
+  IDatePicker,
+  IEmployeeReviews,
+  IReviewsResponse,
+  IReviewStats,
+} from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
+import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
+import StarResolver from '../../components/reviews-page/StarResolver';
+import PaginationComponent from '../../components/reviews-page/Pagination';
 
 const ReviewsPage: React.FC = () => {
-  const [reviews, setReviews] = React.useState<IReviews[]>([]);
+  const dispatch = useAppDispatch();
+  const [employeeReviews, setEmployeeReviews] = React.useState<
+    IEmployeeReviews[]
+  >([]);
+  const [reviewStats, setReviewStats] = React.useState<IReviewStats>(
+    {} as IReviewStats,
+  );
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
+  const [paginationCursor, setPaginationCursor] = React.useState('');
+  const [disableNextPagination, setDisableNextPagination] = React.useState(
+    false,
+  );
+  const [disablePrevPagination, setDisablePrevPagination] = React.useState(
+    false,
+  );
+  const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
+  const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
+  const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
+    false,
+  );
+  const [sitesDropdownValue, setSitesDropdownValue] = React.useState(
+    'All Sites',
+  );
+  const [starsDropdownValue, setStarsDropdownValue] = React.useState(0);
+  const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
+    'Newest',
+  );
+  const [dateRange, setDateRange] = React.useState({
+    start: `${moment(subDays(new Date(), 7)).format('MMM DD')}`,
+    end: `${moment(new Date()).format('MMM DD')}`,
+  });
+  const [dateRangeQuery, setDateRangeQuery] = React.useState({
+    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    end: `${moment(new Date()).format('YYYY-MM-DD')}`,
+  });
+  const [dateQueryForPaginaton, setDateQueryForPagination] = React.useState({
+    firstDate: '',
+    lastDate: '',
+  });
+  const [dateState, setDateState] = React.useState<IDatePicker[]>([
+    {
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
+      key: 'selection',
+    },
+  ]);
+
+  const sitesDropdownRef = React.useRef<HTMLDivElement>(null);
+  const starsDropdownRef = React.useRef<HTMLDivElement>(null);
+  const dateSortDropdownRef = React.useRef<HTMLDivElement>(null);
+  const datePickerDropdownRef = React.useRef<HTMLDivElement>(null);
+  const datePickerDropdownRefDateInput = React.useRef<HTMLDivElement>(null);
+
   React.useEffect(() => {
-    setReviews(mockupData);
-  }, []);
+    const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
+      const isClickedOutsideOfAnyDropdowns = (toggleSitesDropdown
+          && sitesDropdownRef.current
+          && !sitesDropdownRef.current.contains(e.target as Node))
+        || (toggleStarsDropdown
+          && starsDropdownRef.current
+          && !starsDropdownRef.current.contains(e.target as Node))
+        || (toggleDateSortDropdown
+          && dateSortDropdownRef.current
+          && !dateSortDropdownRef.current.contains(e.target as Node))
+        || (toggleDatePicker
+          && datePickerDropdownRef.current
+          && !datePickerDropdownRef.current.contains(e.target as Node)
+          && datePickerDropdownRefDateInput.current
+          && !datePickerDropdownRefDateInput.current.contains(e.target as Node));
+      if (isClickedOutsideOfAnyDropdowns) {
+        setToggleSitesDropdown(false);
+        setToggleStarsDropdown(false);
+        setToggleDateSortDropdown(false);
+        setToggleDatePicker(false);
+      }
+    };
+    document.addEventListener('mousedown', checkIfClickedOutside);
+    return () => {
+      document.removeEventListener('mousedown', checkIfClickedOutside);
+    };
+  }, [
+    toggleSitesDropdown,
+    toggleStarsDropdown,
+    toggleDateSortDropdown,
+    toggleDatePicker,
+  ]);
+
+  const userID = '607a1d65e4be5100126b827e';
+  // const userID = '610ad8f087eb7f7f432a9759';
+
+  React.useEffect(() => {
+    const buildQueryFromState = () => {
+      let query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
+        dateRangeQuery.end
+      }&sort=${dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'}`;
+      if (starsDropdownValue !== 0)
+        query = `${query}&rating=${starsDropdownValue}`;
+      if (sitesDropdownValue !== 'All Sites')
+        query = `${query}&platform=${sitesDropdownValue}`;
+      if (paginationCursor !== '')
+        query = `${query}&cursor=${paginationCursor}`;
+      if (dateQueryForPaginaton.lastDate !== '')
+        query = `${query}&lastDate=${dateQueryForPaginaton.lastDate}`;
+      if (dateQueryForPaginaton.firstDate !== '')
+        query = `${query}&firstDate=${dateQueryForPaginaton.firstDate}`;
+      return query;
+    };
+
+    const query = buildQueryFromState();
+    setIsLoading(true);
+    dispatch(getEmployeesReviewsReviewsAction(query)).then(
+      (res: IReviewsResponse | undefined) => {
+        if (res) {
+          const {
+            data: reviews = [],
+            stats,
+            isFirst = false,
+            isLast = false,
+          } = res;
+          setEmployeeReviews(reviews);
+          setReviewStats(stats);
+          setDisableNextPagination(isLast);
+          setDisablePrevPagination(isFirst);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
+      },
+    );
+  }, [
+    dateRangeQuery,
+    sitesDropdownValue,
+    starsDropdownValue,
+    dispatch,
+    dateSortDropdownValue,
+    paginationCursor,
+    dateQueryForPaginaton,
+  ]);
+
+  const setDateRangeFilter = () => {
+    setDateRange((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'MMM DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format('MMM DD'),
+    }));
+    setDateRangeQuery((prevState) => ({
+      ...prevState,
+      start: moment(dateState.map((d) => d.startDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
+      end: moment(dateState.map((d) => d.endDate).toString()).format(
+        'YYYY-MM-DD',
+      ),
+    }));
+    resetPagination();
+    setToggleDatePicker(!toggleDatePicker);
+  };
+
+  const resetPagination = () => {
+    setPaginationCursor('');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      lastDate: '',
+      firstDate: '',
+    }));
+  };
+
+  const handleDropdownChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLElement;
+    setSitesDropdownValue(target.innerText);
+    resetPagination();
+  };
+
+  const handlePaginationNext = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setPaginationCursor('right');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      lastDate: employeeReviews[employeeReviews.length - 1].created_at,
+    }));
+  };
+
+  const handlePaginationPrev = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setPaginationCursor('left');
+    setDateQueryForPagination((prevState) => ({
+      ...prevState,
+      firstDate: employeeReviews[0].created_at,
+    }));
+  };
+
+  const handleDateSortDropdownChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLElement;
+    setDateSortDropdownValue(target.innerText);
+    resetPagination();
+  };
+
   return (
     <DefaultLayout>
       <Container fluid>
         <h2>Reviews</h2>
-        <div className='filters-section d-flex align-items-center mt-3 mb-5'>
+        <div className='filters-section mt-3 mb-5'>
           <span>Show reviews from</span>
-          <div className='d-flex align-items-center ml-2'>
-            <DropdownButton id='dropdown-reviews-time' title='Last Week'>
-              <Dropdown.Item>Last Week</Dropdown.Item>
-              <Dropdown.Item>Last 4 weeks</Dropdown.Item>
-              <Dropdown.Item>Last 3 Months</Dropdown.Item>
-            </DropdownButton>
-            <input type='date' name='review-date' className='mx-2' />
-            <span className='mr-2'>on</span>
-            <DropdownButton id='dropdown-reviews-site' title='All sites'>
-              <Dropdown.Item>All sites</Dropdown.Item>
-              <Dropdown.Item>Eyerate</Dropdown.Item>
-            </DropdownButton>
+          <div
+            className='date-range-btn-wrapp'
+            onClick={() => setToggleDatePicker(!toggleDatePicker)}
+            ref={datePickerDropdownRefDateInput}
+          >
+            <div className='date-range-btn'>
+              <span>{dateRange.start}</span>
+              {' '}
+              -
+              {' '}
+              <span>{dateRange.end}</span>
+            </div>
+          </div>
+          <div className='filters-site-wrapper'>
+            <span className='mr-2 on-devider'>on</span>
+            <div
+              className='date-range-btn custom-dropdown d-flex align-items-center'
+              onClick={() => {
+                setToggleSitesDropdown(!toggleSitesDropdown);
+              }}
+              ref={sitesDropdownRef}
+            >
+              {sitesDropdownValue}
+              <div className='arrow-wrapp'>
+                <i className='arrow down' />
+              </div>
+              <div
+                className={`custom-dropdown-menu ${
+                  toggleSitesDropdown ? 'd-block' : ''
+                }`}
+              >
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  All Sites
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Weedmaps
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Google
+                </div>
+                <div
+                  className='custom-dropdown-item'
+                  onClick={(e) => handleDropdownChange(e)}
+                >
+                  Eyerate
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className='date-range-btn custom-dropdown d-flex align-items-center'
+            onClick={() => {
+              setToggleStarsDropdown(!toggleStarsDropdown);
+            }}
+            ref={starsDropdownRef}
+          >
+            {starsDropdownValue !== 0 ? (
+              <StarResolver rating={starsDropdownValue} />
+            ) : (
+              'All Ratings'
+            )}
+            <div className='arrow-wrapp'>
+              <i className='arrow down' />
+            </div>
+            <div
+              className={`custom-dropdown-menu ${
+                toggleStarsDropdown ? 'd-block' : ''
+              }`}
+            >
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(0)}
+              >
+                All Ratings
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(1)}
+              >
+                <StarResolver rating={1} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(2)}
+              >
+                <StarResolver rating={2} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(3)}
+              >
+                <StarResolver rating={3} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(4)}
+              >
+                <StarResolver rating={4} />
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => setStarsDropdownValue(5)}
+              >
+                <StarResolver rating={5} />
+              </div>
+            </div>
           </div>
         </div>
-        <Row>
-          <Col md={4}>
-            <ReviewStats />
+        <div
+          className={`date-picker-wrapp ${toggleDatePicker ? 'd-block' : ''}`}
+          ref={datePickerDropdownRef}
+        >
+          <DateRangePicker
+            onChange={(item) => setDateState([item.selection])}
+            inputRanges={[]}
+            // staticRanges={[]}
+            showDateDisplay={false}
+            showMonthAndYearPickers={false}
+            moveRangeOnFirstSelection={false}
+            maxDate={new Date()}
+            ranges={dateState}
+            direction='vertical'
+          />
+          <Col md={12} className='mb-4'>
+            <Button className='w-100' onClick={setDateRangeFilter}>
+              Filter
+            </Button>
           </Col>
-          <Col md={8}>
-            <Card className='p-3'>
-              <Card.Title className='d-flex justify-content-between px-2'>
-                <h3>Review List</h3>
-                <DropdownButton id='dropdown-reviews-sort' title='Most Recent'>
-                  <Dropdown.Item>Newset</Dropdown.Item>
-                  <Dropdown.Item>Oldest</Dropdown.Item>
-                </DropdownButton>
-              </Card.Title>
-              {reviews.map((r) => (
-                <ReviewCard
-                  name={r.name}
-                  body={r.textReceived}
-                  date={r.date}
-                  rating={r.rating}
-                  type={r.type}
-                />
-              ))}
-            </Card>
-          </Col>
-        </Row>
+        </div>
+        {!isLoading ? (
+          <Row>
+            <Col xl={4} lg={5} md={12}>
+              <ReviewStats stats={reviewStats} />
+            </Col>
+            <Col xl={8} lg={7} md={12}>
+              <Card className='p-3 mb-3'>
+                <Card.Title className='d-flex justify-content-between px-2'>
+                  <h3>Review List</h3>
+                  <div
+                    className='date-range-btn custom-dropdown d-flex align-items-center'
+                    onClick={() => {
+                      setToggleDateSortDropdown(!toggleDateSortDropdown);
+                    }}
+                    ref={dateSortDropdownRef}
+                  >
+                    {dateSortDropdownValue}
+                    <div className='arrow-wrapp'>
+                      <i className='arrow down' />
+                    </div>
+                    <div
+                      className={`custom-dropdown-menu ${
+                        toggleDateSortDropdown ? 'd-block' : ''
+                      }`}
+                    >
+                      <div
+                        className='custom-dropdown-item'
+                        onClick={(e) => handleDateSortDropdownChange(e)}
+                      >
+                        Newest
+                      </div>
+                      <div
+                        className='custom-dropdown-item'
+                        onClick={(e) => handleDateSortDropdownChange(e)}
+                      >
+                        Oldest
+                      </div>
+                    </div>
+                  </div>
+                </Card.Title>
+                {employeeReviews.length > 0 ? (
+                  employeeReviews.map((r) => (
+                    <ReviewCard key={r._id} data={r} />
+                  ))
+                ) : (
+                  <div className='m-auto'>No reviews with this criteria</div>
+                )}
+                {employeeReviews.length > 0 && (
+                  <PaginationComponent
+                    disableNextPagination={disableNextPagination}
+                    disablePrevPagination={disablePrevPagination}
+                    handlePaginationNext={handlePaginationNext}
+                    handlePaginationPrev={handlePaginationPrev}
+                  />
+                )}
+              </Card>
+            </Col>
+          </Row>
+        ) : (
+          <Spinner className='d-block m-auto' animation='border' />
+        )}
       </Container>
     </DefaultLayout>
   );

@@ -1,23 +1,48 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { Row, Col, Container } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
+import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
+import MentionsChartCard from '../../components/home-page/MentionsChartCard';
+import ReviewMentionsCard from '../../components/home-page/ReviewMentionsCard';
+import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
+import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
-import { getUserJwtTokenSelector } from '../../store/selectors/selectors';
+import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 
 const HomePage: React.FC = () => {
-  const userInfo = useSelector((state) => getUserJwtTokenSelector(state));
   const history = useHistory();
 
   React.useEffect(() => {
-    if (userInfo === '') {
-      history.push('/login');
+    async function fetchIdToken() {
+      const idToken = await fetchIdTokenCognitoFunction();
+      if (idToken === false) {
+        history.push('/login');
+      }
     }
-  }, [history, userInfo]);
+    fetchIdToken();
+  }, [history]);
 
   return (
     <DefaultLayout>
-      <div className='text-center'>
-        <h1>Home Page</h1>
+      <div>
+        <Container fluid>
+          <Row>
+            <Col lg={12} className='mb-3'>
+              <h1>Home Page</h1>
+            </Col>
+            <Col lg={4} className='mb-3'>
+              <UserInfoCard withButton />
+            </Col>
+            <Col lg={8}>
+              <EarningsAvailableCard />
+              <EarningsStatsCard />
+              <ReviewStatsCard />
+              <MentionsChartCard />
+              <ReviewMentionsCard />
+            </Col>
+          </Row>
+        </Container>
       </div>
     </DefaultLayout>
   );

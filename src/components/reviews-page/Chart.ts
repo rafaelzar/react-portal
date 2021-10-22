@@ -1,4 +1,4 @@
-export const Chart = (data: Array<number>, sites?: Array<string>): Record<string, unknown> => {
+export const Chart = (data: Array<number>, sites?: Array<string>) => {
   const chartData = {
     labels: sites || ['Weedmaps', 'Google', 'Eyerate'],
     datasets: [

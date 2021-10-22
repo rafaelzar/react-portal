@@ -35,7 +35,7 @@
     "arrow-spacing": "warn",
     "strict": "off",
     "curly": "off",
-    // "comma-dangle": ["off", "only-multiline"],
+    "comma-dangle": ["off", "only-multiline"],
     "jsdoc/check-indentation": "warn",
     "jsdoc/check-syntax": "warn",
     "jsdoc/check-types": "off",

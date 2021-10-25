@@ -18,7 +18,8 @@ import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 import StarResolver from '../../components/reviews-page/StarResolver';
 import PaginationComponent from '../../components/reviews-page/Pagination';
-// import { getUserIDSelector } from '../../store/selectors/selectors';
+import { getUserIDSelector } from '../../store/selectors/selectors';
+import { useSelector } from 'react-redux';
 
 const ReviewsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -106,13 +107,13 @@ const ReviewsPage: React.FC = () => {
   ]);
 
   // ! Uncomment this line and import line in order to see real data for the current employee
-  // const userId = useSelector((state) => getUserIDSelector(state));
-  const userID = '607a1d65e4be5100126b827e';
+  const userId = useSelector((state) => getUserIDSelector(state));
+  // const userID = '607a1d65e4be5100126b827e';
   // const userID = '610ad8f087eb7f7f432a9759';
 
   React.useEffect(() => {
     const buildQueryFromState = () => {
-      let query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${
+      let query = `${userId}?startDate=${dateRangeQuery.start}&endDate=${
         dateRangeQuery.end
       }&sort=${dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'}`;
       if (starsDropdownValue !== 0)

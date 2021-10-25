@@ -19,7 +19,8 @@ import {
 import { getEmployeesRevenueHistoryPaymentAction } from '../../store/actions/paymentActions';
 import RevenueInfoModal from '../../components/payment-page/RevenueInfoModal';
 import reviewIcon from '../../lib/assets/img/review.png';
-// import { getUserIDSelector } from '../../store/selectors/selectors';
+import { getUserIDSelector } from '../../store/selectors/selectors';
+import { useSelector } from 'react-redux';
 
 const PaymentPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -47,9 +48,9 @@ const PaymentPage: React.FC = () => {
   const datePickerDropdownRef = React.useRef<HTMLDivElement>(null);
 
   // ! Uncomment this line and import line in order to see real data for the current employee
-  // const userId = useSelector((state) => getUserIDSelector(state));
+  const userId = useSelector((state) => getUserIDSelector(state));
   // const userID = '607a1d65e4be5100126b827e';
-  const userID = '5f876451946f720b216ca65b';
+  // const userID = '5f876451946f720b216ca65b';
 
   React.useEffect(() => {
     const checkIfClickedOutside = (e: MouseEvent | TouchEvent) => {
@@ -77,7 +78,7 @@ const PaymentPage: React.FC = () => {
     }
     fetchIdToken();
 
-    const query = `${userID}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+    const query = `${userId}?startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
     dispatch(getEmployeesRevenueHistoryPaymentAction(query)).then(
       (res: Array<IRevenueHistory>) => {
         if (res) {

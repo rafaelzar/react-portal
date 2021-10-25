@@ -16,7 +16,8 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import { IHomePageData } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
-// import { getUserIDSelector } from '../../store/selectors/selectors';
+import { getUserIDSelector } from '../../store/selectors/selectors';
+import { useSelector } from 'react-redux';
 
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -31,9 +32,9 @@ const HomePage: React.FC = () => {
   const [dateRangeLabel, setDateRangeLabel] = React.useState('Last 7 Days');
 
   // ! Uncomment this line and import line in order to see real data for the current employee
-  // const userId = useSelector((state) => getUserIDSelector(state));
+  const userId = useSelector((state) => getUserIDSelector(state));
 
-  const userID = '607a1d65e4be5100126b827e';
+  // const userID = '607a1d65e4be5100126b827e';
   // const userID = '60ad43e35e08070013432c0b';
 
   React.useEffect(() => {
@@ -45,7 +46,7 @@ const HomePage: React.FC = () => {
     }
     fetchIdToken();
     const buildQueryFromState = () => {
-      const queryData = `${userID}?sort=desc&startDate=${moment(
+      const queryData = `${userId}?sort=desc&startDate=${moment(
         subDays(new Date(), 7),
       ).format('YYYY-MM-DD')}&endDate=${moment(new Date()).format(
         'YYYY-MM-DD',
@@ -76,7 +77,7 @@ const HomePage: React.FC = () => {
     } else {
       setDateRangeLabel('Last 7 Days');
     }
-    const query = `${userID}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
+    const query = `${userId}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
     setLoadReviews(true);
     dispatch(getEmployeeStatsStatsAction(query)).then(
       (res: IHomePageData | undefined) => {

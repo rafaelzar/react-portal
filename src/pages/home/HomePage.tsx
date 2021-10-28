@@ -16,7 +16,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import { IHomePageData } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
-import { getUserIDSelector } from '../../store/selectors/selectors';
+import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
 
 const HomePage: React.FC = () => {
@@ -32,6 +32,7 @@ const HomePage: React.FC = () => {
   const [dateRangeLabel, setDateRangeLabel] = React.useState('Last 7 Days');
 
   // ! Uncomment this line and import line in order to see real data for the current employee
+  const user = useSelector((state) => getUserSelector(state));
   const userId = useSelector((state) => getUserIDSelector(state));
 
   // const userID = '607a1d65e4be5100126b827e';
@@ -97,7 +98,10 @@ const HomePage: React.FC = () => {
         <Container fluid>
           <Row>
             <Col lg={12} className='mb-3'>
-              <h1>Home Page</h1>
+              <h1>
+                Welcome,&nbsp;
+                {user.first_name}
+              </h1>
             </Col>
             <Col lg={4} className='mb-3'>
               <UserInfoCard withButton />

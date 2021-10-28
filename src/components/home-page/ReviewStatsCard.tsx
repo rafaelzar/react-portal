@@ -24,7 +24,7 @@ const ReviewStatsCard: React.FC<IProps> = ({ stats = {} }) => {
             <span>All Time Mentions</span>
           </Col>
           <Col md='4' sm='4' className='text-center mb-2'>
-            <h3 className='big-number'>{averageRatingAllTime.toFixed(2)}</h3>
+            <h3 className='big-number'>{averageRatingAllTime?.toFixed(2)}</h3>
             <span>Average Review Rating</span>
           </Col>
         </Row>

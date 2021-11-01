@@ -101,6 +101,7 @@ const HomePage: React.FC = () => {
               <h1>
                 Welcome,&nbsp;
                 {user.first_name}
+                !
               </h1>
             </Col>
             <Col lg={4} className='mb-3'>

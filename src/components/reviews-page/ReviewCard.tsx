@@ -31,7 +31,6 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
       </div>
       <div className='review-card-footer'>
         <span>{data.name}</span>
-        <span> (612) 258-2151</span>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { resourceUsage } from 'process';
 import { IUserInformation } from '../lib/interfaces';
 
 const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;
@@ -70,5 +71,28 @@ export const getEmployeeBankDetails = async (
   id: string,
 ): Promise<AxiosResponse | undefined> => {
   const res = await axios.get(`${baseUrl}/employees/bank-accounts/${id}`);
+  return res;
+};
+
+export const uploadEmployeePhoto = async (
+  id: string,
+  photo: Blob,
+): Promise<AxiosResponse | undefined> => {
+  const formData = new FormData();
+
+  formData.append('photo', photo);
+
+  const res = await axios.post(`${baseUrl}/employees/upload-photo/${id}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    }
+  });
+  return res;
+};
+
+export const deleteEmployeePhoto = async (
+  id: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.post(`${baseUrl}/employees/delete-photo/${id}`);
   return res;
 };

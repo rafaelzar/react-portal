@@ -37,6 +37,7 @@ import {
   IUserInformation,
 } from '../../lib/interfaces';
 import EarningDetails from '../../components/settings-page/EarningDetails';
+import PhotoSettings from '../../components/settings-page/PhotoSettings';
 import { deletePlaidAccountPlaidAction } from '../../store/actions/plaidActions';
 
 const SettingsPage: React.FC = () => {
@@ -257,6 +258,7 @@ const SettingsPage: React.FC = () => {
                 <Card>
                   <Container className='my-3'>
                     <h2 className='big-h2'>General Settings</h2>
+                    <PhotoSettings />
                     <div className='horizontal-line my-3' />
                     <h3>Contact Information</h3>
                     <Form>

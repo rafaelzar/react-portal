@@ -11,10 +11,10 @@ import { awsconfig } from './lib/aws-exports';
 import axios from 'axios';
 import { fetchIdTokenCognitoFunction } from './lib/aws/aws-cognito-functions';
 
-import './styles/globals.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import './styles/globals.scss';
 
 Amplify.configure(awsconfig);
 axios.interceptors.request.use(

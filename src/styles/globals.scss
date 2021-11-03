@@ -67,26 +67,38 @@ input::placeholder {
 }
 
 .btn {
-  color: #fff !important;
-  background-color: #39bcb4 !important;
-  border: 1px solid transparent !important;
   position: relative;
   transition: all 0.15s ease;
   letter-spacing: 0.025em;
   font-size: 0.875rem;
   will-change: transform;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #39bcb4;
+  border: 1px solid transparent;
   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  &.disabled,
+  &:disabled {
+    color: #fff;
+    background-color: #39bcb4;
+    border: 1px solid transparent;
+  }
+
   &:hover,
   &:focus-visible {
-    background-color: #fff !important;
-    border: 1px solid #39bcb4 !important;
-    color: #39bcb4 !important;
+    background-color: #fff;
+    border: 1px solid #39bcb4;
+    color: #39bcb4;
   }
+  
   &:hover {
-    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
   }
   &:focus {
-    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.3), 0 3px 6px rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.3), 0 3px 6px rgba(0, 0, 0, 0.08);
   }
 }
 

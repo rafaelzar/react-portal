@@ -55,6 +55,7 @@ export interface IUserInformation {
   nick_names?: Array<string>;
   email?: string;
   phone?: string;
+  photo_url?: string;
   _id?: string;
   cognito_id?: string;
   plaid_account?: string;

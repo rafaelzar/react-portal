@@ -38,7 +38,7 @@ import {
 } from '../../lib/interfaces';
 import EarningDetails from '../../components/settings-page/EarningDetails';
 import PhotoSettings from '../../components/settings-page/PhotoSettings';
-import EmployeePhoto from '../../components/settings-page/EmployeePhoto';
+import EmployeePhoto from '../../components/EmployeePhoto';
 import { deletePlaidAccountPlaidAction } from '../../store/actions/plaidActions';
 
 const SettingsPage: React.FC = () => {
@@ -255,11 +255,6 @@ const SettingsPage: React.FC = () => {
               <Card>
                 <Container className='my-3 d-flex flex-column align-items-center'>
                   <EmployeePhoto userInfo={userInfo} big />
-                  <h3 className='mt-3'>
-                    {userInfo.first_name}
-                    &nbsp;
-                    {userInfo.last_name}
-                  </h3>
                 </Container>
               </Card>
               <UserInfoCard />

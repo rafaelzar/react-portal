@@ -5,7 +5,7 @@ import {
   Button,
   Spinner,
 } from 'react-bootstrap';
-import EmployeePhoto from './EmployeePhoto';
+import EmployeePhoto from '../EmployeePhoto';
 import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
 import { uploadEmployeePhotoAction, deleteEmployeePhotoAction } from '../../store/actions/settingsActions';
 import { useAppDispatch } from '../../store/store';

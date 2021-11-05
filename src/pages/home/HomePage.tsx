@@ -1,11 +1,12 @@
 import React from 'react';
 import {
-  Row, Col, Container, Spinner,
+  Row, Col, Container, Spinner, Card,
 } from 'react-bootstrap';
 import moment from 'moment';
 import { subDays } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
+import EmployeePhoto from '../../components/EmployeePhoto';
 import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
 import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import MentionsChartCard from '../../components/home-page/MentionsChartCard';
@@ -105,6 +106,11 @@ const HomePage: React.FC = () => {
               </h1>
             </Col>
             <Col lg={4} className='mb-3'>
+              <Card>
+                <Container className='my-3 d-flex flex-column align-items-center'>
+                  <EmployeePhoto userInfo={user} big />
+                </Container>
+              </Card>
               <UserInfoCard withButton />
             </Col>
             {!isLoading ? (

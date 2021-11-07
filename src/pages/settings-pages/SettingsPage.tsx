@@ -24,6 +24,7 @@ import {
 } from '../../store/actions/authActions';
 import { validateChangePasswordSubmit } from '../../lib/utils/validator';
 import UserInfoCard from '../../components/UserInfoCard';
+import PasswordInput from '../../components/PasswordInput';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
 import PaymentSettings from '../../components/settings-page/PaymentSettings';
 import {
@@ -373,8 +374,8 @@ const SettingsPage: React.FC = () => {
                         <Col lg='6'>
                           <Form.Group className='mb-3'>
                             <Form.Label>New Password</Form.Label>
-                            <Form.Control
-                              type='password'
+                            <PasswordInput
+                              label='New Password'
                               placeholder='**********'
                               onChange={(e) => setNewPassword(e.target.value)}
                             />
@@ -384,9 +385,11 @@ const SettingsPage: React.FC = () => {
                         <Col lg='6'>
                           <Form.Group className='mb-3'>
                             <Form.Label>Confirm Password</Form.Label>
-                            <Form.Control
-                              type='password'
+                            <PasswordInput
+                              label='Confirm Password'
                               placeholder='**********'
+                              matchTo={newPassword}
+                              matchToLabel='new password'
                               onChange={(e) => setConfirmNewPassword(e.target.value)}
                             />
                           </Form.Group>

@@ -8,7 +8,6 @@ type Props = {
     userInfo: IUserInformation;
     className?: string;
     big?: boolean;
-    showName?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const EmployeePhoto: React.FC<Props> = ({
@@ -19,9 +18,9 @@ const EmployeePhoto: React.FC<Props> = ({
       <div className={cn(styles.wrapper, { [styles.big]: big, [styles.pointer]: !!onClick }, className)} onClick={onClick}>
         {userInfo.photo_url ? <img src={userInfo.photo_url} alt={`${userInfo.first_name} ${userInfo.last_name}`} /> : (
           <div className={styles.initials}>
-            {userInfo.first_name[0]}
-          &nbsp;
-            {userInfo.last_name[0]}
+            {userInfo.first_name?.[0]}
+            &nbsp;
+            {userInfo.last_name?.[0]}
           </div>
         )}
         {children && <div className={styles.overlay}>{children}</div>}
@@ -30,7 +29,7 @@ const EmployeePhoto: React.FC<Props> = ({
       {big && (
         <h3 className='mt-3'>
           {userInfo.first_name}
-                    &nbsp;
+          &nbsp;
           {userInfo.last_name}
         </h3>
       )}

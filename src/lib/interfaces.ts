@@ -84,6 +84,8 @@ export interface IHomeEarningStats {
   lastPayment: number;
   allTimeEarnings: number;
   thisMonthEarnings: number;
+  thisMonthEarningsUnpaid: number;
+  prevMonthEarningsUnpaid: number;
   leaderboardRank: number;
 }
 

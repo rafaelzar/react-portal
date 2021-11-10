@@ -1,14 +1,16 @@
 import React from 'react';
+import cn from 'classnames';
 import { Container, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getUserSelector } from '../store/selectors/selectors';
 
 interface IProps {
+  className?: string;
   withButton?: boolean;
 }
 
-const UserInfoCard: React.FC<IProps> = (props) => {
+const UserInfoCard: React.FC<IProps> = ({ className, withButton }) => {
   const userInfo = useSelector((state) => getUserSelector(state));
   const {
     first_name: userFirstName = '',
@@ -17,9 +19,8 @@ const UserInfoCard: React.FC<IProps> = (props) => {
     email: userEmail = '',
     phone: userPhone = '',
   } = userInfo;
-  const { withButton } = props;
   return (
-    <Card className='user-information-card'>
+    <Card className={cn('user-information-card', className)}>
       <Container className='my-3'>
         <h2>Full Name</h2>
         <p>

@@ -51,6 +51,12 @@
   font-size: 3rem;
 }
 
+@media screen and (max-width: 500px) {
+  .big-number.xs-normal {
+    font-size: 1.75rem;
+  }
+}
+
 .review-card {
   border: 1px solid #e5e8ed;
   border-radius: 5px;

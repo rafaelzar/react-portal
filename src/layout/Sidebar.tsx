@@ -39,7 +39,7 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
             <NavbarBrand>
               <img
                 alt={logo.imgAlt}
-                className='navbar-brand-img'
+                className='navbar-brand-img w-75 mx-4'
                 src={logo.imgSrc}
               />
             </NavbarBrand>

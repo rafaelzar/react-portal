@@ -20,6 +20,8 @@ import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
 import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
 
+import styles from './styles.module.scss';
+
 const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -74,11 +76,7 @@ const HomePage: React.FC = () => {
       ...prevState,
       start: `${moment(subDays(new Date(), day)).format('YYYY-MM-DD')}`,
     }));
-    if (day === 30) {
-      setDateRangeLabel('Last 30 Days');
-    } else {
-      setDateRangeLabel('Last 7 Days');
-    }
+    setDateRangeLabel(`Last ${day} Days`);
     const query = `${userId}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
     setLoadReviews(true);
     dispatch(getEmployeeStatsStatsAction(query)).then(
@@ -91,6 +89,10 @@ const HomePage: React.FC = () => {
         }
       },
     );
+  };
+
+  const goToSettings = () => {
+    history.push('/settings');
   };
 
   return (
@@ -108,23 +110,23 @@ const HomePage: React.FC = () => {
             <Col lg={4} className='mb-3'>
               <Card>
                 <Container className='my-3 d-flex flex-column align-items-center'>
-                  <EmployeePhoto userInfo={user} big />
+                  <EmployeePhoto userInfo={user} big onClick={goToSettings} />
                 </Container>
               </Card>
-              <UserInfoCard withButton />
+              <UserInfoCard className={styles.userInfo} />
             </Col>
             {!isLoading ? (
               <Col lg={8}>
                 <EarningsAvailableCard earningsStats={data.earningsStats} />
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
-                <MentionsChartCard sitesData={data.reviewSiteMentions} />
                 <ReviewMentionsCard
                   reviewsData={data.reviewMentions}
                   setDateRangeForReviews={setDateRangeForReviews}
                   dateRangeLabel={dateRangeLabel}
                   loadRevews={loadRevews}
                 />
+                <MentionsChartCard sitesData={data.reviewSiteMentions} />
               </Col>
             ) : (
               <Spinner className='d-block m-auto' animation='border' />

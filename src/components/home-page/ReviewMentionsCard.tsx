@@ -76,20 +76,40 @@ const ReviewMentionsCard: React.FC<IProps> = ({
               >
                 Last 30 Days
               </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => handleDateSortDropdownChange(90)}
+              >
+                Last 90 Days
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => handleDateSortDropdownChange(180)}
+              >
+                Last 180 Days
+              </div>
+              <div
+                className='custom-dropdown-item'
+                onClick={() => handleDateSortDropdownChange(365)}
+              >
+                Last 365 Days
+              </div>
             </div>
           </div>
         </div>
-        {!loadRevews ? (
-          <div className='mt-3'>
-            {reviews && reviews.length > 0 ? (
-              reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
-            ) : (
-              <div className='m-auto text-center'>No reviews on this dates</div>
-            )}
-          </div>
-        ) : (
-          <Spinner className='d-block m-auto' animation='border' />
-        )}
+        <div className='mt-3'>
+          {!loadRevews ? (
+            <>
+              {reviews && reviews.length > 0 ? (
+                reviews?.map((r) => <ReviewCard key={r._id} data={r} />)
+              ) : (
+                <div className='m-auto text-center'>No reviews on this dates</div>
+              )}
+            </>
+          ) : (
+            <Spinner className='d-block m-auto' animation='border' />
+          )}
+        </div>
       </Container>
     </Card>
   );

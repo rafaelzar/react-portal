@@ -1,5 +1,4 @@
 import axios, { AxiosResponse } from 'axios';
-import { resourceUsage } from 'process';
 import { IUserInformation } from '../lib/interfaces';
 
 const baseUrl = process.env.REACT_APP_BACKEND_BASE_URL;

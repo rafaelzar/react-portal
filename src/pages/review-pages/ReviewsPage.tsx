@@ -17,9 +17,9 @@ import {
 import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
 import StarResolver from '../../components/reviews-page/StarResolver';
-import PaginationComponent from '../../components/reviews-page/Pagination';
 import { getUserIDSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const ReviewsPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -30,14 +30,8 @@ const ReviewsPage: React.FC = () => {
     {} as IReviewStats,
   );
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isLastPage, setIsLastPage] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
-  const [paginationCursor, setPaginationCursor] = React.useState('');
-  const [disableNextPagination, setDisableNextPagination] = React.useState(
-    false,
-  );
-  const [disablePrevPagination, setDisablePrevPagination] = React.useState(
-    false,
-  );
   const [toggleSitesDropdown, setToggleSitesDropdown] = React.useState(false);
   const [toggleStarsDropdown, setToggleStarsDropdown] = React.useState(false);
   const [toggleDateSortDropdown, setToggleDateSortDropdown] = React.useState(
@@ -50,8 +44,9 @@ const ReviewsPage: React.FC = () => {
   const [dateSortDropdownValue, setDateSortDropdownValue] = React.useState(
     'Newest',
   );
+  const defaultStartDate = '1970-01-01';
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
-    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    start: defaultStartDate,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
   });
   const [dateQueryForPaginaton, setDateQueryForPagination] = React.useState({
@@ -112,16 +107,19 @@ const ReviewsPage: React.FC = () => {
   // const userID = '610ad8f087eb7f7f432a9759';
 
   React.useEffect(() => {
+    setEmployeeReviews([]);
+    setIsLoading(true);
+  }, [dateRangeQuery, dateSortDropdownValue, starsDropdownValue, sitesDropdownValue]);
+
+  React.useEffect(() => {
     const buildQueryFromState = () => {
       let query = `${userId}?startDate=${dateRangeQuery.start}&endDate=${
         dateRangeQuery.end
-      }&sort=${dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'}`;
+      }&sort=${dateSortDropdownValue === 'Newest' ? 'desc' : 'asc'}&cursor=right`;
       if (starsDropdownValue !== 0)
         query = `${query}&rating=${starsDropdownValue}`;
       if (sitesDropdownValue !== 'All Sites')
         query = `${query}&platform=${sitesDropdownValue}`;
-      if (paginationCursor !== '')
-        query = `${query}&cursor=${paginationCursor}`;
       if (dateQueryForPaginaton.lastDate !== '')
         query = `${query}&lastDate=${dateQueryForPaginaton.lastDate}`;
       if (dateQueryForPaginaton.firstDate !== '')
@@ -130,33 +128,30 @@ const ReviewsPage: React.FC = () => {
     };
 
     const query = buildQueryFromState();
-    setIsLoading(true);
+
     dispatch(getEmployeesReviewsReviewsAction(query)).then(
       (res: IReviewsResponse | undefined) => {
         if (res) {
           const {
             data: reviews = [],
             stats,
-            isFirst = false,
             isLast = false,
           } = res;
-          setEmployeeReviews(reviews);
+          setEmployeeReviews(prevReviews => [...prevReviews, ...reviews]);
           setReviewStats(stats);
-          setDisableNextPagination(isLast);
-          setDisablePrevPagination(isFirst);
-          setIsLoading(false);
-        } else {
-          setIsLoading(false);
+          setIsLastPage(isLast);
         }
+
+        setIsLoading(false);
       },
     );
   }, [
+    userId,
     dateRangeQuery,
     sitesDropdownValue,
     starsDropdownValue,
     dispatch,
     dateSortDropdownValue,
-    paginationCursor,
     dateQueryForPaginaton,
   ]);
 
@@ -175,7 +170,6 @@ const ReviewsPage: React.FC = () => {
   };
 
   const resetPagination = () => {
-    setPaginationCursor('');
     setDateQueryForPagination((prevState) => ({
       ...prevState,
       lastDate: '',
@@ -189,21 +183,10 @@ const ReviewsPage: React.FC = () => {
     resetPagination();
   };
 
-  const handlePaginationNext = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setPaginationCursor('right');
+  const fetchMore = () => {
     setDateQueryForPagination((prevState) => ({
       ...prevState,
       lastDate: employeeReviews[employeeReviews.length - 1].created_at,
-    }));
-  };
-
-  const handlePaginationPrev = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    setPaginationCursor('left');
-    setDateQueryForPagination((prevState) => ({
-      ...prevState,
-      firstDate: employeeReviews[0].created_at,
     }));
   };
 
@@ -230,13 +213,15 @@ const ReviewsPage: React.FC = () => {
             ref={datePickerDropdownRefDateInput}
           >
             <div className='date-range-btn'>
-              <span>
-                {moment(dateRangeQuery.start).format('MMM DD')}
-                {' '}
-                -
-                {' '}
-                {moment(dateRangeQuery.end).format('MMM DD')}
-              </span>
+              {dateRangeQuery.start === defaultStartDate ? <span>All time</span> : (
+                <span>
+                  {moment(dateRangeQuery.start).format('MMM DD')}
+                  {' '}
+                  -
+                  {' '}
+                  {moment(dateRangeQuery.end).format('MMM DD')}
+                </span>
+              )}
             </div>
           </div>
           <div className='filters-site-wrapper'>
@@ -405,19 +390,13 @@ const ReviewsPage: React.FC = () => {
                   </div>
                 </Card.Title>
                 {employeeReviews.length > 0 ? (
-                  employeeReviews.map((r) => (
-                    <ReviewCard key={r._id} data={r} />
-                  ))
+                  <InfiniteScroll dataLength={employeeReviews.length} next={fetchMore} hasMore={!isLastPage} loader={<Spinner className='d-block mx-auto my-4' animation='border' />}>
+                    {employeeReviews.map((r) => (
+                      <ReviewCard key={r._id} data={r} />
+                    ))}
+                  </InfiniteScroll>
                 ) : (
                   <div className='m-auto'>No reviews with this criteria</div>
-                )}
-                {employeeReviews.length > 0 && (
-                  <PaginationComponent
-                    disableNextPagination={disableNextPagination}
-                    disablePrevPagination={disablePrevPagination}
-                    handlePaginationNext={handlePaginationNext}
-                    handlePaginationPrev={handlePaginationPrev}
-                  />
                 )}
               </Card>
             </Col>

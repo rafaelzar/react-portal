@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
         }
       },
     );
-  }, [dispatch, history]);
+  }, [dispatch, history, userId]);
 
   const setDateRangeForReviews = (day: number) => {
     setDateRangeQuery((prevState) => ({

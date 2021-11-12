@@ -109,7 +109,7 @@ const PaymentPage: React.FC = () => {
         }
       },
     );
-  }, [dispatch, history, dateRangeQuery]);
+  }, [dispatch, history, dateRangeQuery, userId]);
 
   const setDateRangeFilter = () => {
     setDateRangeQuery((prevState) => ({

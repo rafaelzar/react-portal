@@ -19,9 +19,9 @@ const MentionsChartCard: React.FC<IProps> = ({ sitesData }) => {
 
   return (
     <Card className='mb-3'>
-      <Container className='py-3'>
-        <h2>Review Site Mentions</h2>
-        <div className='mt-3 d-flex justify-content-center'>
+      <Container className='py-2'>
+        <h2 className='mb-0'>Review Site Mentions</h2>
+        <div className='d-flex justify-content-center'>
           <div className='chart-wrapp'>
             <Doughnut
               data={Chart(chartDataNumbers, chartDataSites)}

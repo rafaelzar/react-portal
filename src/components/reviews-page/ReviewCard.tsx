@@ -22,7 +22,7 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
           <div>{moment(data.created_at).format('LL')}</div>
           <div className='d-flex align-items-center'>
             {data.platform && PAID_PLATFORMS.includes(data.platform.toLocaleLowerCase()) && (
-              <span>$</span>
+              <span>💵</span>
             )}
             <span className='mx-2'>{data.platform}</span>
             <div>

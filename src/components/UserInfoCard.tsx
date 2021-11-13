@@ -21,7 +21,7 @@ const UserInfoCard: React.FC<IProps> = ({ className, withButton }) => {
   } = userInfo;
   return (
     <Card className={cn('user-information-card', className)}>
-      <Container className='my-3'>
+      <Container className='mt-4'>
         <h2>Full Name</h2>
         <p>
           {userFirstName}

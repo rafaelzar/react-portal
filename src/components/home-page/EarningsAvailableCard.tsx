@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-  Container, Card, Button, Row, Col
+  Container, Card, Row, Col
 } from 'react-bootstrap';
 import { IHomeEarningStats } from '../../lib/interfaces';
-import { Link } from 'react-router-dom';
 
 interface IProps {
   earningsStats: IHomeEarningStats;
@@ -11,24 +10,23 @@ interface IProps {
 
 const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
   const {
-    earningsAvailable = 0, lastPayment = 0, prevMonthEarningsUnpaid = 0, thisMonthEarningsUnpaid = 0
+    lastPayment = 0, prevMonthEarningsUnpaid = 0, thisMonthEarningsUnpaid = 0
   } = earningsStats;
   return (
     <Card className='mb-3'>
-      <Container className='py-3'>
-        <h2>Earnings Available</h2>
+      <Container className='py-2'>
+        <h2 className='mb-0'>Earnings Summary 💰</h2>
         <Row>
-          <Col md='4' sm='4' xs='4' className='text-center mb-2'>
+          <Col md='4' sm='4' xs='4' className='text-center'>
             <h3 className='big-number xs-normal'>
               $
-              {earningsAvailable.toFixed(2)}
+              {lastPayment.toFixed(2)}
             </h3>
             <p>
-              Last Payment: $
-              {lastPayment.toFixed(2)}
+              Last Payment
             </p>
           </Col>
-          <Col md='4' sm='4' xs='4' className='text-center mb-2'>
+          <Col md='4' sm='4' xs='4' className='text-center'>
             <h3 className='big-number xs-normal'>
               $
               {prevMonthEarningsUnpaid.toFixed(2)}
@@ -37,7 +35,7 @@ const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
               Rollover from Last Month
             </p>
           </Col>
-          <Col md='4' sm='4' xs='4' className='text-center mb-2'>
+          <Col md='4' sm='4' xs='4' className='text-center'>
             <h3 className='big-number xs-normal'>
               $
               {thisMonthEarningsUnpaid.toFixed(2)}
@@ -47,11 +45,6 @@ const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
             </p>
           </Col>
         </Row>
-        <div className='d-flex mt-3'>
-          <Link to='/settings#payment' className='button-link'>
-            <Button>PAYMENT SETTINGS</Button>
-          </Link>
-        </div>
       </Container>
     </Card>
   );

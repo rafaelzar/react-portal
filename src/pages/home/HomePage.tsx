@@ -3,7 +3,6 @@ import {
   Row, Col, Container, Spinner, Card,
 } from 'react-bootstrap';
 import moment from 'moment';
-import { subDays } from 'date-fns';
 import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
 import EmployeePhoto from '../../components/EmployeePhoto';
@@ -15,7 +14,7 @@ import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { IHomePageData } from '../../lib/interfaces';
+import { IHomePageData, IEmployeeReviews } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
 import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
@@ -27,12 +26,8 @@ const HomePage: React.FC = () => {
   const history = useHistory();
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [loadRevews, setLoadReviews] = React.useState(false);
-  const [dateRangeQuery, setDateRangeQuery] = React.useState({
-    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
-    end: `${moment(new Date()).format('YYYY-MM-DD')}`,
-  });
-  const [dateRangeLabel, setDateRangeLabel] = React.useState('Last 7 Days');
+  const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
+  const [hasMoreReviews, setHasMoreReviews] = React.useState(true);
 
   // ! Uncomment this line and import line in order to see real data for the current employee
   const user = useSelector((state) => getUserSelector(state));
@@ -50,11 +45,9 @@ const HomePage: React.FC = () => {
     }
     fetchIdToken();
     const buildQueryFromState = () => {
-      const queryData = `${userId}?sort=desc&startDate=${moment(
-        subDays(new Date(), 7),
-      ).format('YYYY-MM-DD')}&endDate=${moment(new Date()).format(
-        'YYYY-MM-DD',
-      )}`;
+      const startDate = '1970-01-01';
+      const endDate = moment(new Date()).format('YYYY-MM-DD');
+      const queryData = `${userId}?sort=desc&startDate=${startDate}&endDate=${endDate}`;
       return queryData;
     };
     const query = buildQueryFromState();
@@ -63,29 +56,28 @@ const HomePage: React.FC = () => {
       (res: IHomePageData | undefined) => {
         if (res) {
           setData(res);
-          setIsLoading(false);
-        } else {
-          setIsLoading(false);
+          setReviews(res.reviewMentions);
         }
+        setIsLoading(false);
       },
     );
   }, [dispatch, history, userId]);
 
-  const setDateRangeForReviews = (day: number) => {
-    setDateRangeQuery((prevState) => ({
-      ...prevState,
-      start: `${moment(subDays(new Date(), day)).format('YYYY-MM-DD')}`,
-    }));
-    setDateRangeLabel(`Last ${day} Days`);
-    const query = `${userId}?sort=desc&startDate=${dateRangeQuery.start}&endDate=${dateRangeQuery.end}`;
-    setLoadReviews(true);
+  const fetchMoreReviews = () => {
+    const buildQueryFromState = () => {
+      const startDate = '1970-01-01';
+      const lastDate = reviews[reviews.length - 1].created_at;
+      const endDate = moment(new Date()).format('YYYY-MM-DD');
+      const queryData = `${userId}?sort=desc&startDate=${startDate}&endDate=${endDate}&cursor=right&lastDate=${lastDate}`;
+      return queryData;
+    };
+    const query = buildQueryFromState();
     dispatch(getEmployeeStatsStatsAction(query)).then(
       (res: IHomePageData | undefined) => {
         if (res) {
           setData(res);
-          setLoadReviews(false);
-        } else {
-          setLoadReviews(false);
+          setReviews(prevReviews => [...prevReviews, ...res.reviewMentions]);
+          setHasMoreReviews(Boolean(res.reviewMentions?.length));
         }
       },
     );
@@ -120,12 +112,7 @@ const HomePage: React.FC = () => {
                 <EarningsAvailableCard earningsStats={data.earningsStats} />
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
-                <ReviewMentionsCard
-                  reviewsData={data.reviewMentions}
-                  setDateRangeForReviews={setDateRangeForReviews}
-                  dateRangeLabel={dateRangeLabel}
-                  loadRevews={loadRevews}
-                />
+                <ReviewMentionsCard reviewsData={reviews} fetchMore={fetchMoreReviews} hasMore={hasMoreReviews} />
                 <MentionsChartCard sitesData={data.reviewSiteMentions} />
               </Col>
             ) : (

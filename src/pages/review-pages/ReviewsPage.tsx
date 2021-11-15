@@ -390,7 +390,12 @@ const ReviewsPage: React.FC = () => {
                   </div>
                 </Card.Title>
                 {employeeReviews.length > 0 ? (
-                  <InfiniteScroll dataLength={employeeReviews.length} next={fetchMore} hasMore={!isLastPage} loader={<Spinner className='d-block mx-auto my-4' animation='border' />}>
+                  <InfiniteScroll
+                    dataLength={employeeReviews.length}
+                    next={fetchMore}
+                    hasMore={!isLastPage}
+                    loader={<Spinner className='d-block mx-auto my-4' animation='border' />}
+                  >
                     {employeeReviews.map((r) => (
                       <ReviewCard key={r._id} data={r} />
                     ))}

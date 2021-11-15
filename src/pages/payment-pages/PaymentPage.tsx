@@ -32,8 +32,9 @@ const PaymentPage: React.FC = () => {
   const [activeRevenueReview, setActiveRevenueReview] = React.useState<
     IReviews
   >({} as IReviews);
+  const defaultStartDate = '1970-01-01';
   const [dateRangeQuery, setDateRangeQuery] = React.useState({
-    start: `${moment(subDays(new Date(), 7)).format('YYYY-MM-DD')}`,
+    start: defaultStartDate,
     end: `${moment(new Date()).format('YYYY-MM-DD')}`,
   });
   const [dateState, setDateState] = React.useState<IDatePicker[]>([
@@ -143,11 +144,15 @@ const PaymentPage: React.FC = () => {
               onClick={() => setToggleDatePicker(!toggleDatePicker)}
               ref={datePickerDropdownRefDateInput}
             >
-              <span>{moment(dateRangeQuery.start).format('MMM DD')}</span>
-              {' '}
-              -
-              {' '}
-              <span>{moment(dateRangeQuery.end).format('MMM DD')}</span>
+              {dateRangeQuery.start === defaultStartDate ? <span>All time</span> : (
+                <span>
+                  {moment(dateRangeQuery.start).format('MMM DD')}
+                  {' '}
+                  -
+                  {' '}
+                  {moment(dateRangeQuery.end).format('MMM DD')}
+                </span>
+              )}
             </div>
           </div>
           {revenueInfo.length < 1 ? (

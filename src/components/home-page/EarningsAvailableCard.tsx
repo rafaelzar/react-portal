@@ -14,7 +14,7 @@ const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
   } = earningsStats;
   return (
     <Card className='mb-3'>
-      <Container className='py-2'>
+      <Container className='py-3'>
         <h2 className='mb-0'>Earnings Summary 💰</h2>
         <Row>
           <Col md='4' sm='4' xs='4' className='text-center'>

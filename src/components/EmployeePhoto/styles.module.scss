@@ -5,8 +5,9 @@
   user-select: none;
   width: 100px;
   height: 100px;
-  background-color: #ad61dd;
+  background-color: #fff;
   border-radius: 50%;
+  border: 4px solid #69b8b1;
 
   & > * {
     width: 100%;
@@ -29,17 +30,29 @@
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
+  text-align: center;
   font-size: 2.5rem;
-  color: #fff;
+  color: #69b8b1;
   font-weight: bold;
 }
 
 .big {
   width: 150px;
   height: 150px;
+  border-width: 6px;
 
   .initials {
     font-size: 4rem;
+  }
+}
+
+.small {
+  width: 50px;
+  height: 50px;
+  border-width: 2px;
+
+  .initials {
+    font-size: 1.3rem;
   }
 }
 

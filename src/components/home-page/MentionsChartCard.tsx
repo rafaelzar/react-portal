@@ -19,7 +19,7 @@ const MentionsChartCard: React.FC<IProps> = ({ sitesData }) => {
 
   return (
     <Card className='mb-3'>
-      <Container className='py-2'>
+      <Container className='py-3'>
         <h2 className='mb-0'>Review Site Mentions</h2>
         <div className='d-flex justify-content-center'>
           <div className='chart-wrapp'>

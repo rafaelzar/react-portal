@@ -11,11 +11,12 @@ import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import MentionsChartCard from '../../components/home-page/MentionsChartCard';
 import ReviewMentionsCard from '../../components/home-page/ReviewMentionsCard';
 import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
+import LeaderBoardCard from '../../components/home-page/LeaderBoardCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { IHomePageData, IEmployeeReviews } from '../../lib/interfaces';
-import { getEmployeeStatsStatsAction } from '../../store/actions/statsActions';
+import { IHomePageData, ILeaderboardData, IEmployeeReviews } from '../../lib/interfaces';
+import { getEmployeeStatsStatsAction, getLeaderboardAction } from '../../store/actions/statsActions';
 import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
 
@@ -25,6 +26,7 @@ const HomePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
+  const [leaderboardData, setLeaderboardData] = React.useState<ILeaderboardData[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
   const [hasMoreReviews, setHasMoreReviews] = React.useState(true);
@@ -52,11 +54,14 @@ const HomePage: React.FC = () => {
     };
     const query = buildQueryFromState();
     setIsLoading(true);
-    dispatch(getEmployeeStatsStatsAction(query)).then(
-      (res: IHomePageData | undefined) => {
-        if (res) {
-          setData(res);
-          setReviews(res.reviewMentions);
+    Promise.all([dispatch(getEmployeeStatsStatsAction(query)),
+      dispatch(getLeaderboardAction())]).then(
+      ([homeData, leaderboard]: [IHomePageData | undefined, ILeaderboardData[] | undefined]) => {
+        if (homeData) {
+          setData(homeData);
+        }
+        if (leaderboard) {
+          setLeaderboardData(leaderboard);
         }
         setIsLoading(false);
       },
@@ -104,8 +109,11 @@ const HomePage: React.FC = () => {
                 <Container className='my-3 d-flex flex-column align-items-center'>
                   <EmployeePhoto userInfo={user} big onClick={goToSettings} />
                 </Container>
+                <hr />
+                <UserInfoCard className={styles.userInfo} />
+                <hr />
+                <LeaderBoardCard leaderboardData={leaderboardData} />
               </Card>
-              <UserInfoCard className={styles.userInfo} />
             </Col>
             {!isLoading ? (
               <Col lg={8}>

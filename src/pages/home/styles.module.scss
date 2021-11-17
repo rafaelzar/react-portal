@@ -1,5 +1,9 @@
 @media screen and (max-width: 500px) {
   .userInfo {
     display: none !important;
+
+    & + hr {
+      display: none;
+    }
   }
 }

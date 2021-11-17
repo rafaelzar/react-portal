@@ -43,6 +43,13 @@ export interface IReviewStats {
   chartData?: Array<number>;
 }
 
+export interface ILeaderboardData {
+  earned: number;
+  mentions: number;
+  rating: number;
+  employee: IUserInformation;
+}
+
 export interface IStarsData {
   stars: number;
   percent: number;

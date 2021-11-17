@@ -17,7 +17,7 @@ const ReviewMentionsCard: React.FC<IProps> = ({
 }) => {
   return (
     <Card className='mb-3'>
-      <Container className='py-2'>
+      <Container className='py-3'>
         <div className='review-mentions-card-header'>
           <h2 className='mb-0'>Review Mentions</h2>
         </div>

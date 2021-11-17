@@ -17,10 +17,10 @@ export const getEmployeeStatsStatsAction = (queries: string) => {
   };
 };
 
-export const getLeaderboardAction = () => {
+export const getLeaderboardAction = (userId: string) => {
   return async (): Promise<ILeaderboardData | boolean> => {
     try {
-      const res = await getLeaderboard();
+      const res = await getLeaderboard(userId);
       if (res) {
         const { data = {} } = res;
         return data;

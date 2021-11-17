@@ -96,7 +96,9 @@ export const deleteEmployeePhoto = async (
   return res;
 };
 
-export const getLeaderboard = async (): Promise<AxiosResponse | undefined> => {
-  const res = await axios.get(`${baseUrl}/employees/leaderboard`);
+export const getLeaderboard = async (
+  id: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/leaderboard/${id}`);
   return res;
 };

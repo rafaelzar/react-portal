@@ -55,7 +55,7 @@ const HomePage: React.FC = () => {
     const query = buildQueryFromState();
     setIsLoading(true);
     Promise.all([dispatch(getEmployeeStatsStatsAction(query)),
-      dispatch(getLeaderboardAction())]).then(
+      dispatch(getLeaderboardAction(userId))]).then(
       ([homeData, leaderboard]: [IHomePageData | undefined, ILeaderboardData[] | undefined]) => {
         if (homeData) {
           setData(homeData);
@@ -111,8 +111,7 @@ const HomePage: React.FC = () => {
                 </Container>
                 <hr />
                 <UserInfoCard className={styles.userInfo} />
-                <hr />
-                <LeaderBoardCard leaderboardData={leaderboardData} />
+                <LeaderBoardCard leaderboardData={leaderboardData} isLoading={isLoading} />
               </Card>
             </Col>
             {!isLoading ? (

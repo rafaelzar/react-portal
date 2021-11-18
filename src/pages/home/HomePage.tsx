@@ -59,6 +59,7 @@ const HomePage: React.FC = () => {
       ([homeData, leaderboard]: [IHomePageData | undefined, ILeaderboardData[] | undefined]) => {
         if (homeData) {
           setData(homeData);
+          setReviews(homeData.reviewMentions);
         }
         if (leaderboard) {
           setLeaderboardData(leaderboard);

@@ -15,6 +15,13 @@ export const getEmployeesReviews = async (
   return res;
 };
 
+export const getEmployeesFeedback = async (
+  queries: string,
+): Promise<AxiosResponse | undefined> => {
+  const res = await axios.get(`${baseUrl}/employees/feedback/${queries}`);
+  return res;
+};
+
 export const updateUser = async (
   id: string,
   data: IUserInformation,

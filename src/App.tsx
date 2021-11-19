@@ -4,6 +4,7 @@ import LoginPage from './pages/auth-pages/LoginPage';
 import HomePage from './pages/home/HomePage';
 import PaymentPage from './pages/payment-pages/PaymentPage';
 import ReviewsPage from './pages/review-pages/ReviewsPage';
+import FeedbackPage from './pages/feedback-pages/FeedbackPage';
 import ForgotPasswordPage from './pages/auth-pages/ForgotPasswordPage';
 import SettingsPage from './pages/settings-pages/SettingsPage';
 import Amplify from 'aws-amplify';
@@ -39,6 +40,7 @@ export class App extends Component {
         <Switch>
           <Route path='/' exact component={HomePage} />
           <Route path='/reviews' exact component={ReviewsPage} />
+          <Route path='/feedback' exact component={FeedbackPage} />
           <Route path='/revenue' exact component={PaymentPage} />
           <Route path='/settings' exact component={SettingsPage} />
           <Route path='/login' exact component={LoginPage} />

@@ -6,7 +6,8 @@ import { Nav, NavbarBrand, Navbar } from 'react-bootstrap';
 import cross from '../lib/assets/img/cross.png';
 import dashboardIcon from '../lib/assets/icons/layout-outline.svg';
 import logoutIcon from '../lib/assets/icons/log-out-outline.svg';
-import reviewsIcon from '../lib/assets/icons/star-outline.svg';
+import reviewsIcon from '../lib/assets/icons/reviews-outline.svg';
+import feedbackIcon from '../lib/assets/icons/feedback-outline.svg';
 import settingsIcon from '../lib/assets/icons/settings-outline.svg';
 import revenueIcon from '../lib/assets/icons/credit-card.svg';
 import { swalSuccess } from '../lib/utils/toasts';
@@ -79,6 +80,21 @@ const Sidebar: React.FC<IProps> = ({ toggleSidebar, logo }) => {
                   alt='reviews'
                 />
                 Reviews
+              </NavLink>
+            </Nav.Item>
+            <Nav.Item>
+              <NavLink
+                className='nav-link'
+                activeClassName='active-nav-link'
+                to='/feedback'
+              >
+                <img
+                  className='mr-1'
+                  width='20'
+                  src={feedbackIcon}
+                  alt='feedback'
+                />
+                Feedback
               </NavLink>
             </Nav.Item>
             <Nav.Item>

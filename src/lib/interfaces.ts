@@ -26,6 +26,7 @@ export interface IReviewsResponse {
   isFirst: boolean;
   isLast: boolean;
 }
+
 export interface IEmployeeReviews {
   _id: string;
   name: string;
@@ -42,6 +43,35 @@ export interface IReviewStats {
   starsData?: IStarsData[];
   chartData?: Array<number>;
 }
+
+export interface IFeedbackResponse {
+  data: IEmployeeFeedback[];
+  stats: IFeedbackStats;
+  isFirst: boolean;
+  isLast: boolean;
+}
+
+export interface IEmployeeFeedback {
+  _id: string;
+  customer?: {
+    name: string;
+  };
+  messages?: {
+    content: string;
+    date: string
+  }[];
+  to?: string;
+  created_at: string;
+  rating: number;
+}
+
+export interface IFeedbackStats {
+  numberOfReviews?: number;
+  averageRating?: number;
+  starsData?: IStarsData[];
+}
+
+
 
 export interface ILeaderboardData {
   earned: number;

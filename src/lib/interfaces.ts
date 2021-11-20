@@ -55,7 +55,7 @@ export interface IEmployeeFeedback {
   _id: string;
   customer?: {
     name: string;
-  };
+  }[];
   messages?: {
     content: string;
     date: string

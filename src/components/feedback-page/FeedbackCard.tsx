@@ -26,16 +26,14 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
         </div>
       </div>
       <div className='review-card-body'>
-        {data.messages?.map((message, idx) => (
+        {data.messages?.map((message) => (
           <React.Fragment key={message.date}>
-            {idx !== 0 && (
-              <p>{message.content}</p>
-            )}
+            <p>{message.content}</p>
           </React.Fragment>
         ))}
       </div>
       <div className='review-card-footer'>
-        <span>{data.customer?.name}</span>
+        <span>{data.customer?.[0]?.name}</span>
       </div>
     </div>
   );

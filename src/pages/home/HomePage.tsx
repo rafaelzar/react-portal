@@ -10,12 +10,15 @@ import EarningsAvailableCard from '../../components/home-page/EarningsAvailableC
 import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import MentionsChartCard from '../../components/home-page/MentionsChartCard';
 import ReviewMentionsCard from '../../components/home-page/ReviewMentionsCard';
+import FeedbackMentionsCard from '../../components/home-page/FeedbackMentionsCard';
 import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import LeaderBoardCard from '../../components/home-page/LeaderBoardCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { fetchIdTokenCognitoFunction } from '../../lib/aws/aws-cognito-functions';
-import { IHomePageData, ILeaderboardData, IEmployeeReviews } from '../../lib/interfaces';
+import {
+  IHomePageData, ILeaderboardData, IEmployeeReviews, IEmployeeFeedback
+} from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction, getLeaderboardAction } from '../../store/actions/statsActions';
 import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
@@ -30,6 +33,8 @@ const HomePage: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
   const [hasMoreReviews, setHasMoreReviews] = React.useState(true);
+  const [feedback, setFeedback] = React.useState<IEmployeeFeedback[]>([]);
+  const [hasMoreFeedback, setHasMoreFeedback] = React.useState(true);
 
   // ! Uncomment this line and import line in order to see real data for the current employee
   const user = useSelector((state) => getUserSelector(state));
@@ -60,6 +65,7 @@ const HomePage: React.FC = () => {
         if (homeData) {
           setData(homeData);
           setReviews(homeData.reviewMentions);
+          setFeedback(homeData.feedbackMentions);
         }
         if (leaderboard) {
           setLeaderboardData(leaderboard);
@@ -69,10 +75,11 @@ const HomePage: React.FC = () => {
     );
   }, [dispatch, history, userId]);
 
-  const fetchMoreReviews = () => {
+  const fetchMoreData = (sourceKey: 'reviews' | 'feedback') => () => {
     const buildQueryFromState = () => {
       const startDate = '1970-01-01';
-      const lastDate = reviews[reviews.length - 1].created_at;
+      const source = sourceKey === 'feedback' ? feedback : reviews;
+      const lastDate = source[source.length - 1].created_at;
       const endDate = moment(new Date()).format('YYYY-MM-DD');
       const queryData = `${userId}?sort=desc&startDate=${startDate}&endDate=${endDate}&cursor=right&lastDate=${lastDate}`;
       return queryData;
@@ -82,8 +89,13 @@ const HomePage: React.FC = () => {
       (res: IHomePageData | undefined) => {
         if (res) {
           setData(res);
-          setReviews(prevReviews => [...prevReviews, ...res.reviewMentions]);
-          setHasMoreReviews(Boolean(res.reviewMentions?.length));
+          if (sourceKey === 'feedback') {
+            setFeedback(prevFeedback => [...prevFeedback, ...res.feedbackMentions]);
+            setHasMoreFeedback(Boolean(res.feedbackMentions?.length));
+          } else {
+            setReviews(prevReviews => [...prevReviews, ...res.reviewMentions]);
+            setHasMoreReviews(Boolean(res.reviewMentions?.length));
+          }
         }
       },
     );
@@ -120,7 +132,8 @@ const HomePage: React.FC = () => {
                 <EarningsAvailableCard earningsStats={data.earningsStats} />
                 <EarningsStatsCard earningsStats={data.earningsStats} />
                 <ReviewStatsCard stats={data.reviewStats} />
-                <ReviewMentionsCard reviewsData={reviews} fetchMore={fetchMoreReviews} hasMore={hasMoreReviews} />
+                <ReviewMentionsCard reviewsData={reviews} fetchMore={fetchMoreData('reviews')} hasMore={hasMoreReviews} />
+                <FeedbackMentionsCard feedbackData={feedback} fetchMore={fetchMoreData('feedback')} hasMore={hasMoreFeedback} />
                 <MentionsChartCard sitesData={data.reviewSiteMentions} />
               </Col>
             ) : (

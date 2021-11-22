@@ -7,7 +7,7 @@ interface IProps {
   data: IEmployeeFeedback;
 }
 
-const ReviewCard: React.FC<IProps> = ({ data }) => {
+const FeedbackCard: React.FC<IProps> = ({ data }) => {
   return (
     <div className='review-card'>
       <div className='review-card-header'>
@@ -39,4 +39,4 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
   );
 };
 
-export default ReviewCard;
+export default FeedbackCard;

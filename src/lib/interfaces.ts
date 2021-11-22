@@ -102,6 +102,7 @@ export interface IHomePageData {
   reviewStats: IHomeReviewStats;
   reviewSiteMentions: IHomeReviewSiteMentions[];
   reviewMentions: IEmployeeReviews[];
+  feedbackMentions: IEmployeeFeedback[];
   earningsStats: IHomeEarningStats;
 }
 

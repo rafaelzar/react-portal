@@ -9,7 +9,7 @@ import { sendJWTToken } from '../../store/apiCalls';
 import { Link } from 'react-router-dom';
 import { swalError, swalInfo, swalSuccess } from '../../lib/utils/toasts';
 import {
-  Card, Col, Container, Row,
+  Card, Col, Container, Row
 } from 'react-bootstrap';
 import logo from '../../lib/assets/img/logo-eyerate.png';
 import { validateLogin } from '../../lib/utils/validator';
@@ -25,6 +25,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
   const [password, setPassword] = React.useState('');
   const [newUser, setNewUser] = React.useState(false);
   const [newPassword, setNewPassword] = React.useState('');
+  const [rememberMe, setRememberMe] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
@@ -45,7 +46,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
     e.preventDefault();
     if (validateLogin(email, password)) {
       setIsLoading(true);
-      dispatch(logInCognitoUserAuthAction(email, password)).then(
+      dispatch(logInCognitoUserAuthAction(email, password, rememberMe)).then(
         async (res: boolean | string | undefined) => {
           if (res === 'NEW_PASSWORD_REQUIRED') {
             setNewUser(true);
@@ -81,7 +82,7 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
     if (validateLogin(email, newPassword)) {
       setIsLoading(true);
       dispatch(
-        logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword),
+        logInCognitoUserWithNewPasswordAuthAction(email, password, newPassword, rememberMe),
       ).then((res: boolean | string | undefined) => {
         if (res) {
           fetchUserFromDatabase();
@@ -127,8 +128,12 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                       placeholder='password'
                       value={password}
                       onChange={(e) => setPassword(e.target.value.trim())}
-                      className='mb-5'
+                      className='mb-3'
                     />
+                    <label htmlFor='rememberMe' className='cursor-pointer mb-5'>
+                      <input type='checkbox' id='rememberMe' checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                      <span className='ml-2'>Remember me</span>
+                    </label>
                     <button
                       type='submit'
                       disabled={isLoading}
@@ -151,8 +156,12 @@ const LoginPage: React.FC<IProps> = ({ history }) => {
                         placeholder='New Password'
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value.trim())}
-                        className='mb-5'
+                        className='mb-3'
                       />
+                      <label htmlFor='rememberMe' className='cursor-pointer mb-5'>
+                        <input type='checkbox' id='rememberMe' checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+                        <span className='ml-2'>Remember me</span>
+                      </label>
                       <button
                         type='submit'
                         disabled={isLoading}

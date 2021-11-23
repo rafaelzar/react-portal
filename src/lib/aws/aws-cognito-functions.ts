@@ -6,6 +6,7 @@ import { ICognitoErrorHandler } from '../interfaces';
 export const logInUserCognitoFunction = async (
   username: string,
   password: string,
+  rememberMe?: boolean,
 ): Promise<string | boolean | undefined> => {
   try {
     const user = await Auth.signIn(username, password);
@@ -14,6 +15,11 @@ export const logInUserCognitoFunction = async (
       return 'NEW_PASSWORD_REQUIRED';
     } else {
       console.log('user', user);
+
+      if (rememberMe) {
+        await Auth.rememberDevice();
+      }
+
       return user;
     }
   } catch (error) {
@@ -37,6 +43,7 @@ export const logInUserWithNewPasswordCognitoFunction = async (
   username: string,
   password: string,
   newPassword: string,
+  rememberMe?: boolean,
 ): Promise<boolean | undefined> => {
   try {
     const res = await Auth.signIn(username, password);
@@ -49,6 +56,11 @@ export const logInUserWithNewPasswordCognitoFunction = async (
         console.log(e);
         return false;
       });
+
+    if (rememberMe) {
+      await Auth.rememberDevice();
+    }
+
     return res;
   } catch (error) {
     console.log('error signing in', error);
@@ -60,6 +72,11 @@ export const logInUserWithNewPasswordCognitoFunction = async (
 export const logOutUserCognitoFunction = async (): Promise<boolean> => {
   try {
     await Auth.signOut({ global: true });
+    try {
+      await Auth.forgetDevice();
+    } catch (ex) {
+      console.log(ex);
+    }
     return true;
   } catch (error) {
     console.log('error signing out: ', error);

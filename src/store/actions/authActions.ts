@@ -14,12 +14,13 @@ import { IUserInformation } from '../../lib/interfaces';
 export const logInCognitoUserAuthAction = (
   username: string,
   password: string,
+  rememberMe?: boolean,
 ) => {
   return async (
     dispatch: AppDispatch,
   ): Promise<boolean | string | undefined> => {
     try {
-      const user = await logInUserCognitoFunction(username, password);
+      const user = await logInUserCognitoFunction(username, password, rememberMe);
       if (user === 'NEW_PASSWORD_REQUIRED') {
         return 'NEW_PASSWORD_REQUIRED';
       } else if (user) {
@@ -39,6 +40,7 @@ export const logInCognitoUserWithNewPasswordAuthAction = (
   username: string,
   password: string,
   newPassword: string,
+  rememberMe?: boolean,
 ) => {
   return async (
     dispatch: AppDispatch,
@@ -48,6 +50,7 @@ export const logInCognitoUserWithNewPasswordAuthAction = (
         username,
         password,
         newPassword,
+        rememberMe,
       );
       if (user) {
         dispatch({ type: 'LOGIN_SUCCESS', user });

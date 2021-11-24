@@ -10,7 +10,7 @@ interface IProps {
 
 const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
   const {
-    lastPayment = 0, prevMonthEarningsUnpaid = 0, thisMonthEarningsUnpaid = 0
+    allTimeEarnings = 0, lastPayment = 0, thisMonthEarningsUnpaid = 0
   } = earningsStats;
   return (
     <Card className='mb-3'>
@@ -20,19 +20,19 @@ const EarningsAvailableCard: React.FC<IProps> = ({ earningsStats = {} }) => {
           <Col md='4' sm='4' xs='4' className='text-center'>
             <h3 className='big-number xs-normal'>
               $
-              {lastPayment.toFixed(2)}
+              {allTimeEarnings.toFixed(2)}
             </h3>
             <p>
-              Last Payment
+              All Time Earnings
             </p>
           </Col>
           <Col md='4' sm='4' xs='4' className='text-center'>
             <h3 className='big-number xs-normal'>
               $
-              {prevMonthEarningsUnpaid.toFixed(2)}
+              {lastPayment.toFixed(2)}
             </h3>
             <p>
-              Rollover from Last Month
+              Paid Out
             </p>
           </Col>
           <Col md='4' sm='4' xs='4' className='text-center'>

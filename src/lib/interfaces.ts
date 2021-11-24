@@ -116,6 +116,7 @@ export interface IHomeEarningStats {
   earningsAvailable: number;
   lastPayment: number;
   allTimeEarnings: number;
+  allTimePayments: number;
   thisMonthEarnings: number;
   thisMonthEarningsUnpaid: number;
   prevMonthEarningsUnpaid: number;

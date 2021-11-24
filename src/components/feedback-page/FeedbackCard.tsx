@@ -32,9 +32,6 @@ const FeedbackCard: React.FC<IProps> = ({ data }) => {
           </React.Fragment>
         ))}
       </div>
-      <div className='review-card-footer'>
-        <span>{data.customer?.[0]?.name}</span>
-      </div>
     </div>
   );
 };

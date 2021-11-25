@@ -8,9 +8,10 @@ import { IReviewStats } from '../../lib/interfaces';
 
 interface IProps {
   stats: IReviewStats;
+  platforms: string[];
 }
 
-const ReviewStats: React.FC<IProps> = ({ stats }) => {
+const ReviewStats: React.FC<IProps> = ({ stats, platforms }) => {
   const {
     numberOfReviews, averageRating, starsData, chartData,
   } = stats;
@@ -59,7 +60,7 @@ const ReviewStats: React.FC<IProps> = ({ stats }) => {
               <Col md={12}>
                 <p className='font-weight-bold'>Site Distribution</p>
                 <Doughnut
-                  data={Chart(chartData)}
+                  data={Chart(chartData, platforms)}
                   options={{ animation: { duration: 0 } }}
                 />
               </Col>

@@ -13,6 +13,7 @@ import {
   IEmployeeReviews,
   IReviewsResponse,
   IReviewStats,
+  ILocation,
 } from '../../lib/interfaces';
 import ReviewStats from '../../components/reviews-page/ReviewStats';
 import { getEmployeesReviewsReviewsAction } from '../../store/actions/reviewsActions';
@@ -29,6 +30,7 @@ const ReviewsPage: React.FC = () => {
   const [reviewStats, setReviewStats] = React.useState<IReviewStats>(
     {} as IReviewStats,
   );
+  const [location, setLocation] = React.useState<ILocation>({} as ILocation);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isLastPage, setIsLastPage] = React.useState(false);
   const [toggleDatePicker, setToggleDatePicker] = React.useState(false);
@@ -60,6 +62,7 @@ const ReviewsPage: React.FC = () => {
       key: 'selection',
     },
   ]);
+  const platforms = React.useMemo(() => [location?.industry === 'Cannabis' && 'Weedmaps', 'Google', 'Eyerate'].filter(Boolean) as string[], [location]);
 
   const sitesDropdownRef = React.useRef<HTMLDivElement>(null);
   const starsDropdownRef = React.useRef<HTMLDivElement>(null);
@@ -138,6 +141,7 @@ const ReviewsPage: React.FC = () => {
             isLast = false,
           } = res;
           setEmployeeReviews(prevReviews => [...prevReviews, ...reviews]);
+          setLocation(res.location);
           setReviewStats(stats);
           setIsLastPage(isLast);
         }
@@ -248,24 +252,15 @@ const ReviewsPage: React.FC = () => {
                 >
                   All Sites
                 </div>
-                <div
-                  className='custom-dropdown-item'
-                  onClick={(e) => handleDropdownChange(e)}
-                >
-                  Weedmaps
-                </div>
-                <div
-                  className='custom-dropdown-item'
-                  onClick={(e) => handleDropdownChange(e)}
-                >
-                  Google
-                </div>
-                <div
-                  className='custom-dropdown-item'
-                  onClick={(e) => handleDropdownChange(e)}
-                >
-                  Eyerate
-                </div>
+                {platforms.map((platform) => (
+                  <div
+                    key={platform}
+                    className='custom-dropdown-item'
+                    onClick={(e) => handleDropdownChange(e)}
+                  >
+                    {platform}
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -352,7 +347,7 @@ const ReviewsPage: React.FC = () => {
         {!isLoading ? (
           <Row>
             <Col xl={4} lg={5} md={12}>
-              <ReviewStats stats={reviewStats} />
+              <ReviewStats stats={reviewStats} platforms={platforms} />
             </Col>
             <Col xl={8} lg={7} md={12}>
               <Card className='p-3 mb-3'>

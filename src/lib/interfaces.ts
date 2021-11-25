@@ -23,6 +23,7 @@ export interface IDatePicker {
 export interface IReviewsResponse {
   data: IEmployeeReviews[];
   stats: IReviewStats;
+  location: ILocation;
   isFirst: boolean;
   isLast: boolean;
 }
@@ -79,6 +80,11 @@ export interface IStarsData {
   stars: number;
   percent: number;
   number: number;
+}
+
+export interface ILocation {
+  _id: string;
+  industry: string;
 }
 
 export interface IUserInformation {

@@ -7,11 +7,9 @@ import { useHistory } from 'react-router-dom';
 import { useAppDispatch } from '../../store/store';
 import EmployeePhoto from '../../components/EmployeePhoto';
 import EarningsAvailableCard from '../../components/home-page/EarningsAvailableCard';
-import EarningsStatsCard from '../../components/home-page/EarningsStatsCard';
 import MentionsChartCard from '../../components/home-page/MentionsChartCard';
 import ReviewMentionsCard from '../../components/home-page/ReviewMentionsCard';
 import FeedbackMentionsCard from '../../components/home-page/FeedbackMentionsCard';
-import ReviewStatsCard from '../../components/home-page/ReviewStatsCard';
 import LeaderBoardCard from '../../components/home-page/LeaderBoardCard';
 import UserInfoCard from '../../components/UserInfoCard';
 import DefaultLayout from '../../layout/DefaultLayout';
@@ -132,8 +130,6 @@ const HomePage: React.FC = () => {
             {!isLoading ? (
               <Col lg={8}>
                 <EarningsAvailableCard earningsStats={data.earningsStats} />
-                <EarningsStatsCard earningsStats={data.earningsStats} />
-                <ReviewStatsCard stats={data.reviewStats} />
                 <ReviewMentionsCard reviewsData={reviews} fetchMore={fetchMoreData('reviews')} hasMore={hasMoreReviews} />
                 <FeedbackMentionsCard feedbackData={feedback} fetchMore={fetchMoreData('feedback')} hasMore={hasMoreFeedback} />
                 <MentionsChartCard sitesData={data.reviewSiteMentions} />

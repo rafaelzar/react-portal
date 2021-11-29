@@ -122,7 +122,7 @@ const FeedbackPage: React.FC = () => {
         if (res) {
           setFeedback(prevReviews => [...prevReviews, ...res.data]);
           setStats(res.stats);
-          setIsLastPage(res.isLast);
+          setIsLastPage(res.isLast || res.data.length === 0);
         }
 
         setIsLoading(false);

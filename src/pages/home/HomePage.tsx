@@ -120,6 +120,8 @@ const HomePage: React.FC = () => {
               <Card>
                 <Container className='my-3 d-flex flex-column align-items-center'>
                   <EmployeePhoto userInfo={user} big onClick={goToSettings} />
+                  Business Name:
+                  {' '}
                   {userLocation?.name}
                 </Container>
                 <hr />

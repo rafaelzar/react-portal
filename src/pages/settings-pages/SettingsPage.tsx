@@ -253,6 +253,8 @@ const SettingsPage: React.FC = () => {
               <Card>
                 <Container className='my-3 d-flex flex-column align-items-center'>
                   <EmployeePhoto userInfo={userInfo} big />
+                  Business Name:
+                  {' '}
                   {userLocation?.name}
                 </Container>
               </Card>

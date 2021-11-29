@@ -99,6 +99,11 @@ export interface IUserInformation {
   plaid_account?: string;
 }
 
+export interface IUserLocation {
+  _id?: string;
+  name?: string;
+}
+
 export interface IHomePageData {
   reviewStats: IHomeReviewStats;
   reviewSiteMentions: IHomeReviewSiteMentions[];

@@ -15,9 +15,8 @@ const UserInfoCard: React.FC<IProps> = ({ className, withButton }) => {
   const {
     first_name: userFirstName = '',
     last_name: userLastName = '',
-    nick_names: userNickName = [' '],
+    nick_names: userNickName = [],
     email: userEmail = '',
-    phone: userPhone = '',
   } = userInfo;
   return (
     <Container className={cn('user-information mt-4', className)}>
@@ -28,17 +27,9 @@ const UserInfoCard: React.FC<IProps> = ({ className, withButton }) => {
         {userLastName}
       </p>
       <h2>Nicknames</h2>
-      {userNickName ? (
+      {userNickName.length > 0 ? (
         <>
           <p>{userNickName.join(', ')}</p>
-        </>
-      ) : (
-        <p>Unset</p>
-      )}
-      <h2>Phone</h2>
-      {userPhone ? (
-        <>
-          <p>{userPhone}</p>
         </>
       ) : (
         <p>Unset</p>

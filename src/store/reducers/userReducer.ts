@@ -1,4 +1,4 @@
-import { IStore, IUserInformation } from '../../lib/interfaces';
+import { IStore, IUserInformation, IUserLocation } from '../../lib/interfaces';
 
 const initState = {
   user: {},
@@ -7,6 +7,7 @@ const initState = {
 interface Action {
   type?: string;
   user?: IUserInformation | Record<string, never>;
+  location?: IUserLocation | Record<string, never>;
 }
 
 export const userReducer = (state = initState, action: Action): IStore => {
@@ -26,6 +27,12 @@ export const userReducer = (state = initState, action: Action): IStore => {
     return {
       ...state,
       user: action.user,
+    } as IStore;
+
+  case 'SET_LOCATION':
+    return {
+      ...state,
+      location: action.location,
     } as IStore;
 
   case 'AUTH_LOGOUT_SUCCESS':

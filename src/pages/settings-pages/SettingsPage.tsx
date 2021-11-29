@@ -2,7 +2,7 @@ import React from 'react';
 import { useAppDispatch } from '../../store/store';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { getUserSelector } from '../../store/selectors/selectors';
+import { getUserLocationSelector, getUserSelector } from '../../store/selectors/selectors';
 import DefaultLayout from '../../layout/DefaultLayout';
 import {
   Container,
@@ -44,19 +44,18 @@ import { deletePlaidAccountPlaidAction } from '../../store/actions/plaidActions'
 
 const SettingsPage: React.FC = () => {
   const userInfo = useSelector((state) => getUserSelector(state));
+  const userLocation = useSelector((state) => getUserLocationSelector(state));
   const {
     plaid_account: plaidAccount = '',
     first_name: userFirstName = '',
     last_name: userLastName = '',
     nick_names: userNickName = [''],
-    phone: userPhone = '',
     _id: userId = '',
   } = userInfo;
   // user with earning details
   // const userId = '60ad43e35e08070013432c0b';
   const [firstName, setFirstName] = React.useState(userFirstName.trim());
   const [lastName, setLastName] = React.useState(userLastName);
-  const [phoneNumber, setPhoneNumber] = React.useState(userPhone);
   const [nickNames, setNickNames] = React.useState(userNickName);
   const [tempNickname, setTempNickname] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -119,8 +118,7 @@ const SettingsPage: React.FC = () => {
     e.preventDefault();
     const isUserInfoChanged = userFirstName.trim() !== firstName.trim()
       || lastName.trim() !== userLastName.trim()
-      || userNickName.length !== nickNames.length
-      || userPhone.trim() !== phoneNumber.trim();
+      || userNickName.length !== nickNames.length;
 
     const isPasswordChanged = password !== '' || newPassword !== '' || confirmNewPassword !== '';
     if (isUserInfoChanged === true) {
@@ -170,7 +168,6 @@ const SettingsPage: React.FC = () => {
       updateUserAuthAction(userId, {
         first_name: firstName.trim(),
         last_name: lastName.trim(),
-        phone: phoneNumber.trim(),
         nick_names: nickNames,
       }),
     ).then((res: boolean | string | undefined) => {
@@ -256,6 +253,7 @@ const SettingsPage: React.FC = () => {
               <Card>
                 <Container className='my-3 d-flex flex-column align-items-center'>
                   <EmployeePhoto userInfo={userInfo} big />
+                  {userLocation?.name}
                 </Container>
               </Card>
               <UserInfoCard />
@@ -344,16 +342,6 @@ const SettingsPage: React.FC = () => {
                                 )}
                               </Row>
                             </Col>
-                          </Form.Group>
-                        </Col>
-                        <Col lg='6' md='12'>
-                          <Form.Group className='mb-4'>
-                            <Form.Label>Phone</Form.Label>
-                            <Form.Control
-                              type='text'
-                              value={phoneNumber}
-                              onChange={(e) => setPhoneNumber(e.target.value)}
-                            />
                           </Form.Group>
                         </Col>
                         <Col lg='12'>

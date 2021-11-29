@@ -1,5 +1,5 @@
 import { RootStateOrAny } from 'react-redux';
-import { IUserInformation } from '../../lib/interfaces';
+import { IUserInformation, IUserLocation } from '../../lib/interfaces';
 
 export const getUserSelector = (state: RootStateOrAny): IUserInformation => {
   const {
@@ -13,4 +13,11 @@ export const getUserIDSelector = (state: RootStateOrAny): string => {
     user: { user: { _id: userID = '' } = {} },
   } = state;
   return userID || '';
+};
+
+export const getUserLocationSelector = (state: RootStateOrAny): IUserLocation => {
+  const {
+    user: { location = {} },
+  } = state;
+  return location || {};
 };

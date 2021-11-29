@@ -20,7 +20,7 @@ import {
   IHomePageData, ILeaderboardData, IEmployeeReviews, IEmployeeFeedback
 } from '../../lib/interfaces';
 import { getEmployeeStatsStatsAction, getLeaderboardAction } from '../../store/actions/statsActions';
-import { getUserSelector, getUserIDSelector } from '../../store/selectors/selectors';
+import { getUserSelector, getUserIDSelector, getUserLocationSelector } from '../../store/selectors/selectors';
 import { useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
@@ -39,6 +39,7 @@ const HomePage: React.FC = () => {
   // ! Uncomment this line and import line in order to see real data for the current employee
   const user = useSelector((state) => getUserSelector(state));
   const userId = useSelector((state) => getUserIDSelector(state));
+  const userLocation = useSelector((state) => getUserLocationSelector(state));
 
   // const userID = '607a1d65e4be5100126b827e';
   // const userID = '60ad43e35e08070013432c0b';
@@ -121,6 +122,7 @@ const HomePage: React.FC = () => {
               <Card>
                 <Container className='my-3 d-flex flex-column align-items-center'>
                   <EmployeePhoto userInfo={user} big onClick={goToSettings} />
+                  {userLocation?.name}
                 </Container>
                 <hr />
                 <UserInfoCard className={styles.userInfo} />

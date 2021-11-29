@@ -146,7 +146,8 @@ export const fetchUserFromDatabaseAuthAction = () => {
       const user = await sendJWTToken();
       if (user) {
         const { data = {} } = user;
-        dispatch({ type: 'SET_USER', user: data });
+        dispatch({ type: 'SET_USER', user: data.employee });
+        dispatch({ type: 'SET_LOCATION', location: data.location });
         return true;
       } else {
         return false;

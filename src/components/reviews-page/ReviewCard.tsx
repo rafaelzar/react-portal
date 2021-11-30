@@ -1,5 +1,6 @@
 import React from 'react';
 import moment from 'moment';
+import { Badge } from 'react-bootstrap';
 import { IEmployeeReviews } from '../../lib/interfaces';
 import StarResolver from './StarResolver';
 
@@ -18,8 +19,11 @@ const ReviewCard: React.FC<IProps> = ({ data }) => {
             data.rating < 3 ? 'negative-review-color' : ''
           }`}
         />
-        <div className='d-flex justify-content-between mb-3 review-card-body'>
-          <div>{moment(data.created_at).format('LL')}</div>
+        <div className='mb-3 d-flex justify-content-between review-card-body'>
+          <div className='d-flex align-items-center'>
+            {moment(data.created_at).format('LL')}
+            {data.is_new && <Badge pill variant='info' className='ml-1'>new</Badge>}
+          </div>
           <div className='d-flex align-items-center'>
             {data.platform && PAID_PLATFORMS.includes(data.platform.toLocaleLowerCase()) && (
               <span>💵</span>

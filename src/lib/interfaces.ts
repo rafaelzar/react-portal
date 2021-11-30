@@ -35,6 +35,7 @@ export interface IEmployeeReviews {
   phone?: string;
   created_at: string;
   rating: number;
+  is_new?: boolean;
   platform?: string;
 }
 

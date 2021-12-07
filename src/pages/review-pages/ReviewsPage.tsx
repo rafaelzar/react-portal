@@ -62,7 +62,7 @@ const ReviewsPage: React.FC = () => {
       key: 'selection',
     },
   ]);
-  const platforms = React.useMemo(() => [location?.industry === 'Cannabis' && 'Weedmaps', 'Google', 'Eyerate'].filter(Boolean) as string[], [location]);
+  const platforms = React.useMemo(() => [location?.industry === 'Cannabis' && 'Weedmaps', 'Google'].filter(Boolean) as string[], [location]);
 
   const sitesDropdownRef = React.useRef<HTMLDivElement>(null);
   const starsDropdownRef = React.useRef<HTMLDivElement>(null);

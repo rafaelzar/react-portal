@@ -29,6 +29,7 @@ const HomePage: React.FC = () => {
   const [data, setData] = React.useState<IHomePageData>({} as IHomePageData);
   const [leaderboardData, setLeaderboardData] = React.useState<ILeaderboardData[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isLeaderboardLoading, setIsLeaderboardLoading] = React.useState(false);
   const [reviews, setReviews] = React.useState<IEmployeeReviews[]>([]);
   const [hasMoreReviews, setHasMoreReviews] = React.useState(true);
   const [feedback, setFeedback] = React.useState<IEmployeeFeedback[]>([]);
@@ -58,18 +59,24 @@ const HomePage: React.FC = () => {
     };
     const query = buildQueryFromState();
     setIsLoading(true);
-    Promise.all([dispatch(getEmployeeStatsStatsAction(query)),
-      dispatch(getLeaderboardAction(userId))]).then(
-      ([homeData, leaderboard]: [IHomePageData | undefined, ILeaderboardData[] | undefined]) => {
+    dispatch(getEmployeeStatsStatsAction(query)).then(
+      (homeData?: IHomePageData) => {
         if (homeData) {
           setData(homeData);
           setReviews(homeData.reviewMentions);
           setFeedback(homeData.feedbackMentions);
         }
+        setIsLoading(false);
+      },
+    );
+
+    setIsLeaderboardLoading(true);
+    dispatch(getLeaderboardAction(userId)).then(
+      (leaderboard?: ILeaderboardData[]) => {
         if (leaderboard) {
           setLeaderboardData(leaderboard);
         }
-        setIsLoading(false);
+        setIsLeaderboardLoading(false);
       },
     );
   }, [dispatch, history, userId]);
@@ -126,7 +133,7 @@ const HomePage: React.FC = () => {
                 </Container>
                 <hr />
                 <UserInfoCard className={styles.userInfo} />
-                <LeaderBoardCard leaderboardData={leaderboardData} isLoading={isLoading} />
+                <LeaderBoardCard leaderboardData={leaderboardData} isLoading={isLeaderboardLoading} />
               </Card>
             </Col>
             {!isLoading ? (

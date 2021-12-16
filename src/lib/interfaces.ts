@@ -125,14 +125,9 @@ export interface IHomeReviewSiteMentions {
 }
 
 export interface IHomeEarningStats {
-  earningsAvailable: number;
-  lastPayment: number;
   allTimeEarnings: number;
-  allTimePayments: number;
-  thisMonthEarnings: number;
-  thisMonthEarningsUnpaid: number;
-  prevMonthEarningsUnpaid: number;
-  leaderboardRank: number;
+  paidOut: number;
+  rollOver: number;
 }
 
 export interface IRevenueHistory {
